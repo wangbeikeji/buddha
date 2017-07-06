@@ -30,7 +30,7 @@ public class MenuController {
     * @description 根据菜单id获取菜单信息
     */
     @GetMapping("/{id}")
-    public Menu fetchMenu(@PathVariable Long id) {
+    public Menu fetchById(@PathVariable Integer id) {
         return menuService.getMenuInfo(id);
     }
 
@@ -42,7 +42,7 @@ public class MenuController {
     * @description 添加菜单
     */
     @PostMapping("/")
-    public Menu additionMenu(Menu menu) {
+    public Menu addition(Menu menu) {
         return menuService.addMenu(menu);
     }
 
@@ -54,7 +54,7 @@ public class MenuController {
     * @description 修改菜单
     */
     @PutMapping("/")
-    public Menu modificationMenu(Menu menu) {
+    public Menu modification(Menu menu) {
         return menuService.modifyMenu(menu);
     }
 

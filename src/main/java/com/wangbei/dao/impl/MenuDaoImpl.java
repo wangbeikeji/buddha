@@ -22,7 +22,7 @@ public class MenuDaoImpl implements MenuDao {
     private MenuRepository menuRepository;
 
     @Override
-    public Menu retrieveMenuById(Long id) {
+    public Menu retrieveMenuById(Integer id) {
         return menuRepository.findById(id);
     }
 

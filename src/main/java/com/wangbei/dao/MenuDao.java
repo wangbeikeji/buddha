@@ -7,7 +7,7 @@ import com.wangbei.entity.Menu;
  * @desc
  */
 public interface MenuDao {
-    Menu retrieveMenuById(Long id);
+    Menu retrieveMenuById(Integer id);
 
     Menu createMenu(Menu menu);
 
