@@ -8,6 +8,8 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -26,11 +28,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Created by yuyidi on 2017/7/5.
- * @desc
- */
+* @author yuyidi 2017-07-06 13:06:16
+* @class com.wangbei.awre.HttpClientConfigure
+* @description
+*/
 @Configuration
 public class HttpClientConfigure {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     @Bean
     public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager() {
@@ -67,6 +72,7 @@ public class HttpClientConfigure {
     @Bean
     public HttpClient httpClient() {
         HttpClient httpClient = httpClientBuilder().build();
+        logger.info("httpclient 创建成功：{}",httpClient);
         return httpClient;
     }
 

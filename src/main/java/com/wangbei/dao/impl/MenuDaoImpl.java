@@ -33,9 +33,6 @@ public class MenuDaoImpl implements MenuDao {
 
     @Override
     public Menu updateMenu(Menu menu) {
-        logger.info("更新菜单");
-        Menu result = menuRepository.save(menu);
-        logger.info("结束更新菜单:{}", result);
-        return result;
+        return menuRepository.save(menu);
     }
 }

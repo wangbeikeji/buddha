@@ -40,7 +40,9 @@ public abstract class HttpRest<T> {
 		} else {
 			entityClass = (Class<T>) c;
 		}
+		logger.info("实体类:{}",entityClass);
 		entityName = entityClass.getSimpleName();
+		logger.info("实体名称:{}",entityName);
 	}
 
 	public String doPostString(URI uri,T t) {
