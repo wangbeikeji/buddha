@@ -29,15 +29,4 @@ public class DataSourceConfigure {
     // create-if-not-found  若标注@Query   则使用,若没有则查找符合条件的@NameQuery(命名查询),否则 就通过解析方法名查询
     // use-declared-query   若标注@Query   则使用,若没有则查找符合条件的@NameQuery(明明查询),否则 就报错
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-    @Bean
-    public SessionFactory getSessionFactory() {
-        if (entityManagerFactory.unwrap(SessionFactory.class) == null) {
-            throw new NullPointerException("factory is not a hibernate factory");
-        }
-        return entityManagerFactory.unwrap(SessionFactory.class);
-    }
-
 }

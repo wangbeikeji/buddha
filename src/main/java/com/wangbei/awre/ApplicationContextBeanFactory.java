@@ -14,6 +14,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManagerFactory;
+
 /**
  * @author yuyidi 2017-07-05 17:08:58
  * @class com.wangbei.awre.ApplicationContextBeanFactory
@@ -23,7 +25,8 @@ import org.springframework.stereotype.Component;
 public class ApplicationContextBeanFactory implements ApplicationContextAware {
     Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
-    private SessionFactory sessionFactory;
+    private EntityManagerFactory entityManagerFactory;
+
     @Autowired
     private CustomMergeEventListener mergeEventListener;
 
@@ -36,6 +39,7 @@ public class ApplicationContextBeanFactory implements ApplicationContextAware {
     }
 
     public void init() {
+        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory).getServiceRegistry().getService(
                 EventListenerRegistry.class);
         EventListenerGroup group = registry.getEventListenerGroup(EventType.MERGE);
