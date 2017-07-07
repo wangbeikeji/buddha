@@ -9,4 +9,6 @@ import com.wangbei.entity.User;
 */
 public interface UserDao {
     public User createUser(User user);
+
+    User fetchUserByPhoneAndPassword(String phone, String password);
 }

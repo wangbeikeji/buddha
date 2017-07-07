@@ -21,4 +21,8 @@ public class UserService {
     public User addUser(User user){
         return userDao.createUser(user);
     }
+
+    public User getUserByPhoneAndPassword(String phone, String password) {
+        return userDao.fetchUserByPhoneAndPassword(phone, password);
+    }
 }

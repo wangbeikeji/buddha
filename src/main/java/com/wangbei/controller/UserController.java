@@ -3,6 +3,8 @@ package com.wangbei.controller;
 import com.wangbei.entity.User;
 import com.wangbei.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +20,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/")
+    @PostMapping("/")
     public User addition(User user) {
         return userService.addUser(user);
     }
+
+    @PostMapping("/login")
+    public User login(String phone,String password){
+        return userService.getUserByPhoneAndPassword(phone,password);
+    };
 }

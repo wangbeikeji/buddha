@@ -1,5 +1,7 @@
 package com.wangbei.util;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ public enum GenderEnum implements CommonalityEnum {
         return index;
     }
 
+    @JsonValue
     public String getGender() {
         return gender;
     }

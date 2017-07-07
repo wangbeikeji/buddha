@@ -17,11 +17,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SystemControllerTest extends BaseControllerTest {
 
     @Test
-    public void welcome() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/system/")
+    public void payment() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/system/payment")
                 .param("payEnum", "1").accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("支付宝")));
+    }
+
+    @Test
+    public void gender() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/system/gender")
+                .param("gender", "1").accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("男")));
     }
 
     @Test

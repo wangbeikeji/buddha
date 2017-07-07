@@ -21,4 +21,9 @@ public class UserDaoImpl implements UserDao {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public User fetchUserByPhoneAndPassword(String phone, String password) {
+        return userRepository.findByPhoneAndPassword(phone,password);
+    }
 }
