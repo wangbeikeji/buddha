@@ -6,6 +6,8 @@ public class ServiceException extends RuntimeException {
 	public static final String MENU_ADDITION_EXCEPTION="2001";
 	public static final String MENU_MODIFICATION_EXCEPTION = "2002";
 
+	public static final String TOKEN_VALIDATE_EXCEPTION = "5001";
+
 	private String type;
 	private String message;
 	public ServiceException(String type) {

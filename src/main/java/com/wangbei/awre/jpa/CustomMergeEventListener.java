@@ -6,9 +6,9 @@ import org.hibernate.jpa.event.internal.core.JpaMergeEventListener;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.property.access.internal.PropertyAccessStrategyBackRefImpl;
 import org.hibernate.type.AbstractStandardBasicType;
-import org.hibernate.type.AssociationType;
-import org.hibernate.type.ForeignKeyDirection;
 import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -19,6 +19,8 @@ import java.util.Map;
  */
 @Component
 public class CustomMergeEventListener extends JpaMergeEventListener {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     protected void copyValues(EntityPersister persister, Object entity, Object target, SessionImplementor source, Map
@@ -37,13 +39,10 @@ public class CustomMergeEventListener extends JpaMergeEventListener {
                     PropertyAccessStrategyBackRefImpl.UNKNOWN) {
                 if (target[i] == LazyPropertyInitializer.UNFETCHED_PROPERTY) {
                     if (types[i].isMutable()) {
+                        logger.info("可变的类型对象:{}", types[i]);
                         copied[i] = types[i].deepCopy(original[i], session.getFactory());
                     } else {
                         copied[i] = original[i];
-                        // 若 original 为空  target 不为空 则将target 中的数值赋值到新的 copied 数组中
-//                        if (original[i] == null && target[i] != null) {
-//                            copied[i] = target[i];
-//                        }
                     }
                 } else {
                     //若当前是基础数据类型
@@ -52,7 +51,7 @@ public class CustomMergeEventListener extends JpaMergeEventListener {
                         if (original[i] == null && target[i] != null) {
                             copied[i] = target[i];
                         }
-                    }else{
+                    } else {
                         copied[i] = types[i].replace(original[i], target[i], session, owner, copyCache);
                     }
 
@@ -65,5 +64,4 @@ public class CustomMergeEventListener extends JpaMergeEventListener {
     }
 
 
-
- }
+}
