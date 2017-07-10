@@ -9,14 +9,15 @@ import java.io.Serializable;
 */
 public class Response<T> implements Serializable{
     /*状态码*/
-    private String code;
+    private String code="200";
     /*响应实体对象*/
     private T result;
     /*响应结果内容*/
     private String message;
 
-    public Response(String code) {
+    public Response(String code,String message) {
         this.code = code;
+        this.message = message;
     }
 
     public Response(T result) {

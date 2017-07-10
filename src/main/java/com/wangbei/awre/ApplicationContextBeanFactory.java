@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import com.wangbei.awre.jpa.CustomMergeEventListener;
 import com.wangbei.dao.SmsDao;
 import com.wangbei.util.SmsTypeEnum;
+import javax.persistence.EntityManagerFactory;
 
 /**
  * @author yuyidi 2017-07-05 17:08:58
@@ -29,14 +30,13 @@ import com.wangbei.util.SmsTypeEnum;
 public class ApplicationContextBeanFactory implements ApplicationContextAware {
     Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
-    private SessionFactory sessionFactory;
+    private EntityManagerFactory entityManagerFactory;
+
     @Autowired
     private CustomMergeEventListener mergeEventListener;
 
     private ApplicationContext applicationContext;
 
-    private Map<SmsTypeEnum, SmsDao> smsDaoMap = new HashMap<>();
-    
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -44,6 +44,7 @@ public class ApplicationContextBeanFactory implements ApplicationContextAware {
     }
 
     public void init() {
+        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory).getServiceRegistry().getService(
                 EventListenerRegistry.class);
         EventListenerGroup group = registry.getEventListenerGroup(EventType.MERGE);

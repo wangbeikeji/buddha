@@ -9,9 +9,9 @@ import com.wangbei.entity.Menu;
 * @class com.wangbei.dao.impl.jpa.MenuRepository
 * @description 菜单jpa接口
 */
-public interface MenuRepository extends Repository<Menu,Long> {
+public interface MenuRepository extends Repository<Menu,Integer> {
 
-    Menu findById(Long id);
+    Menu findById(Integer id);
 
     Menu save(Menu menu);
 

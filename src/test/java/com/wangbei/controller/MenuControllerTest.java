@@ -16,10 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class MenuControllerTest extends BaseControllerTest {
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
     @Test
-    public void fetchMenu() throws Exception {
+    public void fetchById() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/menu/{id}", 1)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -27,7 +25,7 @@ public class MenuControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void additionMenu() throws Exception {
+    public void addition() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/menu/")
                 .param("name", "测试")
                 .param("level", "1")
@@ -37,7 +35,7 @@ public class MenuControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void modificationMenu() throws Exception {
+    public void modification() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/menu/")
                 .param("id", "12")
                 .param("name", "测试菜单")

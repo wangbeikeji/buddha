@@ -17,7 +17,7 @@ public class MenuService {
     @Autowired
     private MenuDao menuDao;
 
-    public Menu getMenuInfo(Long id) {
+    public Menu getMenuInfo(Integer id) {
         return menuDao.retrieveMenuById(id);
     }
 
