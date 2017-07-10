@@ -6,4 +6,6 @@ package com.wangbei.pojo;
 * @description 短信请求实体抽象
 */
 public interface SmsParameter {
+	
+	public String sign();
 }

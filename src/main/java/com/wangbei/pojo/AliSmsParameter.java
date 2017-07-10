@@ -9,4 +9,14 @@ import java.io.Serializable;
 */
 public class AliSmsParameter implements SmsParameter,Serializable{
 
+	private String appKey;
+	
+	
+	private String sign = sign();
+	
+	@Override
+	public String sign() {
+		return "";
+	}
+
 }

@@ -1,6 +1,8 @@
 package com.wangbei.awre;
 
-import com.wangbei.awre.jpa.CustomMergeEventListener;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.event.service.spi.EventListenerGroup;
 import org.hibernate.event.service.spi.EventListenerRegistry;
@@ -13,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+
+import com.wangbei.awre.jpa.CustomMergeEventListener;
+import com.wangbei.dao.SmsDao;
+import com.wangbei.util.SmsTypeEnum;
 
 /**
  * @author yuyidi 2017-07-05 17:08:58
@@ -29,6 +35,8 @@ public class ApplicationContextBeanFactory implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    private Map<SmsTypeEnum, SmsDao> smsDaoMap = new HashMap<>();
+    
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
