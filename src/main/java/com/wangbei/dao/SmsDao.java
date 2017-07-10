@@ -1,7 +1,7 @@
 package com.wangbei.dao;
 
 import com.wangbei.pojo.SendAuthCodeResult;
-import com.wangbei.util.SmsTypeEnum;
+import com.wangbei.util.enums.SmsTypeEnum;
 
 /**
  * @author yuyidi 2017-07-06 13:55:19

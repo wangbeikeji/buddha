@@ -1,13 +1,12 @@
 package com.wangbei;
 
-import com.wangbei.util.GenderEnum;
+import com.wangbei.util.enums.GenderEnum;
 import org.hibernate.bytecode.instrumentation.spi.LazyPropertyInitializer;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 /**
  * @author Created by yuyidi on 2017/7/4.

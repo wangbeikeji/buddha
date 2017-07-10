@@ -1,4 +1,6 @@
-package com.wangbei.util;
+package com.wangbei.util.enums;
+
+import com.wangbei.util.enums.CommonalityEnum;
 
 /**
  * @author Created by yuyidi on 2017/6/27.

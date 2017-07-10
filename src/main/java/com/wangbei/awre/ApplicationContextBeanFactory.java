@@ -1,8 +1,5 @@
 package com.wangbei.awre;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.event.service.spi.EventListenerGroup;
 import org.hibernate.event.service.spi.EventListenerRegistry;
@@ -17,8 +14,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import com.wangbei.awre.jpa.CustomMergeEventListener;
-import com.wangbei.dao.SmsDao;
-import com.wangbei.util.SmsTypeEnum;
+
 import javax.persistence.EntityManagerFactory;
 
 /**

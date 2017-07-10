@@ -1,7 +1,7 @@
 package com.wangbei.controller;
 
-import com.wangbei.util.GenderEnum;
-import com.wangbei.util.PayEnum;
+import com.wangbei.util.enums.GenderEnum;
+import com.wangbei.util.enums.PayEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
 package com.wangbei.awre.converter;
 
-import com.wangbei.util.enums.GenderEnum;
+import com.wangbei.util.enums.DivinationTypeEnum;
 
 import javax.persistence.AttributeConverter;
 
@@ -9,7 +9,7 @@ import javax.persistence.AttributeConverter;
 * @class com.wangbei.awre.converter.GenderEnumConverter
 * @description 自定义性别类型转换器
 */
-public class GenderEnumConverter implements AttributeConverter<GenderEnum,Integer> {
+public class DivinationTypeEnumConverter implements AttributeConverter<DivinationTypeEnum,Integer> {
 
     /**
     * @author yuyidi 2017-07-06 17:24:41
@@ -19,7 +19,7 @@ public class GenderEnumConverter implements AttributeConverter<GenderEnum,Intege
     * @description 将枚举类型转换成数据库字段值
     */
     @Override
-    public Integer convertToDatabaseColumn(GenderEnum attribute) {
+    public Integer convertToDatabaseColumn(DivinationTypeEnum attribute) {
         return  attribute.getIndex();
     }
 
@@ -31,7 +31,7 @@ public class GenderEnumConverter implements AttributeConverter<GenderEnum,Intege
     * @description 将数据库字段值转换成枚举
     */
     @Override
-    public GenderEnum convertToEntityAttribute(Integer dbData) {
-        return GenderEnum.getByIndex(dbData);
+    public DivinationTypeEnum convertToEntityAttribute(Integer dbData) {
+        return DivinationTypeEnum.getByIndex(dbData);
     }
 }
