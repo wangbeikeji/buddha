@@ -7,6 +7,7 @@ import com.wangbei.exception.ExceptionMap;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.pojo.Response;
 import com.wangbei.util.JacksonUtil;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +30,7 @@ import java.io.IOException;
 public class JWTFilter extends AbstractAuthenticationProcessingFilter {
 
     public JWTFilter(String url, AuthenticationManager authenticationManager) {
-        super(new AntPathRequestMatcher(url));
+        super(new AntPathRequestMatcher(url,"POST"));
         setAuthenticationManager(authenticationManager);
     }
 
