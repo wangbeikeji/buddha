@@ -1,15 +1,16 @@
 package com.wangbei.awre.converter;
 
 import com.wangbei.util.enums.DivinationTypeEnum;
+import com.wangbei.util.enums.OfferingTypeEnum;
 
 import javax.persistence.AttributeConverter;
 
 /**
 * @author yuyidi 2017-07-06 17:24:07
 * @class com.wangbei.awre.converter.GenderEnumConverter
-* @description 自定义灵签类型转换器
+* @description 自定义供品类型转换器
 */
-public class DivinationTypeEnumConverter implements AttributeConverter<DivinationTypeEnum,Integer> {
+public class OfferingTypeEnumConverter implements AttributeConverter<OfferingTypeEnum,Integer> {
 
     /**
     * @author yuyidi 2017-07-06 17:24:41
@@ -19,7 +20,7 @@ public class DivinationTypeEnumConverter implements AttributeConverter<Divinatio
     * @description 将枚举类型转换成数据库字段值
     */
     @Override
-    public Integer convertToDatabaseColumn(DivinationTypeEnum attribute) {
+    public Integer convertToDatabaseColumn(OfferingTypeEnum attribute) {
         return  attribute.getIndex();
     }
 
@@ -31,7 +32,7 @@ public class DivinationTypeEnumConverter implements AttributeConverter<Divinatio
     * @description 将数据库字段值转换成枚举
     */
     @Override
-    public DivinationTypeEnum convertToEntityAttribute(Integer dbData) {
-        return DivinationTypeEnum.getByIndex(dbData);
+    public OfferingTypeEnum convertToEntityAttribute(Integer dbData) {
+        return OfferingTypeEnum.getByIndex(dbData);
     }
 }
