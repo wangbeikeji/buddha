@@ -21,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/")
-    public User addition(User user) {
+    public User redister(User user) {
         return userService.addUser(user);
     }
 
