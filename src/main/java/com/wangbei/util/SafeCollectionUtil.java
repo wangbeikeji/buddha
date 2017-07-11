@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 */
 public class SafeCollectionUtil {
 
-    private static ConcurrentHashMap<String, ValidateCode> validateCodes = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, ValidateCode> validateCodes = new ConcurrentHashMap<>(1000);
 
 
     public static ValidateCode saveValidateCode(String phone,Integer code){

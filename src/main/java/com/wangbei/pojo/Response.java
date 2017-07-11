@@ -8,6 +8,8 @@ import java.io.Serializable;
 * @description http接口响应实体
 */
 public class Response<T> implements Serializable{
+
+    private static final long serialVersionUID = 1L;
     /*状态码*/
     private String code="200";
     /*响应实体对象*/

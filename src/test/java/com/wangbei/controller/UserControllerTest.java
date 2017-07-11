@@ -18,13 +18,13 @@ public class UserControllerTest extends BaseControllerTest {
     @Test
     public void addition() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/user/register")
-                .param("name", "admin")
+                .param("name", "yuyidi")
                 .param("phone", "18008622878")
                 .param("password", "123456")
                 .param("gender", "1")
                 .param("birthday", sdf.format(new Date()))
-                .param("signature", "我是系统管理员，我怕谁")
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .param("validateCode","123456")
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(status().isOk());
     }
 
