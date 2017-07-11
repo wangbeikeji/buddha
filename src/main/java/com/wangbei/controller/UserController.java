@@ -44,5 +44,5 @@ public class UserController {
     @PostMapping("/login")
     public User login(String phone,String password){
         return userService.getUserByPhoneAndPassword(phone,password);
-    };
+    }
 }

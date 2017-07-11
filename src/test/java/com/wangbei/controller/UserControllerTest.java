@@ -22,7 +22,7 @@ public class UserControllerTest extends BaseControllerTest {
                 .param("phone", "18008622878")
                 .param("password", "123456")
                 .param("gender", "1")
-                .param("birthday", sdf.format(new Date()))
+                .param("birthday", "199206")
                 .param("validateCode","123456")
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(status().isOk());

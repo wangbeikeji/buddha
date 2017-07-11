@@ -29,7 +29,7 @@ public class  User implements Serializable {
     @Column(name = "gender")
     private GenderEnum gender = GenderEnum.MAN;
     @Column(name = "birthday")
-    private Date birthday;
+    private String birthday;
     @Column(name = "signature")
     private String signature;
     @Column(name = "create_time")
@@ -75,11 +75,11 @@ public class  User implements Serializable {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
