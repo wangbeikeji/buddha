@@ -22,7 +22,7 @@ public class SmsController {
 	@Autowired
 	private SmsService smsService;
 
-	@RequestMapping(value = "/sendAuthCode")
+	@PostMapping(value = "/sendAuthCode")
 	public Response<SendAuthCodeResult> sendAuthCode(String phone) {
 		return new Response<>(smsService.sendAuthCode(phone));
 	}
