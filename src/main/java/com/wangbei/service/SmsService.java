@@ -12,9 +12,9 @@ public class SmsService {
 
 	private SmsTypeEnum smsType = SmsTypeEnum.Ali;
 
-	public SendAuthCodeResult sendAuthCode(String[] phoneNumbers) {
+	public SendAuthCodeResult sendAuthCode(String phoneNumber) {
 		SmsDao smsDao = BusinessFactory.getSmsDao(smsType);
-		return smsDao.sendAuthCode(phoneNumbers);
+		return smsDao.sendAuthCode(new String[] { phoneNumber });
 	}
 
 }

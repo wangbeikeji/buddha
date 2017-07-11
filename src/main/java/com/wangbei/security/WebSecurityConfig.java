@@ -6,6 +6,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.wangbei.security.jwt.JWTAuthenticationFilter;
+import com.wangbei.security.jwt.JWTLoginFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -16,11 +20,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new AuthenticationProvider();
 	}
 
-	@Bean
-	AuthenticationSuccessHandler authenticationSuccessHandler() {
-		return new AuthenticationSuccessHandler();
-	}
-
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());
@@ -29,16 +28,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
-		
-		http.authorizeRequests().antMatchers("/noauth.html").permitAll();
-		http.authorizeRequests().antMatchers("/index.html").authenticated();
-		http.authorizeRequests().antMatchers("/user.html").hasAuthority("ROLE_USER");
-		http.authorizeRequests().antMatchers("/admin.html").hasAuthority("ROLE_ADMIN");
-
+		http.authorizeRequests().antMatchers("/").permitAll();
 		http.authorizeRequests().antMatchers("/sec/**").authenticated();
-
-		http.authorizeRequests().and().formLogin().loginPage("/login").successHandler(authenticationSuccessHandler())
-				.failureUrl("/login?error").permitAll().and().logout().permitAll();
+		
+		
+		
+		// 添加一个过滤器 所有访问 /login 的请求交给 JWTLoginFilter 来处理 这个类处理所有的JWT相关内容
+		http.addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
+                UsernamePasswordAuthenticationFilter.class);
+		// 添加一个过滤器验证其他请求的Token是否合法
+		http.addFilterBefore(new JWTAuthenticationFilter(),
+				UsernamePasswordAuthenticationFilter.class);
 	}
 
 }
