@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.wangbei.dao.SmsDao;
 import com.wangbei.pojo.SendAuthCodeResult;
-import com.wangbei.util.SmsTypeEnum;
+import com.wangbei.util.enums.SmsTypeEnum;
 
 @Component
 public class SxtSmsRest extends HttpRest<SendAuthCodeResult> implements SmsDao {

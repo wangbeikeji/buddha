@@ -1,7 +1,7 @@
 package com.wangbei.entity;
 
 import com.wangbei.awre.converter.GenderEnumConverter;
-import com.wangbei.util.GenderEnum;
+import com.wangbei.util.enums.GenderEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;

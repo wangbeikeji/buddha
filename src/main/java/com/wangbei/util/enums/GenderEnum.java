@@ -1,4 +1,4 @@
-package com.wangbei.util;
+package com.wangbei.util.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * @author yuyidi 2017-07-06 17:02:43
- * @class com.wangbei.util.GenderEnum
+ * @class com.wangbei.util.enums.GenderEnum
  * @description 性别枚举
  */
 public enum GenderEnum implements CommonalityEnum {
@@ -15,14 +15,6 @@ public enum GenderEnum implements CommonalityEnum {
 
     private Integer index;
     private String gender;
-
-    private static Map<Integer, GenderEnum> valueMap = new HashMap<>();
-
-    static {
-        for (GenderEnum gender : GenderEnum.values()) {
-            valueMap.put(gender.getIndex(), gender);
-        }
-    }
 
     GenderEnum(Integer index, String gender) {
         this.index = index;
@@ -37,6 +29,15 @@ public enum GenderEnum implements CommonalityEnum {
     @JsonValue
     public String getGender() {
         return gender;
+    }
+
+
+    private static Map<Integer, GenderEnum> valueMap = new HashMap<>();
+
+    static {
+        for (GenderEnum _enum : GenderEnum.values()) {
+            valueMap.put(_enum.getIndex(), _enum);
+        }
     }
 
     public static GenderEnum getByIndex(Integer index){

@@ -13,7 +13,7 @@ import com.wangbei.pojo.SendAuthCodeResult;
 import com.wangbei.sdk.ali.SendSmsClient;
 import com.wangbei.sdk.ali.model.SendSmsResponse;
 import com.wangbei.util.RandomUtil;
-import com.wangbei.util.SmsTypeEnum;
+import com.wangbei.util.enums.SmsTypeEnum;
 
 /**
  * @author yuyidi 2017-07-06 13:49:06

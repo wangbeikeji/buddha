@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import com.wangbei.dao.SmsDao;
-import com.wangbei.util.SmsTypeEnum;
+import com.wangbei.util.enums.SmsTypeEnum;
 
 /**
  * 短信dao工厂类

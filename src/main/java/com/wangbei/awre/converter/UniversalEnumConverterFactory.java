@@ -1,6 +1,6 @@
 package com.wangbei.awre.converter;
 
-import com.wangbei.util.CommonalityEnum;
+import com.wangbei.util.enums.CommonalityEnum;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
