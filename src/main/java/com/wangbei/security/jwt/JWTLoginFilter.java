@@ -19,7 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangbei.pojo.LoginParam;
 import com.wangbei.pojo.Response;
-import com.wangbei.util.JsonUtil;
+import com.wangbei.util.JacksonUtil;
 
 import io.swagger.models.HttpMethod;
 
@@ -61,7 +61,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 		res.setContentType("application/json");
 		res.setStatus(HttpServletResponse.SC_OK);
 		Response<String> result = new Response<String>("200", token, "successful!");
-		res.getOutputStream().println(JsonUtil.beanToJson(result));
+		res.getOutputStream().println(JacksonUtil.encode(result));
 	}
 
 	@Override
@@ -70,6 +70,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 		response.setContentType("application/json;charset=utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 		Response<String> result = new Response<>("601", "用户名或者密码错误!");
-		response.getWriter().println(JsonUtil.beanToJson(result));
+		response.getWriter().println(JacksonUtil.encode(result));
 	}
 }

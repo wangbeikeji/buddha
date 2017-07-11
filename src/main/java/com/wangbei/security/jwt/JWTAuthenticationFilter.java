@@ -36,9 +36,9 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 					// 如果为正确的token，将身份验证放入上下文中
 					List<GrantedAuthority> authorities = AuthorityUtils
 							.commaSeparatedStringToAuthorityList((String) tokenInfo.get("authorities"));
-					Authentication authentication = new UsernamePasswordAuthenticationToken(useranme, null, authorities);
+					Authentication authentication = new UsernamePasswordAuthenticationToken(useranme, null,
+							authorities);
 					SecurityContextHolder.getContext().setAuthentication(authentication);
-							
 				}
 			}
 		}
