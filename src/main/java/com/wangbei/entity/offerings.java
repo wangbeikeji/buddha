@@ -9,8 +9,8 @@ import java.io.Serializable;
 * @class com.wangbei.entity.offerings
 * @description 供品
 */
-@Entity
-@Table(name = "offerings")
+// @Entity
+// @Table(name = "offerings")
 public class offerings implements Serializable{
 
     private Integer id;

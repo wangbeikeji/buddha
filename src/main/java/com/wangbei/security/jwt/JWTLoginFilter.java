@@ -1,6 +1,7 @@
 package com.wangbei.security.jwt;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -47,7 +49,19 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
-		TokenAuthenticationService.addAuthentication(res, auth.getName());
+		// step 1 : 获取权限
+		StringBuilder grantedAuthStr = new StringBuilder();
+		Collection<? extends GrantedAuthority> grantedAuthList = auth.getAuthorities();
+		for (GrantedAuthority grantedAuth : grantedAuthList) {
+			grantedAuthStr.append(grantedAuth.getAuthority() + ",");
+		}
+		// step 2 : 获取token
+		String token = TokenAuthenticationService.generateToken(auth.getName(), grantedAuthStr.toString());
+		// step 3 : 返回token到客户端
+		res.setContentType("application/json");
+		res.setStatus(HttpServletResponse.SC_OK);
+		Response<String> result = new Response<String>("200", token, "successful!");
+		res.getOutputStream().println(JsonUtil.beanToJson(result));
 	}
 
 	@Override
