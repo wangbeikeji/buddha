@@ -27,7 +27,7 @@ public class  User implements Serializable {
     private String password;
     @Convert(converter = GenderEnumConverter.class)
     @Column(name = "gender")
-    private GenderEnum gender;
+    private GenderEnum gender = GenderEnum.MAN;
     @Column(name = "birthday")
     private Date birthday;
     @Column(name = "signature")

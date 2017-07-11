@@ -14,17 +14,17 @@ public class SmsService {
 
 	private SmsTypeEnum smsType = SmsTypeEnum.Ali;
 
-	public ValidateCode sendAuthCode(String phoneNumber) {
-		ValidateCode reuslt = null;
+	public SendAuthCodeResult sendAuthCode(String phoneNumber) {
+		SendAuthCodeResult sacr = null;
 		ValidateCode validateCode = SafeCollectionUtil.getValidateCode(phoneNumber);
 		if (validateCode == null) {
 			SmsDao smsDao = BusinessFactory.getSmsDao(smsType);
-			SendAuthCodeResult sacr = smsDao.sendAuthCode(new String[] { phoneNumber });
+			sacr = smsDao.sendAuthCode(new String[] { phoneNumber });
 			if (sacr.getCode() == 1000) {
-				reuslt = SafeCollectionUtil.saveValidateCode(phoneNumber,Integer.valueOf(sacr.getValidationCode()));
+				SafeCollectionUtil.saveValidateCode(phoneNumber,Integer.valueOf(sacr.getValidationCode()));
 			}
 		}
-		return reuslt;
+		return sacr;
 	}
 
 }

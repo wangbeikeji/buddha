@@ -15,7 +15,7 @@ public class Response<T> implements Serializable{
     /*响应实体对象*/
     private T result;
     /*响应结果内容*/
-    private String message;
+    private String message="OK";
 
     public Response() {
     }

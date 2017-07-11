@@ -6,10 +6,7 @@ import com.wangbei.pojo.ValidateCode;
 import com.wangbei.service.UserService;
 import com.wangbei.util.SafeCollectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
 * @author yuyidi 2017-07-06 17:39:59
@@ -37,6 +34,11 @@ public class UserController {
             return new Response<>("3000","用户验证码发送失败");
         }
         return new Response<>("4001","手机号不能为空");
+    }
+
+    @PutMapping("/")
+    public Response<User> complete(User user) {
+        return new Response<>(userService.addUser(user));
     }
 
     @PostMapping("/login")

@@ -1,5 +1,7 @@
 package com.wangbei.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 发送验证码结果 对象
  * 
@@ -35,6 +37,7 @@ public class SendAuthCodeResult {
 		this.message = message;
 	}
 
+	@JsonIgnore
 	public String getValidationCode() {
 		return validationCode;
 	}
