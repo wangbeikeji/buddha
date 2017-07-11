@@ -1,5 +1,7 @@
 package com.wangbei.service;
 
+import com.wangbei.pojo.ValidateCode;
+import com.wangbei.util.SafeCollectionUtil;
 import org.springframework.stereotype.Service;
 
 import com.wangbei.awre.BusinessFactory;
@@ -12,9 +14,17 @@ public class SmsService {
 
 	private SmsTypeEnum smsType = SmsTypeEnum.Ali;
 
-	public SendAuthCodeResult sendAuthCode(String phoneNumber) {
-		SmsDao smsDao = BusinessFactory.getSmsDao(smsType);
-		return smsDao.sendAuthCode(new String[] { phoneNumber });
+	public ValidateCode sendAuthCode(String phoneNumber) {
+		ValidateCode reuslt = null;
+		ValidateCode validateCode = SafeCollectionUtil.getValidateCode(phoneNumber);
+		if (validateCode == null) {
+			SmsDao smsDao = BusinessFactory.getSmsDao(smsType);
+			SendAuthCodeResult sacr = smsDao.sendAuthCode(new String[] { phoneNumber });
+			if (sacr.getCode() == 1000) {
+				reuslt = SafeCollectionUtil.saveValidateCode(phoneNumber,Integer.valueOf(sacr.getValidationCode()));
+			}
+		}
+		return reuslt;
 	}
 
 }

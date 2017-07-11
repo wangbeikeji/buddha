@@ -17,6 +17,8 @@ public class SendAuthCodeResult {
 	 */
 	private String message;
 
+	private String validationCode;
+
 	public int getCode() {
 		return code;
 	}
@@ -33,4 +35,11 @@ public class SendAuthCodeResult {
 		this.message = message;
 	}
 
+	public String getValidationCode() {
+		return validationCode;
+	}
+
+	public void setValidationCode(String validationCode) {
+		this.validationCode = validationCode;
+	}
 }

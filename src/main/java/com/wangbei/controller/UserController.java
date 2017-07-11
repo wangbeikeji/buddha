@@ -1,7 +1,10 @@
 package com.wangbei.controller;
 
 import com.wangbei.entity.User;
+import com.wangbei.pojo.Response;
+import com.wangbei.pojo.ValidateCode;
 import com.wangbei.service.UserService;
+import com.wangbei.util.SafeCollectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +23,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/")
-    public User redister(User user) {
-        return userService.addUser(user);
+    @PostMapping("/register")
+    public Response<User> addition(User user, Integer validateCode) {
+        User result = null;
+        Response<User> response = null;
+        if (user.getPhone() != null) {
+            ValidateCode validate = SafeCollectionUtil.getValidateCode(user.getPhone());
+            if (validate != null && validate.getCode().equals(validateCode)) {
+                result = userService.addUser(user);
+                response = new Response<>(result);
+                return response;
+            }
+            return new Response<>("3000","用户验证码发送失败");
+        }
+        return new Response<>("4001","手机号不能为空");
     }
 
     @PostMapping("/login")

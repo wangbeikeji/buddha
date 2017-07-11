@@ -17,7 +17,7 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Test
     public void addition() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/user/")
+        mvc.perform(MockMvcRequestBuilders.post("/user/register")
                 .param("name", "admin")
                 .param("phone", "18008622878")
                 .param("password", "123456")
