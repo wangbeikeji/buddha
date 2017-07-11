@@ -1,5 +1,6 @@
 package com.wangbei.controller;
 
+import com.wangbei.pojo.ValidateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ public class SmsController {
 	private SmsService smsService;
 
 	@PostMapping("/sendAuthCode")
-	public SendAuthCodeResult sendAuthCode(@RequestBody String phoneNumber) {
+	public ValidateCode sendAuthCode(String phoneNumber) {
 		return smsService.sendAuthCode(phoneNumber);
 	}
 

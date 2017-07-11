@@ -15,7 +15,10 @@ public class Response<T> implements Serializable{
     /*响应结果内容*/
     private String message;
 
-    public Response(String code,String message) {
+    public Response() {
+    }
+
+    public Response(String code, String message) {
         this.code = code;
         this.message = message;
     }

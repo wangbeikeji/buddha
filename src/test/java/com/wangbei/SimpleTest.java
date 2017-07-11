@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author Created by yuyidi on 2017/7/4.
@@ -33,7 +35,12 @@ public class SimpleTest {
 
     @Test
     public void testJodaTime() throws ParseException {
-        String date = DateTime.now().toLocalDateTime().toString();
-        System.out.println(date);
+        DateTime dt = new DateTime();
+        DateTime expire = dt.plusMinutes(5);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(expire.toDate()));
+
+        Date date = new Date();
+        System.out.println(date.getTime()-System.currentTimeMillis());
     }
 }
