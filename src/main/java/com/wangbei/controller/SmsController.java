@@ -22,9 +22,9 @@ public class SmsController {
 	@Autowired
 	private SmsService smsService;
 
-	@PostMapping("/sendVerificationCode")
-	public SendAuthCodeResult sendVerificationCode(@RequestBody String[] phoneNumbers) {
-		return smsService.sendAuthCode(phoneNumbers);
+	@PostMapping("/sendAuthCode")
+	public SendAuthCodeResult sendAuthCode(@RequestBody String phoneNumber) {
+		return smsService.sendAuthCode(phoneNumber);
 	}
 
 }

@@ -24,7 +24,7 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
 			UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 		try {
-			if (!userDetails.getPassword().equalsIgnoreCase(Md5Util.md5(authentication.getPrincipal().toString()))) {
+			if (!userDetails.getPassword().equalsIgnoreCase(Md5Util.md5(authentication.getCredentials().toString()))) {
 				throw new BadCredentialsException("密码错误");
 			}
 		} catch (NoSuchAlgorithmException e) {
