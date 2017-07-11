@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wangbei.pojo.Response;
+
 /**
  * 需要鉴权的控制器
  * 
@@ -20,6 +22,11 @@ public class SecController {
 	@RequestMapping("/index")
 	public String index() {
 		return "sec index result!";
+	}
+	
+	@RequestMapping("/foo")
+	public Response<String> foo() {
+		return new Response<String>("foo");
 	}
 
 }
