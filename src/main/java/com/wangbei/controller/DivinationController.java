@@ -16,6 +16,9 @@ import com.wangbei.entity.Divination;
 import com.wangbei.pojo.Response;
 import com.wangbei.service.DivinationService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * 灵签 Controller
  * 
@@ -24,6 +27,7 @@ import com.wangbei.service.DivinationService;
  */
 @RestController
 @RequestMapping("/divination")
+@Api(tags = { "灵签接口列表" })
 public class DivinationController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -32,27 +36,32 @@ public class DivinationController {
 	public DivinationService divinationService;
 
 	@GetMapping("/{id}")
+	@ApiOperation(value = "根据id获取灵签")
 	public Response<Divination> fetchById(@PathVariable Integer id) {
 		return new Response<>(divinationService.getDivinationInfo(id));
 	}
 
 	@PostMapping("/")
+	@ApiOperation(value = "添加灵签")
 	public Response<Divination> addition(Divination divination) {
 		return new Response<>(divinationService.addDivination(divination));
 	}
 
 	@PutMapping("/")
+	@ApiOperation(value = "修改灵签")
 	public Response<Divination> modification(Divination divination) {
 		return new Response<>(divinationService.modifyDivination(divination));
 	}
 
 	@DeleteMapping("/")
+	@ApiOperation(value = "删除灵签")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		divinationService.deleteDivination(id);
 		return new Response<Integer>(id);
 	}
 
 	@GetMapping("/page")
+	@ApiOperation(value = "获取灵签分页数据")
 	public Response<Page<Divination>> divinations(int page, int limit) {
 		return new Response<>((Page<Divination>) divinationService.divinations(page, limit));
 	}

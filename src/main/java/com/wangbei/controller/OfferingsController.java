@@ -16,6 +16,9 @@ import com.wangbei.entity.Offerings;
 import com.wangbei.pojo.Response;
 import com.wangbei.service.OfferingsService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * 供品 Controller
  * 
@@ -24,6 +27,7 @@ import com.wangbei.service.OfferingsService;
  */
 @RestController
 @RequestMapping("/offerings")
+@Api(tags = { "供品接口列表" })
 public class OfferingsController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -32,27 +36,32 @@ public class OfferingsController {
 	public OfferingsService offeringsService;
 
 	@GetMapping("/{id}")
+	@ApiOperation(value = "根据id获取供品")
 	public Response<Offerings> fetchById(@PathVariable Integer id) {
 		return new Response<>(offeringsService.getOfferingsInfo(id));
 	}
 
 	@PostMapping("/")
+	@ApiOperation(value = "添加供品")
 	public Response<Offerings> addition(Offerings offerings) {
 		return new Response<>(offeringsService.addOfferings(offerings));
 	}
 
 	@PutMapping("/")
+	@ApiOperation(value = "修改供品")
 	public Response<Offerings> modification(Offerings offerings) {
 		return new Response<>(offeringsService.modifyOfferings(offerings));
 	}
 
 	@DeleteMapping("/")
+	@ApiOperation(value = "删除供品")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		offeringsService.deleteOfferings(id);
 		return new Response<Integer>(id);
 	}
 
 	@GetMapping("/page")
+	@ApiOperation(value = "获取供品分页数据")
 	public Response<Page<Offerings>> offeringss(int page, int limit) {
 		return new Response<>((Page<Offerings>) offeringsService.offeringss(page, limit));
 	}

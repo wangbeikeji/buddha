@@ -16,6 +16,9 @@ import com.wangbei.entity.Rune;
 import com.wangbei.pojo.Response;
 import com.wangbei.service.RuneService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * 符文 Controller
  * 
@@ -24,6 +27,7 @@ import com.wangbei.service.RuneService;
  */
 @RestController
 @RequestMapping("/rune")
+@Api(tags = { "符文接口列表" })
 public class RuneController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -32,27 +36,32 @@ public class RuneController {
 	public RuneService runeService;
 
 	@GetMapping("/{id}")
+	@ApiOperation(value = "根据id获取符文")
 	public Response<Rune> fetchById(@PathVariable Integer id) {
 		return new Response<>(runeService.getRuneInfo(id));
 	}
 
 	@PostMapping("/")
+	@ApiOperation(value = "添加符文")
 	public Response<Rune> addition(Rune rune) {
 		return new Response<>(runeService.addRune(rune));
 	}
 
 	@PutMapping("/")
+	@ApiOperation(value = "修改符文")
 	public Response<Rune> modification(Rune rune) {
 		return new Response<>(runeService.modifyRune(rune));
 	}
 
 	@DeleteMapping("/")
+	@ApiOperation(value = "删除符文")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		runeService.deleteRune(id);
 		return new Response<Integer>(id);
 	}
 
 	@GetMapping("/page")
+	@ApiOperation(value = "获取符文分页数据")
 	public Response<Page<Rune>> runes(int page, int limit) {
 		return new Response<>((Page<Rune>) runeService.runes(page, limit));
 	}
