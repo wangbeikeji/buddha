@@ -33,7 +33,7 @@ public class UserControllerTest extends BaseControllerTest {
         MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/user/login")
                 .param("phone", "18008622878")
                 .param("password", "123456")
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(status().isOk())
                 .andReturn();
         System.out.println(result.getResponse().getContentAsString());
