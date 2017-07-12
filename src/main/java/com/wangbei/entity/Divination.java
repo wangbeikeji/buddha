@@ -19,11 +19,24 @@ public class Divination implements Serializable {
     private Integer id;
     @Column(name = "sequence_number")
     private String sequenceNumber;
+    //签诗
     @Column(name = "poem")
     private String poem;
+    //解签
+    @Column(name = "solution")
+    private String solution;
     @Column(name = "type")
     @Convert(converter = DivinationTypeEnumConverter.class)
     private DivinationTypeEnum type;
+    //引用
+    @Column(name = "reference")
+    private String reference;
+    //概述
+    @Column(name = "summarize")
+    private String summarize;
+    //签语
+    @Column(name = "sketch")
+    private String sketch;
 
     public Integer getId() {
         return id;
@@ -49,11 +62,43 @@ public class Divination implements Serializable {
         this.poem = poem;
     }
 
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
+
     public DivinationTypeEnum getType() {
         return type;
     }
 
     public void setType(DivinationTypeEnum type) {
         this.type = type;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getSummarize() {
+        return summarize;
+    }
+
+    public void setSummarize(String summarize) {
+        this.summarize = summarize;
+    }
+
+    public String getSketch() {
+        return sketch;
+    }
+
+    public void setSketch(String sketch) {
+        this.sketch = sketch;
     }
 }
