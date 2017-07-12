@@ -21,7 +21,8 @@ public interface KnowledgeDao {
 
 	public Knowledge retrieveKnowledgeById(Integer id);
 
-	public Page<Knowledge> pageKnowledgeByType(KnowledgeTypeEnum type, int offset, int limit);
+	public Page<Knowledge> pageKnowledgeByType(KnowledgeTypeEnum type, int page, int limit);
 
-	public Page<Knowledge> pageKnowledge(int offset, int limit);
+	public Page<Knowledge> pageKnowledge(int page, int limit);
+	
 }

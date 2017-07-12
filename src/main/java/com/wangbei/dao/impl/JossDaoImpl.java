@@ -39,7 +39,7 @@ public class JossDaoImpl implements JossDao {
     }
 
     @Override
-    public Page<Joss> pageJoss(int offset, int limit) {
-        return jossRepository.findAll(new PageRequest(offset,limit));
+    public Page<Joss> pageJoss(int page, int limit) {
+        return jossRepository.findAll(new PageRequest(page, limit));
     }
 }

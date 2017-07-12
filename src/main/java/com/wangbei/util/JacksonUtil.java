@@ -8,12 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 
 public class JacksonUtil {
 	private static final Logger logger = LoggerFactory
@@ -23,13 +20,13 @@ public class JacksonUtil {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		objectMapper.setDateFormat(dateFormat);
 		// 是否使用parser是否允许使用java注释样式 / /**
-		objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES,
-				true);
-		objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS,
-				true);
-		objectMapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+//		objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+//		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES,
+//				true);
+//		objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+//		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS,
+//				true);
+//		objectMapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 //		SerializationConfig serConfig = objectMapper.getSerializationConfig();
 //		DeserializationConfig deserializationConfig = objectMapper
 //				.getDeserializationConfig();

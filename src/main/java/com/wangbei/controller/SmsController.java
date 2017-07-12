@@ -1,11 +1,11 @@
 package com.wangbei.controller;
 
-import com.wangbei.pojo.Response;
-import com.wangbei.pojo.ValidateCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.wangbei.pojo.Response;
 import com.wangbei.pojo.SendAuthCodeResult;
 import com.wangbei.service.SmsService;
 

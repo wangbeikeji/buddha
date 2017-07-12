@@ -18,7 +18,7 @@ import com.wangbei.util.enums.SmsTypeEnum;
  *
  */
 @Component
-public class BusinessFactory implements ApplicationContextAware {
+public class SmsDaoFactory implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
 

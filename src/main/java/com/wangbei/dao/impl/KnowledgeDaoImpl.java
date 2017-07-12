@@ -43,13 +43,13 @@ public class KnowledgeDaoImpl implements KnowledgeDao {
 	}
 
 	@Override
-	public Page<Knowledge> pageKnowledgeByType(KnowledgeTypeEnum type, int offset, int limit) {
-		return knowledgeRepository.findByType(type, new PageRequest(offset, limit));
+	public Page<Knowledge> pageKnowledgeByType(KnowledgeTypeEnum type, int page, int limit) {
+		return knowledgeRepository.findByType(type, new PageRequest(page, limit));
 	}
 
 	@Override
-	public Page<Knowledge> pageKnowledge(int offset, int limit) {
-		return knowledgeRepository.findAll(new PageRequest(offset, limit));
+	public Page<Knowledge> pageKnowledge(int page, int limit) {
+		return knowledgeRepository.findAll(new PageRequest(page, limit));
 	}
 
 }

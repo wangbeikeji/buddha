@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.wangbei.util.JacksonUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,9 +16,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangbei.pojo.LoginParam;
 import com.wangbei.pojo.Response;
+import com.wangbei.util.JacksonUtil;
 
 import io.swagger.models.HttpMethod;
 
@@ -36,7 +35,9 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 		// 获取登陆请求数据
 		LoginParam creds = null;
 		try {
-			creds = new ObjectMapper().readValue(req.getInputStream(), LoginParam.class);
+			String username = req.getParameter("username");
+			String password = req.getParameter("password");
+			creds = new LoginParam(username, password);
 		} catch (Exception ex) {
 			res.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(null, null));

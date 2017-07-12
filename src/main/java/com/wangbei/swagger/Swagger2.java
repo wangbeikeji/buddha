@@ -7,6 +7,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -22,9 +23,9 @@ public class Swagger2 {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Spring Boot中使用Swagger2构建RESTful APIs")
-				.description("Swagger2")
-				.termsOfServiceUrl("http://localhost:8080/swagger-ui.html").contact("luomengan").version("1.0").build();
+		Contact contact = new Contact("wangbei", "https://github.com/wangbeikeji/buddha", "yuyidi@waben.com");
+		return new ApiInfoBuilder().title("Document Api").description("华人佛教API").license("Apache License Version 2.0")
+				.contact(contact).version("1.0").build();
 	}
 
 }

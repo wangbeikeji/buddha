@@ -54,7 +54,7 @@ public class MenuController {
     * @description 修改菜单
     */
     @PutMapping("/")
-    public Menu modification(@RequestBody Menu menu) {
+    public Menu modification(Menu menu) {
         return menuService.modifyMenu(menu);
     }
 

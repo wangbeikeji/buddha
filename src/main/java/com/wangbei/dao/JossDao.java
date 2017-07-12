@@ -16,5 +16,5 @@ public interface JossDao {
 
     public Joss retrieveJossById(Integer id);
 
-    public Page<Joss> pageJoss(int offset, int limit);
+    public Page<Joss> pageJoss(int page, int limit);
 }

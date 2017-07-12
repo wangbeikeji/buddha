@@ -15,7 +15,7 @@ import com.wangbei.util.enums.KnowledgeTypeEnum;
  */
 public interface KnowledgeRepository extends Repository<Knowledge, Integer> {
 
-	public Knowledge save(Knowledge knowledge);
+	Knowledge save(Knowledge knowledge);
 
 	void delete(Integer id);
 
@@ -24,4 +24,5 @@ public interface KnowledgeRepository extends Repository<Knowledge, Integer> {
 	Page<Knowledge> findByType(KnowledgeTypeEnum type, Pageable pageable);
 
 	Knowledge findById(Integer id);
+	
 }
