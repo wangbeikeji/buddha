@@ -72,7 +72,6 @@ public class HttpClientConfigure {
     @Bean
     public HttpClient httpClient() {
         HttpClient httpClient = httpClientBuilder().build();
-        logger.info("httpclient 创建成功：{}",httpClient);
         return httpClient;
     }
 
@@ -92,20 +91,25 @@ public class HttpClientConfigure {
         messageConverters.add(new ByteArrayHttpMessageConverter());
         messageConverters.add(new StringHttpMessageConverter());
         messageConverters.add(new ResourceHttpMessageConverter());
-        messageConverters.add(new SourceHttpMessageConverter<Source>());
+        messageConverters.add(new SourceHttpMessageConverter<>());
         messageConverters.add(new AllEncompassingFormHttpMessageConverter());
         messageConverters.add(new FormHttpMessageConverter());
+        messageConverters.add(mappingJackson2HttpMessageConverter());
+        restTemplate.setMessageConverters(messageConverters);
+        return restTemplate;
+    }
+
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(){
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         jackson2HttpMessageConverter.setObjectMapper(objectMapper());
         List<MediaType> mediaTypes = new ArrayList<>();
         mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         mediaTypes.add(MediaType.TEXT_HTML);
         jackson2HttpMessageConverter.setSupportedMediaTypes(mediaTypes);
-        restTemplate.setMessageConverters(messageConverters);
-        return restTemplate;
+        return jackson2HttpMessageConverter;
     }
 
-    ;
 
     @Bean
     public ObjectMapper objectMapper() {

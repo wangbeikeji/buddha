@@ -9,10 +9,10 @@ import com.google.gson.GsonBuilder;
 
 import springfox.documentation.spring.web.json.Json;
 
-@Configuration
+//@Configuration
 public class CustomHttpMessageConverters {
 
-	@Bean
+//	@Bean
 	public GsonHttpMessageConverter gsonHttpMessageConverter() {
 		GsonHttpMessageConverter converter = new GsonHttpMessageConverter();
 		converter.setGson(gson());

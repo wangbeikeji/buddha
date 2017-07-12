@@ -25,4 +25,9 @@ public class UserService {
     public User getUserByPhoneAndPassword(String phone, String password) {
         return userDao.fetchUserByPhoneAndPassword(phone, password);
     }
+
+    @Transactional
+    public User modifyUser(User user) {
+        return userDao.createUser(user);
+    }
 }
