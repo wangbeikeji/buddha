@@ -24,8 +24,8 @@ public class Knowledge implements Serializable{
     @Column(name = "type")
     @Convert(converter = KnowledgeTypeEnumConverter.class)
     private KnowledgeTypeEnum type;
-    @Column(name = "picture")
-    private String picture;
+    @Column(name = "link")
+    private String link;
     @Column(name = "context")
     private String context;
     @Column(name = "create_time")
@@ -55,12 +55,12 @@ public class Knowledge implements Serializable{
         this.type = type;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getLink() {
+        return link;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getContext() {

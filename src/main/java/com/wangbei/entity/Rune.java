@@ -19,6 +19,8 @@ public class Rune implements Serializable{
     private String symbol;
     @Column(name = "introduction")
     private String introduction;
+    @Column(name = "link")
+    private String link;
 
     public Integer getId() {
         return id;
@@ -42,5 +44,13 @@ public class Rune implements Serializable{
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
