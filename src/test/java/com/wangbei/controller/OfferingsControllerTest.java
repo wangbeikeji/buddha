@@ -26,11 +26,11 @@ public class OfferingsControllerTest extends BaseControllerTest {
 	@Test
 	public void addition() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/offerings/")
-				.param("designation", "aaa")
-				.param("type", "2")
-				.param("meritValue", "20")
-				.param("paraphrase", "aaa")
-				.param("link", "aaa")
+				.param("type", "3")
+				.param("designation", "曼陀罗花")
+				.param("meritValue", "10")
+				.param("paraphrase", "适意")
+				.param("link", "/picture/offerings/fruit/10_mtlh.png")
 				.accept(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk());
 	}

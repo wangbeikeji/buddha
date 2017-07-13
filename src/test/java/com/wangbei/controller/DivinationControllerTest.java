@@ -26,13 +26,13 @@ public class DivinationControllerTest extends BaseControllerTest {
 	@Test
 	public void addition() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/divination/")
-				.param("sequenceNumber", "0")
-				.param("summarize", "此卦心平正直之象，凡事安稳无凶也。此签家宅安，自身平，求财守慎，交易稳，婚姻合，六甲男，行人有信，田蚕稳，六畜安，寻人迟见，讼和，移徙守旧，失物见，病禳星，山坟平。")
-				.param("type", "2")
-				.param("reference", "金星试窦儿")
-				.param("poem", "一条金线秤君心 无减无增无重轻 为人平生心正直 文章全具艺光明")
-				.param("solution", "心平正直 到底清平 只依本份 天下太平")
-				.param("sketch", "此卦心平正直之象，凡事安稳无凶也。")
+				.param("sequenceNumber", "24")
+				.param("summarize", "此卦痴人道塞之象，凡事守旧待时也。此签家宅不安，自身险，求财阻，交易难，婚姻待时，田蚕六畜多灾，六甲祈福，行人寻人阻，讼亏，移徙吉，病急急求神，失物难见， 山坟不吉。")
+				.param("type", "3")
+				.param("reference", "殷效遇师")
+				.param("poem", "不成理论不成家 水性痴人似落花 若问君恩须得力 到头方见事如麻")
+				.param("solution", "是非莫说 必须仔细 心正理直 方免灾危")
+				.param("sketch", "此卦痴人道塞之象，凡事守旧待时也。")
 				.accept(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk());
 	}

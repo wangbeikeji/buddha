@@ -26,8 +26,8 @@ public class RuneControllerTest extends BaseControllerTest {
 	@Test
 	public void addition() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/rune/")
-				.param("symbol", "aaa")
-				.param("introduction", "aaa")
+				.param("symbol", "平安符")
+				.param("introduction", "辟邪驱邪，万事平安。")
 				.accept(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk());
 	}
