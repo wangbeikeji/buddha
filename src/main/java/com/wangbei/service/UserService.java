@@ -2,6 +2,8 @@ package com.wangbei.service;
 
 import com.wangbei.dao.UserDao;
 import com.wangbei.entity.User;
+import com.wangbei.exception.ServiceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,10 @@ public class UserService {
 
     @Transactional
     public User addUser(User user){
+    	User checkUser = userDao.fetchUserByPhone(user.getPhone());
+    	if(checkUser != null) {
+    		throw new ServiceException(ServiceException.USER_REGISTER_EXIST_EXCEPTION);
+    	}
         return userDao.createUser(user);
     }
 

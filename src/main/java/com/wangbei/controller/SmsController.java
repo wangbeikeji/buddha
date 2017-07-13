@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/sms")
-@Api(tags = { "短信服务接口列表" })
+@Api(description = "短信服务接口列表")
 public class SmsController {
 
 	@Autowired

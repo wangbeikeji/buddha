@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/knowledge")
-@Api(tags = { "佛学知识接口列表" })
+@Api(description = "佛学知识接口列表")
 public class KnowledgeController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());

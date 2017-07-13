@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/rune")
-@Api(tags = { "符文接口列表" })
+@Api(description = "符文接口列表")
 public class RuneController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());

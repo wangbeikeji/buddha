@@ -29,6 +29,8 @@ public class Offerings implements Serializable {
     private String paraphrase;
     @Column(name = "link")
     private String link;
+    @Column(name = "small_link")
+    private String smallLink;
 
     public Integer getId() {
         return id;

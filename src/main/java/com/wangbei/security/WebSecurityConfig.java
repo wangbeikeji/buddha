@@ -1,5 +1,6 @@
 package com.wangbei.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,12 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.wangbei.dao.UserDao;
 import com.wangbei.security.jwt.JWTAuthenticationFilter;
 import com.wangbei.security.jwt.JWTLoginFilter;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private UserDao userDao;
 
 	@Bean
 	AuthenticationProvider authenticationProvider() {
@@ -31,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// 登陆和注册
 		http.authorizeRequests().antMatchers("/login").permitAll();
 		http.authorizeRequests().antMatchers("/user/register").permitAll();
+		http.authorizeRequests().antMatchers("/sms/**").permitAll();
 		http.authorizeRequests().antMatchers("/user/login").permitAll();
 		// swagger
 		http.authorizeRequests().antMatchers("/swagger-ui.html").permitAll();
@@ -39,16 +45,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/v2/api-docs").permitAll();
 		http.authorizeRequests().antMatchers("/configuration/**").permitAll();
 		
-		http.authorizeRequests().antMatchers("/knowledge/**").permitAll();
-		http.authorizeRequests().antMatchers("/divination/**").permitAll();
-		http.authorizeRequests().antMatchers("/joss/**").permitAll();
-		http.authorizeRequests().antMatchers("/offerings/**").permitAll();
-		http.authorizeRequests().antMatchers("/rune/**").permitAll();
+		// http.authorizeRequests().antMatchers("/knowledge/**").permitAll();
+		// http.authorizeRequests().antMatchers("/divination/**").permitAll();
+		// http.authorizeRequests().antMatchers("/joss/**").permitAll();
+		// http.authorizeRequests().antMatchers("/offerings/**").permitAll();
+		// http.authorizeRequests().antMatchers("/rune/**").permitAll();
 		
 		http.authorizeRequests().antMatchers("/**").authenticated();
 		
 		// 添加一个过滤器 所有访问 /login 的请求交给 JWTLoginFilter 来处理 这个类处理所有的JWT相关内容
-		http.addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
+		http.addFilterBefore(new JWTLoginFilter("/login", authenticationManager(), userDao),
                 UsernamePasswordAuthenticationFilter.class);
 		// 添加一个过滤器验证其他请求的Token是否合法
 		http.addFilterBefore(new JWTAuthenticationFilter(),

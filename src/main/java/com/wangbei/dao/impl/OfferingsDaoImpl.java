@@ -1,8 +1,11 @@
 package com.wangbei.dao.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import com.wangbei.dao.OfferingsDao;
@@ -44,6 +47,11 @@ public class OfferingsDaoImpl implements OfferingsDao {
 	@Override
 	public Page<Offerings> pageOfferings(int page, int limit) {
 		return offeringsRepository.findAll(new PageRequest(page, limit));
+	}
+
+	@Override
+	public List<Offerings> listOfferings(Sort sort) {
+		return offeringsRepository.findAll(sort);
 	}
 
 }

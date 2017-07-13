@@ -5,7 +5,9 @@ public class ServiceException extends RuntimeException {
 	public static final String UNKNOW_EXCEPTION = "1001";
 	public static final String MENU_ADDITION_EXCEPTION="2001";
 	public static final String MENU_MODIFICATION_EXCEPTION = "2002";
-
+	
+	public static final String USER_REGISTER_EXIST_EXCEPTION = "3001";
+	
 	public static final String TOKEN_VALIDATE_EXCEPTION = "5001";
 
 	private String type;
@@ -21,7 +23,7 @@ public class ServiceException extends RuntimeException {
 	}
 
 	//提示错误信息
-	public String message() {
+	public String getMessage() {
 		if (ExceptionMap.exceptionMap.containsKey(type)) {
 			message = ExceptionMap.exceptionMap.get(type);
 		}

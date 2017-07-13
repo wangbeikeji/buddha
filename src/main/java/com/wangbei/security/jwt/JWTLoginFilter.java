@@ -16,35 +16,29 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.wangbei.pojo.LoginParam;
+import com.wangbei.dao.UserDao;
 import com.wangbei.pojo.Response;
+import com.wangbei.pojo.UserWithToken;
 import com.wangbei.util.JacksonUtil;
 
 import io.swagger.models.HttpMethod;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-	public JWTLoginFilter(String url, AuthenticationManager authManager) {
+	private UserDao userDao;
+	
+	public JWTLoginFilter(String url, AuthenticationManager authManager, UserDao userDao) {
 		super(new AntPathRequestMatcher(url, HttpMethod.POST.name()));
+		this.userDao = userDao;
 		setAuthenticationManager(authManager);
 	}
-
+	
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
 			throws AuthenticationException, IOException, ServletException {
-		// 获取登陆请求数据
-		LoginParam creds = null;
-		try {
-			String username = req.getParameter("username");
-			String password = req.getParameter("password");
-			creds = new LoginParam(username, password);
-		} catch (Exception ex) {
-			res.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(null, null));
-		}
 		// 验证登陆信息
-		return getAuthenticationManager()
-				.authenticate(new UsernamePasswordAuthenticationToken(creds.getUsername(), creds.getPassword()));
+		return getAuthenticationManager().authenticate(
+				new UsernamePasswordAuthenticationToken(req.getParameter("phone"), req.getParameter("password")));
 	}
 
 	@Override
@@ -61,8 +55,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 		// step 3 : 返回token到客户端
 		res.setContentType("application/json");
 		res.setStatus(HttpServletResponse.SC_OK);
-		Response<String> result = new Response<String>("200", token, "successful!");
-		res.getOutputStream().println(JacksonUtil.encode(result));
+		
+		UserWithToken user = new UserWithToken(userDao.fetchUserByPhone(auth.getName()));
+		user.setToken(token);
+		Response<UserWithToken> result = new Response<UserWithToken>("200", user, "successful!");
+		res.getWriter().println(JacksonUtil.encode(result));
 	}
 
 	@Override

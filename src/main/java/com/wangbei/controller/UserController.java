@@ -1,16 +1,18 @@
 package com.wangbei.controller;
 
-import com.wangbei.entity.User;
-import com.wangbei.pojo.Response;
-import com.wangbei.pojo.ValidateCode;
-import com.wangbei.service.UserService;
-import com.wangbei.util.SafeCollectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.wangbei.entity.User;
+import com.wangbei.pojo.Response;
+import com.wangbei.pojo.UserWithToken;
+import com.wangbei.pojo.ValidateCode;
+import com.wangbei.security.jwt.TokenAuthenticationService;
+import com.wangbei.service.UserService;
+import com.wangbei.util.SafeCollectionUtil;
 
 /**
  * @author yuyidi 2017-07-06 17:39:59
@@ -25,13 +27,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Response<User> addition(User user, Integer validateCode) {
-        User result = null;
-        Response<User> response = null;
+    public Response<UserWithToken> addition(User user, Integer validateCode) {
+        Response<UserWithToken> response = null;
         if (user.getPhone() != null) {
             ValidateCode validate = SafeCollectionUtil.getValidateCode(user.getPhone());
             if (validate != null && validate.getCode().equals(validateCode)) {
-                result = userService.addUser(user);
+                User userInfo = userService.addUser(user);
+                UserWithToken result = new UserWithToken(userInfo);
+                result.setToken(TokenAuthenticationService.generateToken(userInfo.getPhone(), ""));
                 response = new Response<>(result);
                 return response;
             }

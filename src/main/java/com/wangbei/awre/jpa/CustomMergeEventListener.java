@@ -48,7 +48,7 @@ public class CustomMergeEventListener extends JpaMergeEventListener {
                     //若当前是基础数据类型
                     if (types[i] instanceof AbstractStandardBasicType) {
                         copied[i] = original[i];
-                        if (original[i] == null && target[i] != null) {
+                        if (original[i] == null && !"".equals(original[i]) && target[i] != null) {
                             copied[i] = target[i];
                         }
                     } else {

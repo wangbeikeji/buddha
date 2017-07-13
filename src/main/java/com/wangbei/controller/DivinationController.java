@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/divination")
-@Api(tags = { "灵签接口列表" })
+@Api(description = "灵签接口列表")
 public class DivinationController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());

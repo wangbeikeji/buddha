@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/joss")
-@Api(tags = { "佛信息接口列表" })
+@Api(description = "佛信息接口列表")
 public class JossController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
