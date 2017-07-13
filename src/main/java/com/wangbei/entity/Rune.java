@@ -17,8 +17,10 @@ public class Rune implements Serializable{
     private Integer id;
     @Column(name = "symbol")
     private String symbol;
-    @Column(name = "introduction")
-    private String introduction;
+    @Column(name = "effect")
+    private String effect;
+    @Column(name = "apply")
+    private String apply;
     @Column(name = "link")
     private String link;
 
@@ -38,19 +40,27 @@ public class Rune implements Serializable{
         this.symbol = symbol;
     }
 
-    public String getIntroduction() {
-        return introduction;
-    }
-
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
-    }
-
     public String getLink() {
         return link;
     }
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getEffect() {
+        return effect;
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
+    }
+
+    public String getApply() {
+        return apply;
+    }
+
+    public void setApply(String apply) {
+        this.apply = apply;
     }
 }

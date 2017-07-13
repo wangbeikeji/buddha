@@ -27,7 +27,7 @@ public class RuneControllerTest extends BaseControllerTest {
 	public void addition() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/rune/")
 				.param("symbol", "平安符")
-				.param("introduction", "辟邪驱邪，万事平安。")
+				.param("effect", "辟邪驱邪，万事平安。")
 				.accept(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk());
 	}
@@ -36,11 +36,10 @@ public class RuneControllerTest extends BaseControllerTest {
 	public void modification() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.put("/rune/")
 				.param("id", "2")
-				.param("introduction", "aaa_modification")
+				.param("apply", "如果是经常走夜路、或者夜里开车的人即使命硬最好也请避祸镇煞符佩戴，现在人们都生活在城市里，自然会觉得这样的事距离自己的生活很远，但是开车走在一些偏僻的地方，这样的事情就很容易遇到")
 				.accept(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.result.id").value(2))
-				.andExpect(jsonPath("$.result.introduction").value("aaa_modification"));
+				.andExpect(jsonPath("$.result.id").value(2));
 	}
 	
 	@Test
