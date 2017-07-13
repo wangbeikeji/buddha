@@ -1,7 +1,10 @@
 package com.wangbei.dao.impl.jpa;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 
 import com.wangbei.entity.Offerings;
@@ -21,5 +24,7 @@ public interface OfferingsRepository extends Repository<Offerings, Integer> {
 	Page<Offerings> findAll(Pageable pageable);
 
 	Offerings findById(Integer id);
+	
+	List<Offerings> findAll(Sort sort);
 	
 }

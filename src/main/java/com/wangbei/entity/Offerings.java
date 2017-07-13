@@ -15,66 +15,77 @@ import java.io.Serializable;
 @Table(name = "Offerings")
 public class Offerings implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "designation")
-    private String designation;
-    @Column(name = "type")
-    @Convert(converter = OfferingTypeEnumConverter.class)
-    private OfferingTypeEnum type;
-    @Column(name = "merit_value")
-    private Integer meritValue;
-    @Column(name = "paraphrase")
-    private String paraphrase;
-    @Column(name = "link")
-    private String link;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(name = "designation")
+	private String designation;
+	@Column(name = "type")
+	@Convert(converter = OfferingTypeEnumConverter.class)
+	private OfferingTypeEnum type;
+	@Column(name = "merit_value")
+	private Integer meritValue;
+	@Column(name = "paraphrase")
+	private String paraphrase;
+	@Column(name = "link")
+	private String link;
+	@Column(name = "small_link")
+	private String smallLink;
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getDesignation() {
-        return designation;
-    }
+	public String getDesignation() {
+		return designation;
+	}
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
 
-    public OfferingTypeEnum getType() {
-        return type;
-    }
+	public OfferingTypeEnum getType() {
+		return type;
+	}
 
-    public void setType(OfferingTypeEnum type) {
-        this.type = type;
-    }
+	public void setType(OfferingTypeEnum type) {
+		this.type = type;
+	}
 
-    public Integer getMeritValue() {
-        return meritValue;
-    }
+	public Integer getMeritValue() {
+		return meritValue;
+	}
 
-    public void setMeritValue(Integer meritValue) {
-        this.meritValue = meritValue;
-    }
+	public void setMeritValue(Integer meritValue) {
+		this.meritValue = meritValue;
+	}
 
-    public String getParaphrase() {
-        return paraphrase;
-    }
+	public String getParaphrase() {
+		return paraphrase;
+	}
 
-    public void setParaphrase(String paraphrase) {
-        this.paraphrase = paraphrase;
-    }
+	public void setParaphrase(String paraphrase) {
+		this.paraphrase = paraphrase;
+	}
 
-    public String getLink() {
-        return link;
-    }
+	public String getLink() {
+		return link;
+	}
 
-    public void setLink(String link) {
-        this.link = link;
-    }
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getSmallLink() {
+		return smallLink;
+	}
+
+	public void setSmallLink(String smallLink) {
+		this.smallLink = smallLink;
+	}
+
 }

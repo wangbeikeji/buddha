@@ -1,5 +1,8 @@
 package com.wangbei.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/offerings")
-@Api(tags = { "供品接口列表" })
+@Api(description = "供品接口列表")
 public class OfferingsController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -64,6 +67,12 @@ public class OfferingsController {
 	@ApiOperation(value = "获取供品分页数据")
 	public Response<Page<Offerings>> offeringss(int page, int limit) {
 		return new Response<>((Page<Offerings>) offeringsService.offeringss(page, limit));
+	}
+	
+	@GetMapping("/groupByType")
+	@ApiOperation(value = "根据供品的类型分组获取数据")
+	public Response<Map<String, List<Offerings>>> groupByType() {
+		return new Response<>(offeringsService.groupByType());
 	}
 
 }

@@ -31,4 +31,9 @@ public class UserDaoImpl implements UserDao {
 	public User fetchUserByPhone(String phone) {
 		return userRepository.findByPhone(phone);
 	}
+
+	@Override
+	public User updateUser(User user) {
+		return userRepository.save(user);
+	}
 }

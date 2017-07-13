@@ -3,6 +3,9 @@ package com.wangbei.dao.impl;
 import com.wangbei.dao.JossDao;
 import com.wangbei.dao.impl.jpa.JossRepository;
 import com.wangbei.entity.Joss;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,4 +45,9 @@ public class JossDaoImpl implements JossDao {
     public Page<Joss> pageJoss(int page, int limit) {
         return jossRepository.findAll(new PageRequest(page, limit));
     }
+
+	@Override
+	public List<Joss> listJoss() {
+		return jossRepository.findAll();
+	}
 }

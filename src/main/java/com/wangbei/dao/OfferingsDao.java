@@ -1,6 +1,9 @@
 package com.wangbei.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 import com.wangbei.entity.Offerings;
 
@@ -21,5 +24,7 @@ public interface OfferingsDao {
 	public Offerings retrieveOfferingsById(Integer id);
 
 	public Page<Offerings> pageOfferings(int page, int limit);
+	
+	public List<Offerings> listOfferings(Sort sort);
 
 }

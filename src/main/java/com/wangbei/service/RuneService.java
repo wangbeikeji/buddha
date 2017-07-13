@@ -1,5 +1,7 @@
 package com.wangbei.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,10 @@ public class RuneService {
 
 	public Page<Rune> runes(int page, int limit) {
 		return runeDao.pageRune(page, limit);
+	}
+
+	public List<Rune> list() {
+		return runeDao.listRune();
 	}
 
 }

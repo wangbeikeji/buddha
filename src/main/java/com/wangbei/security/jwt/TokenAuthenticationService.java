@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import com.wangbei.exception.ServiceException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -32,21 +34,25 @@ public class TokenAuthenticationService {
 	 *            权限（多个权限以英文逗号分割）
 	 * @return token
 	 */
-	static String generateToken(String username, String grantedAuthStr) {
+	public static String generateToken(String username, String grantedAuthStr) {
 		return Jwts.builder().claim("authorities", grantedAuthStr).setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET).compact();
 	}
 
-	static Map<String, Object> getTokenInfo(String token) {
-		// 解析 Token
-		Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
-		// 获取token中的信息并返回
-		Map<String, Object> result = new HashMap<>();
-		result.put("sub", claims.getSubject());
-		result.put("authorities", claims.get("authorities"));
-		result.put("exp", claims.getExpiration());
-		return result;
+	public static Map<String, Object> getTokenInfo(String token) {
+		try {
+			// 解析 Token
+			Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+			// 获取token中的信息并返回
+			Map<String, Object> result = new HashMap<>();
+			result.put("sub", claims.getSubject());
+			result.put("authorities", claims.get("authorities"));
+			result.put("exp", claims.getExpiration());
+			return result;
+		} catch (Exception ex) {
+			throw new ServiceException(ServiceException.TOKEN_VALIDATE_EXCEPTION);
+		}
 	}
 
 	static Authentication getAuthentication(HttpServletRequest request) {

@@ -8,9 +8,12 @@ import com.wangbei.entity.User;
  * @description 用户数据访问接口
  */
 public interface UserDao {
+	
 	public User createUser(User user);
+	
+	public User updateUser(User user);
 
-	User fetchUserByPhone(String phone);
+	public User fetchUserByPhone(String phone);
 
-	User fetchUserByPhoneAndPassword(String phone, String password);
+	public User fetchUserByPhoneAndPassword(String phone, String password);
 }
