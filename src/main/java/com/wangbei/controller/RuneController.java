@@ -53,7 +53,7 @@ public class RuneController {
 		return new Response<>(runeService.modifyRune(rune));
 	}
 
-	@DeleteMapping("/")
+	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除符文")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		runeService.deleteRune(id);

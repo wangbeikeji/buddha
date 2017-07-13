@@ -53,7 +53,7 @@ public class OfferingsController {
 		return new Response<>(offeringsService.modifyOfferings(offerings));
 	}
 
-	@DeleteMapping("/")
+	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除供品")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		offeringsService.deleteOfferings(id);

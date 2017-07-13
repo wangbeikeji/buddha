@@ -53,7 +53,7 @@ public class DivinationController {
 		return new Response<>(divinationService.modifyDivination(divination));
 	}
 
-	@DeleteMapping("/")
+	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除灵签")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		divinationService.deleteDivination(id);

@@ -54,7 +54,7 @@ public class KnowledgeController {
 		return new Response<>(knowledgeService.modifyKnowledge(knowledge));
 	}
 
-	@DeleteMapping("/")
+	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除佛学知识")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		knowledgeService.deleteKnowledge(id);

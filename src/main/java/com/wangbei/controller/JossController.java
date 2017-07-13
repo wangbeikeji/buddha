@@ -53,7 +53,7 @@ public class JossController {
 		return new Response<>(jossService.modifyJoss(joss));
 	}
 
-	@DeleteMapping("/")
+	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除佛信息")
 	public Response<Integer> delete(@PathVariable Integer id) {
 		jossService.deleteJoss(id);
