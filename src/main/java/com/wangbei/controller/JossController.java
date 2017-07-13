@@ -1,5 +1,7 @@
 package com.wangbei.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,12 @@ public class JossController {
 	@ApiOperation(value = "获取佛信息分页数据")
 	public Response<Page<Joss>> josss(int page, int limit) {
 		return new Response<>((Page<Joss>) jossService.josss(page, limit));
+	}
+	
+	@GetMapping("/list")
+	@ApiOperation(value = "获取佛信息列表")
+	public Response<List<Joss>> list() {
+		return new Response<>(jossService.list());
 	}
 
 }

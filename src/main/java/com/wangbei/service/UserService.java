@@ -9,31 +9,45 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
-* @author yuyidi 2017-07-06 17:36:53
-* @class com.wangbei.service.UserService
-* @description 用户业务服务
-*/
+ * @author yuyidi 2017-07-06 17:36:53
+ * @class com.wangbei.service.UserService
+ * @description 用户业务服务
+ */
 @Service
 public class UserService {
 
-    @Autowired
-    private UserDao userDao;
+	@Autowired
+	private UserDao userDao;
 
-    @Transactional
-    public User addUser(User user){
-    	User checkUser = userDao.fetchUserByPhone(user.getPhone());
-    	if(checkUser != null) {
-    		throw new ServiceException(ServiceException.USER_REGISTER_EXIST_EXCEPTION);
-    	}
-        return userDao.createUser(user);
-    }
+	@Transactional
+	public User addUser(User user) {
+		User checkUser = userDao.fetchUserByPhone(user.getPhone());
+		if (checkUser != null) {
+			throw new ServiceException(ServiceException.USER_REGISTER_EXIST_EXCEPTION);
+		}
+		return userDao.createUser(user);
+	}
 
-    public User getUserByPhoneAndPassword(String phone, String password) {
-        return userDao.fetchUserByPhoneAndPassword(phone, password);
-    }
+	public User getUserByPhoneAndPassword(String phone, String password) {
+		return userDao.fetchUserByPhoneAndPassword(phone, password);
+	}
 
-    @Transactional
-    public User modifyUser(User user) {
-        return userDao.createUser(user);
-    }
+	public User getUserByPhone(String phone) {
+		return userDao.fetchUserByPhone(phone);
+	}
+
+	@Transactional
+	public User modifyUser(User user) {
+		return userDao.createUser(user);
+	}
+
+	public User resetPassword(String phone, String password) {
+		User user = userDao.fetchUserByPhone(phone);
+		if (user == null) {
+			throw new ServiceException(ServiceException.USER_PHONE_NOTEXIST_EXCEPTION);
+		}
+
+		user.setPassword(password);
+		return userDao.updateUser(user);
+	}
 }

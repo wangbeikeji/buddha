@@ -1,7 +1,9 @@
 package com.wangbei.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,20 +51,21 @@ public class OfferingsService {
 		return offeringsDao.pageOfferings(page, limit);
 	}
 
-	public List<List<Offerings>> groupByType() {
-		List<List<Offerings>> result = new ArrayList<>();
+	public Map<String, List<Offerings>> groupByType() {
+		Map<String, List<Offerings>> result = new HashMap<>();
 		
 		// 添加分组List对象
 		List<Offerings> list = offeringsDao.listOfferings(
 				new Sort(new Sort.Order(Direction.ASC, "type"), new Sort.Order(Direction.ASC, "meritValue")));
-		for(int i = 0; i < OfferingTypeEnum.values().length; i++) {
-			result.add(new ArrayList<Offerings>());
+		OfferingTypeEnum[] typeArr = OfferingTypeEnum.values();
+		for(OfferingTypeEnum type : typeArr) {
+			result.put(type.name().toLowerCase(), new ArrayList<Offerings>());
 		}
 		// 将数据放到对应的List对象中，List的顺序为枚举的类型
 		if(list != null && list.size() > 0) {
 			for(Offerings o : list) {
 				if(o.getType() != null) {
-					result.get(o.getType().getIndex() - 1).add(o);
+					result.get(o.getType().name().toLowerCase()).add(o);
 				}
 			}
 		}

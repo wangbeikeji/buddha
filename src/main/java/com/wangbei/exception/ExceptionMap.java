@@ -14,6 +14,7 @@ public class ExceptionMap {
         exceptionMap.put(ServiceException.MENU_MODIFICATION_EXCEPTION, "菜单修改异常");
         
         exceptionMap.put(ServiceException.USER_REGISTER_EXIST_EXCEPTION, "该手机号已被注册");
+        exceptionMap.put(ServiceException.USER_REGISTER_EXIST_EXCEPTION, "用户手机号不存在");
         
         exceptionMap.put(ServiceException.TOKEN_VALIDATE_EXCEPTION, "token验证失败");
     }

@@ -1,5 +1,7 @@
 package com.wangbei.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,12 @@ public class RuneController {
 	@ApiOperation(value = "获取符文分页数据")
 	public Response<Page<Rune>> runes(int page, int limit) {
 		return new Response<>((Page<Rune>) runeService.runes(page, limit));
+	}
+	
+	@GetMapping("/list")
+	@ApiOperation(value = "获取符文列表")
+	public Response<List<Rune>> list() {
+		return new Response<>(runeService.list());
 	}
 
 }

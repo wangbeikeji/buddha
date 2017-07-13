@@ -1,5 +1,7 @@
 package com.wangbei.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,10 @@ public class JossService {
 
 	public Page<Joss> josss(int page, int limit) {
 		return jossDao.pageJoss(page, limit);
+	}
+
+	public List<Joss> list() {
+		return jossDao.listJoss();
 	}
 
 }

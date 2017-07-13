@@ -1,6 +1,7 @@
 package com.wangbei.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class OfferingsController {
 	
 	@GetMapping("/groupByType")
 	@ApiOperation(value = "根据供品的类型分组获取数据")
-	public Response<List<List<Offerings>>> groupByType() {
+	public Response<Map<String, List<Offerings>>> groupByType() {
 		return new Response<>(offeringsService.groupByType());
 	}
 

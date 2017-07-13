@@ -1,6 +1,9 @@
 package com.wangbei.dao;
 
 import com.wangbei.entity.Joss;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 /**
@@ -17,4 +20,6 @@ public interface JossDao {
     public Joss retrieveJossById(Integer id);
 
     public Page<Joss> pageJoss(int page, int limit);
+    
+    public List<Joss> listJoss();
 }

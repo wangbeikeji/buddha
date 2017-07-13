@@ -53,12 +53,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 		// step 2 : 获取token
 		String token = TokenAuthenticationService.generateToken(auth.getName(), grantedAuthStr.toString());
 		// step 3 : 返回token到客户端
-		res.setContentType("application/json");
-		res.setStatus(HttpServletResponse.SC_OK);
-		
 		UserWithToken user = new UserWithToken(userDao.fetchUserByPhone(auth.getName()));
 		user.setToken(token);
 		Response<UserWithToken> result = new Response<UserWithToken>("200", user, "successful!");
+		res.setContentType("application/json;charset=utf-8");
+		res.setStatus(HttpServletResponse.SC_OK);
 		res.getWriter().println(JacksonUtil.encode(result));
 	}
 

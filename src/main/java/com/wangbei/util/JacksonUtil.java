@@ -91,6 +91,7 @@ public class JacksonUtil {
 	 */
 	public static String encode(Object object) {
 		try {
+			objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 			return objectMapper.writeValueAsString(object);
 		} catch (JsonParseException e) {
 			logger.error("json encode 实体对象 解析异常", e.getMessage());

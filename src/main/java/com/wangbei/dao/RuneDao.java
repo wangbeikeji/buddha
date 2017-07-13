@@ -1,5 +1,7 @@
 package com.wangbei.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.wangbei.entity.Rune;
@@ -21,5 +23,7 @@ public interface RuneDao {
 	public Rune retrieveRuneById(Integer id);
 
 	public Page<Rune> pageRune(int page, int limit);
+
+	public List<Rune> listRune();
 
 }
