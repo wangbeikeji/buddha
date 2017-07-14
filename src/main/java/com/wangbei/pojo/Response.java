@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @class com.wangbei.pojo.Response
  * @description http接口响应实体
  */
-public class Response<T> implements Serializable {
+public class Response<T extends Serializable> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	/* 状态码 */
