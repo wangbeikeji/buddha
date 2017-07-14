@@ -31,7 +31,7 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
 		if (user == null) {
 			throw new UsernameNotFoundException("用户名不存在");
 		}
-		AuthUserDetails result = new AuthUserDetails(user.getPhone(), user.getPassword(), null);
+		AuthUserDetails result = new AuthUserDetails(user.getId(), user.getPhone(), user.getPassword(), null);
 		return result;
 	}
 

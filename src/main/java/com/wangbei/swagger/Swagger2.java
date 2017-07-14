@@ -24,7 +24,7 @@ public class Swagger2 {
 
 	@Bean
 	public Docket createRestApi() {
-		String token = "eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6IiIsInN1YiI6IjE4NTY1MTg5MjYzIiwiZXhwIjo0MTgxOTkxNjUyMX0.CxKH27r_WBF0EKdMERQhjxOm6gk3KlbTNX9hM75L01zNySPvppOJGJg6pPfM-zbZR_EqFDMUk073UyL6C5fh9w";
+		String token = "eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6IiIsInVzZXJJZCI6Mywic3ViIjoiMTM5Mjg5NTIyNTQiLCJleHAiOjQ0NzAwMDA2OTY1fQ._r485hISBsKmopDQ8JysYg3O9j85ae_ulpLDt1BnKqUq3XvpNjUWsS_YoL9KTH9Vnhy2_EPJeCj83ADBKyV4bg";
 		ParameterBuilder tokenPar = new ParameterBuilder();
 		List<Parameter> pars = new ArrayList<Parameter>();
 		tokenPar.name("Authorization").description("token令牌").modelRef(new ModelRef("string")).parameterType("header")
