@@ -20,7 +20,7 @@ import java.util.Properties;
 * @description 关于数据源的一些配置(事务/查询顺序)
 */
 @EnableTransactionManagement
-@EnableJpaRepositories(queryLookupStrategy = QueryLookupStrategy.Key.CREATE,
+@EnableJpaRepositories(queryLookupStrategy = QueryLookupStrategy.Key.CREATE_IF_NOT_FOUND,
                         basePackages = "com.wangbei.dao.impl.jpa")
 @Configuration
 public class DataSourceConfigure {

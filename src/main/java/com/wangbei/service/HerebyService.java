@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
-* @author yuyidi 2017-07-14 11:33:00
-* @class com.wangbei.service.HerebyService
-* @description 恭请佛业务
-*/
+ * @author yuyidi 2017-07-14 11:33:00
+ * @class com.wangbei.service.HerebyService
+ * @description 恭请佛业务
+ */
 @Service
 public class HerebyService {
 
@@ -18,7 +18,17 @@ public class HerebyService {
     private HerebyDao herebyDao;
 
     @Transactional
-    public Hereby addHereby(Hereby hereby) {
+    public Hereby addHereby(Integer user, Integer joss) {
+        Hereby hereby = new Hereby(user, joss);
+        hereby.expire();//设置过期时间
         return herebyDao.create(hereby);
+    }
+
+    @Transactional
+    public Hereby modifyHereby(Integer id,Integer user, Integer joss) {
+        Hereby hereby = new Hereby(user,joss);
+        hereby.setId(id);
+        hereby.expire();
+        return herebyDao.update(hereby);
     }
 }

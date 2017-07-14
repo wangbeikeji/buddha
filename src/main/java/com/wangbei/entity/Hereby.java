@@ -1,5 +1,7 @@
 package com.wangbei.entity;
 
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,14 +20,21 @@ public class Hereby implements Serializable{
     private Integer id;
     @Column(name = "user_id")
     private Integer userId;
-    @Column(name = "user_phone")
-    private String userPhone;
     @Column(name = "joss_id")
     private Integer jossId;
     @Column(name = "create_time")
     private Date createTime;
-    @Column(name = "expire_ime")
+    @Column(name = "expire_time")
     private Date expireTime;
+
+    public Hereby() {
+    }
+
+    public Hereby(Integer userId, Integer jossId) {
+        this.userId = userId;
+        this.jossId = jossId;
+    }
+
 
     public Integer getId() {
         return id;
@@ -41,14 +50,6 @@ public class Hereby implements Serializable{
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getUserPhone() {
-        return userPhone;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
     }
 
     public Integer getJossId() {
@@ -73,5 +74,16 @@ public class Hereby implements Serializable{
 
     public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
+    }
+
+    /**
+     * 设置过期时间
+     */
+    public void expire() {
+        DateTime time = new DateTime();
+        setCreateTime(time.toDate());
+        DateTime expire = time.plusHours(24);
+        Date expireTime = expire.toDate();
+        setExpireTime(expireTime);
     }
 }
