@@ -1,5 +1,7 @@
 package com.wangbei.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,12 @@ public class DivinationController {
 	@ApiOperation(value = "获取灵签分页数据")
 	public Response<Page<Divination>> divinations(int page, int limit) {
 		return new Response<>((Page<Divination>) divinationService.divinations(page, limit));
+	}
+
+	@GetMapping("/list")
+	@ApiOperation(value = "获取灵签列表")
+	public Response<List<Divination>> list() {
+		return new Response<>(divinationService.list());
 	}
 
 }

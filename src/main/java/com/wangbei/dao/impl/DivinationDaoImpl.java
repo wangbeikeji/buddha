@@ -1,5 +1,7 @@
 package com.wangbei.dao.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +46,11 @@ public class DivinationDaoImpl implements DivinationDao {
 	@Override
 	public Page<Divination> pageDivination(int page, int limit) {
 		return divinationRepository.findAll(new PageRequest(page, limit));
+	}
+
+	@Override
+	public List<Divination> listDivination() {
+		return divinationRepository.findAll();
 	}
 
 }
