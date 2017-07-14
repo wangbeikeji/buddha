@@ -19,6 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.wangbei.dao.UserDao;
 import com.wangbei.pojo.Response;
 import com.wangbei.pojo.UserWithToken;
+import com.wangbei.security.AuthUserDetails;
 import com.wangbei.util.JacksonUtil;
 
 import io.swagger.models.HttpMethod;
@@ -26,13 +27,13 @@ import io.swagger.models.HttpMethod;
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 	private UserDao userDao;
-	
+
 	public JWTLoginFilter(String url, AuthenticationManager authManager, UserDao userDao) {
 		super(new AntPathRequestMatcher(url, HttpMethod.POST.name()));
 		this.userDao = userDao;
 		setAuthenticationManager(authManager);
 	}
-	
+
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
 			throws AuthenticationException, IOException, ServletException {
@@ -51,7 +52,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 			grantedAuthStr.append(grantedAuth.getAuthority() + ",");
 		}
 		// step 2 : 获取token
-		String token = TokenAuthenticationService.generateToken(auth.getName(), grantedAuthStr.toString());
+		AuthUserDetails authUser = (AuthUserDetails) auth.getPrincipal();
+		UsernamePasswordAuthenticationToken upAuth = (UsernamePasswordAuthenticationToken) auth;
+		upAuth.setDetails(authUser);
+		String token = TokenAuthenticationService.generateToken(authUser.getUserId(), auth.getName(),
+				grantedAuthStr.toString());
 		// step 3 : 返回token到客户端
 		UserWithToken user = new UserWithToken(userDao.fetchUserByPhone(auth.getName()));
 		user.setToken(token);

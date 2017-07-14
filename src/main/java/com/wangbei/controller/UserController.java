@@ -30,56 +30,56 @@ import io.swagger.annotations.ApiOperation;
 @Api(description = "用户相关接口列表")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @PostMapping("/register")
-    @ApiOperation(value = "用户注册")
-    public Response<UserWithToken> addition(User user, Integer validateCode) {
-        Response<UserWithToken> response = null;
-        if (user.getPhone() != null) {
-            ValidateCode validate = SafeCollectionUtil.getValidateCode(user.getPhone());
-            if (validate != null && validate.getCode().equals(validateCode)) {
-                User userInfo = userService.addUser(user);
-                UserWithToken result = new UserWithToken(userInfo);
-                result.setToken(TokenAuthenticationService.generateToken(userInfo.getPhone(), ""));
-                response = new Response<>(result);
-                return response;
-            }
-            return new Response<>("3000", "用户验证码发送失败");
-        }
-        return new Response<>("4001", "手机号不能为空");
-    }
+	@PostMapping("/register")
+	@ApiOperation(value = "用户注册")
+	public Response<UserWithToken> addition(User user, Integer validateCode) {
+		Response<UserWithToken> response = null;
+		if (user.getPhone() != null) {
+			ValidateCode validate = SafeCollectionUtil.getValidateCode(user.getPhone());
+			if (validate != null && validate.getCode().equals(validateCode)) {
+				User userInfo = userService.addUser(user);
+				UserWithToken result = new UserWithToken(userInfo);
+				result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
+				response = new Response<>(result);
+				return response;
+			}
+			return new Response<>("3000", "用户验证码发送失败");
+		}
+		return new Response<>("4001", "手机号不能为空");
+	}
 
-    @PutMapping("/{id}")
-    @ApiOperation(value = "完善用户信息")
-    public Response<User> complete(User user) {
-        return new Response<>(userService.modifyUser(user));
-    }
+	@PutMapping("/{id}")
+	@ApiOperation(value = "完善用户信息")
+	public Response<User> complete(User user) {
+		return new Response<>(userService.modifyUser(user));
+	}
 
-    @GetMapping("/getCurrent")
-    @ApiOperation(value = "获取当前用户信息")
-    public Response<User> getCurrent() {
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	return new Response<>(userService.getUserByPhone(auth.getName()));
-    }
-    
-    @PutMapping("/resetPassword")
-    @ApiOperation(value = "重置密码")
-    public Response<UserWithToken> resetPassword(String phone, Integer validateCode, String password) {
-        Response<UserWithToken> response = null;
-        if (phone != null) {
-            ValidateCode validate = SafeCollectionUtil.getValidateCode(phone);
-            if (validate != null && validate.getCode().equals(validateCode)) {
-                User userInfo = userService.resetPassword(phone, password);
-                UserWithToken result = new UserWithToken(userInfo);
-                result.setToken(TokenAuthenticationService.generateToken(userInfo.getPhone(), ""));
-                response = new Response<>(result);
-                return response;
-            }
-            return new Response<>("3000", "用户验证码发送失败");
-        }
-        return new Response<>("4001", "手机号不能为空");
-    }
-    
+	@GetMapping("/getCurrent")
+	@ApiOperation(value = "获取当前用户信息")
+	public Response<User> getCurrent() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return new Response<>(userService.getUserByPhone(auth.getName()));
+	}
+
+	@PutMapping("/resetPassword")
+	@ApiOperation(value = "重置密码")
+	public Response<UserWithToken> resetPassword(String phone, Integer validateCode, String password) {
+		Response<UserWithToken> response = null;
+		if (phone != null) {
+			ValidateCode validate = SafeCollectionUtil.getValidateCode(phone);
+			if (validate != null && validate.getCode().equals(validateCode)) {
+				User userInfo = userService.resetPassword(phone, password);
+				UserWithToken result = new UserWithToken(userInfo);
+				result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
+				response = new Response<>(result);
+				return response;
+			}
+			return new Response<>("3000", "用户验证码发送失败");
+		}
+		return new Response<>("4001", "手机号不能为空");
+	}
+
 }

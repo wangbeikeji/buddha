@@ -47,16 +47,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/configuration/**").permitAll();
 		// 图片
 		http.authorizeRequests().antMatchers("/picture/**").permitAll();
-
+		// 文档
+		http.authorizeRequests().antMatchers("/document/**").permitAll();
+		// 部分开发接口
 		http.authorizeRequests().antMatchers("/offerings/groupByType").permitAll();
 		http.authorizeRequests().antMatchers("/joss/list").permitAll();
 		http.authorizeRequests().antMatchers("/rune/list").permitAll();
-		
-		// http.authorizeRequests().antMatchers("/knowledge/**").permitAll();
-		// http.authorizeRequests().antMatchers("/divination/**").permitAll();
-		// http.authorizeRequests().antMatchers("/joss/**").permitAll();
-		// http.authorizeRequests().antMatchers("/offerings/**").permitAll();
-		// http.authorizeRequests().antMatchers("/rune/**").permitAll();
+		http.authorizeRequests().antMatchers("/knowledge/pageByType").permitAll();
+		http.authorizeRequests().antMatchers("/sutra/page").permitAll();
+		http.authorizeRequests().antMatchers("/sutra/list").permitAll();
+		http.authorizeRequests().antMatchers("/banner/page").permitAll();
+		http.authorizeRequests().antMatchers("/banner/pageByType").permitAll();
+		http.authorizeRequests().antMatchers("/banner/list").permitAll();
+		http.authorizeRequests().antMatchers("/banner/listByType").permitAll();
 		
 		http.authorizeRequests().antMatchers("/**").authenticated();
 		

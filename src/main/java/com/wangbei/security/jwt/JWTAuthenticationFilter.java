@@ -12,11 +12,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+
+import com.wangbei.security.AuthUserDetails;
 
 public class JWTAuthenticationFilter extends GenericFilterBean {
 
@@ -29,15 +30,18 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 			// 获取token中的信息
 			Map<String, Object> tokenInfo = TokenAuthenticationService.getTokenInfo(token);
 			// 判断username是否存在，以及token是否过期
-			String useranme = (String) tokenInfo.get("sub");
-			if (useranme != null && !"".equals(useranme)) {
+			String username = (String) tokenInfo.get("sub");
+			Integer userId = (Integer) tokenInfo.get("userId");
+			if (username != null && !"".equals(username)) {
 				Date exp = (Date) tokenInfo.get("exp");
 				if (exp != null && exp.getTime() * 1000 > System.currentTimeMillis()) {
 					// 如果为正确的token，将身份验证放入上下文中
 					List<GrantedAuthority> authorities = AuthorityUtils
 							.commaSeparatedStringToAuthorityList((String) tokenInfo.get("authorities"));
-					Authentication authentication = new UsernamePasswordAuthenticationToken(useranme, null,
-							authorities);
+					AuthUserDetails userDeatails = new AuthUserDetails(userId, username, null, authorities);
+					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+							username, null, authorities);
+					authentication.setDetails(userDeatails);
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
 			}

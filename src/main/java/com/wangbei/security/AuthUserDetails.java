@@ -11,12 +11,22 @@ public class AuthUserDetails implements UserDetails {
 
 	private String username;
 	private String password;
+	private Integer userId;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public AuthUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+	public AuthUserDetails(Integer userId, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+		this.userId = userId;
 		this.username = username;
 		this.password = password;
 		this.authorities = authorities;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 	@Override
