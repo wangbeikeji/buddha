@@ -1,5 +1,7 @@
 package com.wangbei.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,10 @@ public class DivinationService {
 
 	public Page<Divination> divinations(int page, int limit) {
 		return divinationDao.pageDivination(page, limit);
+	}
+
+	public List<Divination> list() {
+		return divinationDao.listDivination();
 	}
 
 }

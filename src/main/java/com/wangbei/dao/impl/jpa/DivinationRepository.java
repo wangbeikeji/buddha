@@ -1,5 +1,7 @@
 package com.wangbei.dao.impl.jpa;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
@@ -19,6 +21,8 @@ public interface DivinationRepository extends Repository<Divination, Integer> {
 	void delete(Integer id);
 
 	Page<Divination> findAll(Pageable pageable);
+	
+	List<Divination> findAll();
 
 	Divination findById(Integer id);
 	

@@ -1,5 +1,7 @@
 package com.wangbei.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.wangbei.entity.Divination;
@@ -21,5 +23,7 @@ public interface DivinationDao {
 	public Divination retrieveDivinationById(Integer id);
 
 	public Page<Divination> pageDivination(int page, int limit);
+
+	public List<Divination> listDivination();
 
 }
