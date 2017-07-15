@@ -24,7 +24,7 @@ public class MeritDetail implements Serializable{
     @Column(name = "user_id",nullable = false)
     private Integer userId;
     @Column(name = "offerings_id",nullable = false)
-    private Integer offerings_id;
+    private Integer offeringsId;
     @Column(name = "merit_value")
     private Integer meritValue;
     @Convert(converter = OfferingTypeEnumConverter.class)
@@ -52,12 +52,12 @@ public class MeritDetail implements Serializable{
         this.userId = userId;
     }
 
-    public Integer getOfferings_id() {
-        return offerings_id;
+    public Integer getOfferingsId() {
+        return offeringsId;
     }
 
-    public void setOfferings_id(Integer offerings_id) {
-        this.offerings_id = offerings_id;
+    public void setOfferingsId(Integer offeringsId) {
+        this.offeringsId = offeringsId;
     }
 
     public Integer getMeritValue() {
@@ -95,9 +95,9 @@ public class MeritDetail implements Serializable{
     public MeritDetail() {
     }
 
-    public MeritDetail(Integer userId, Integer offerings_id, Integer meritValue, OfferingTypeEnum type) {
+    public MeritDetail(Integer userId, Integer offeringsId, Integer meritValue, OfferingTypeEnum type) {
         this.userId = userId;
-        this.offerings_id = offerings_id;
+        this.offeringsId = offeringsId;
         this.meritValue = meritValue;
         this.type = type;
     }
