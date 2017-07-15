@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/picture/**").permitAll();
 		// 文档
 		http.authorizeRequests().antMatchers("/document/**").permitAll();
-		// 部分开发接口
+		// 部分开放接口
 		http.authorizeRequests().antMatchers("/offerings/groupByType").permitAll();
 		http.authorizeRequests().antMatchers("/joss/list").permitAll();
 		http.authorizeRequests().antMatchers("/rune/list").permitAll();
