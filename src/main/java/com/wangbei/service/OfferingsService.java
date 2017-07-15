@@ -1,10 +1,8 @@
 package com.wangbei.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.wangbei.entity.MeritDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -27,6 +25,8 @@ public class OfferingsService {
 
 	@Autowired
 	private OfferingsDao offeringsDao;
+	@Autowired
+	private MeritDetailService meritDetailService;
 
 	public Offerings getOfferingsInfo(Integer id) {
 		return offeringsDao.retrieveOfferingsById(id);
@@ -73,4 +73,24 @@ public class OfferingsService {
 		return result;
 	}
 
+	/**
+	* @author yuyidi 2017-07-15 15:29:56
+	* @method getOfferingsByUser
+	* @param user
+	* @return java.util.Map<java.lang.String,com.wangbei.entity.Offerings>
+	* @description 根据用户获取用户供佛的未过期供品信息
+	*/
+	public Map<String, Offerings> getOfferingsByUser(Integer user) {
+		//从功德详情中获取未过期的供品信息
+		List<MeritDetail> meritDetails = meritDetailService.getByUserAndExpireTimeLessthan(user, new Date());
+		//遍历功德详情，将用户供品信息按照类型分组
+		Map<String, Offerings> result = new HashMap<>();
+		for (MeritDetail meritDetail : meritDetails) {
+			Offerings offerings = getOfferingsInfo(meritDetail.getOfferings_id());
+			if (offerings != null) {
+				result.put(meritDetail.getType().name(),offerings);
+			}
+		}
+		return result;
+	}
 }

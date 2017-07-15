@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.wangbei.entity.Hereby;
+import com.wangbei.entity.MeritDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,20 @@ public class JossService {
 
 	@Autowired
 	private JossDao jossDao;
+	@Autowired
+	private HerebyService herebyService;
 
 	public Joss getJossInfo(Integer id) {
 		return jossDao.retrieveJossById(id);
+	}
+
+	public Joss getJossByUser(Integer user) {
+		Joss result = null;
+		Hereby hereby = herebyService.findByUser(user);
+		if (hereby != null) {
+			result = jossDao.retrieveJossById(hereby.getJossId());
+		}
+		return result;
 	}
 
 	@Transactional

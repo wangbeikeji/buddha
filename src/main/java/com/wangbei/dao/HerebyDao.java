@@ -9,4 +9,6 @@ import com.wangbei.entity.Hereby;
 public interface HerebyDao extends BaseDao<Hereby, Integer> {
 
     Integer updateJossByUser(Integer userId, Integer joss);
+
+    Hereby retrieveByUser(Integer user);
 }
