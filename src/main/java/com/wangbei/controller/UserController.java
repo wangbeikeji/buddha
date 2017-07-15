@@ -101,7 +101,7 @@ public class UserController {
 
     @ApiOperation(value = "恭请其他佛")
     @PutMapping("/{id}/hereby/{hereby}")
-    public Response<Hereby> modification(@PathVariable Integer id ,@PathVariable Integer hereby, Integer joss) {
+    public Response<Hereby> modificationHereby(@PathVariable Integer id ,@PathVariable Integer hereby, Integer joss) {
         Response<Hereby> response = new Response<>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
