@@ -24,8 +24,7 @@ public class Hereby implements Serializable{
     private Integer jossId;
     @Column(name = "create_time")
     private Date createTime;
-    @Column(name = "expire_time")
-    private Date expireTime;
+
 
     public Hereby() {
     }
@@ -68,22 +67,4 @@ public class Hereby implements Serializable{
         this.createTime = createTime;
     }
 
-    public Date getExpireTime() {
-        return expireTime;
-    }
-
-    public void setExpireTime(Date expireTime) {
-        this.expireTime = expireTime;
-    }
-
-    /**
-     * 设置过期时间
-     */
-    public void expire() {
-        DateTime time = new DateTime();
-        setCreateTime(time.toDate());
-        DateTime expire = time.plusHours(24);
-        Date expireTime = expire.toDate();
-        setExpireTime(expireTime);
-    }
 }

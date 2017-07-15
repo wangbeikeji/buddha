@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public enum OfferingTypeEnum implements CommonalityEnum {
 
-    SANDALWOOD(1, "檀香"), FRUIT(2, "水果"), FLOWERS(3, "鲜花"), CREATURES(4, "生灵");
+    SANDALWOOD(1, "檀香"), FRUIT(2, "水果"), FLOWERS(3, "鲜花");
 
     private Integer index;
     private String type;

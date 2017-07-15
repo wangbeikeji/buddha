@@ -22,4 +22,5 @@ public interface JossDao {
     public Page<Joss> pageJoss(int page, int limit);
     
     public List<Joss> listJoss();
+
 }

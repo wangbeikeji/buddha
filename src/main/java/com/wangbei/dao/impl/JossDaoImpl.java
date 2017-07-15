@@ -50,4 +50,5 @@ public class JossDaoImpl implements JossDao {
 	public List<Joss> listJoss() {
 		return jossRepository.findAll();
 	}
+
 }

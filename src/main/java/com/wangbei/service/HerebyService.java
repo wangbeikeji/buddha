@@ -20,7 +20,6 @@ public class HerebyService {
     @Transactional
     public Hereby addHereby(Integer user, Integer joss) {
         Hereby hereby = new Hereby(user, joss);
-        hereby.expire();//设置过期时间
         return herebyDao.create(hereby);
     }
 
@@ -28,7 +27,10 @@ public class HerebyService {
     public Hereby modifyHereby(Integer id,Integer user, Integer joss) {
         Hereby hereby = new Hereby(user,joss);
         hereby.setId(id);
-        hereby.expire();
         return herebyDao.update(hereby);
+    }
+
+    public Hereby findByUser(Integer user) {
+        return herebyDao.retrieveByUser(user);
     }
 }

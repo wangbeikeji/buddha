@@ -15,4 +15,5 @@ public interface HerebyRepository extends CurdJpaRepository<Hereby, Integer>, Re
     @Modifying
     Integer updateJossByUser(Integer user, Integer joss);
 
+    Hereby findByUserId(Integer user);
 }
