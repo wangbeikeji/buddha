@@ -27,6 +27,8 @@ public class Rune implements Serializable {
 	@Column(name = "merit_value")
 	private Integer meritValue;
 	@Transient
+	private Date createTime;
+	@Transient
 	private Date expireTime;
 
 	public Integer getId() {
@@ -83,5 +85,13 @@ public class Rune implements Serializable {
 
 	public void setExpireTime(Date expireTime) {
 		this.expireTime = expireTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

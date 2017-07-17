@@ -3,7 +3,10 @@ package com.wangbei.service;
 import com.wangbei.dao.MeritDetailDao;
 import com.wangbei.entity.MeritDetail;
 import com.wangbei.entity.Offerings;
+import com.wangbei.entity.Trade;
+import com.wangbei.exception.ServiceException;
 import com.wangbei.util.enums.OfferingTypeEnum;
+import com.wangbei.util.enums.TradeTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,8 @@ public class MeritDetailService {
 
     @Autowired
     private MeritDetailDao meritDetailDao;
+    @Autowired
+    private TradeService tradeService;
 
     @Transactional
     public MeritDetail addMeritDetail(Integer user, Offerings offerings) {
@@ -30,14 +35,21 @@ public class MeritDetailService {
                 //若还未过期
                 return meritDetail;
             }
-            //若过期时间超过当前日期，则允许并更新当前供品信息
-            meritDetail.expire();
-            MeritDetail result = addMeritDetail(meritDetail);
-            return result;
+//            //若过期时间超过当前日期，则允许并更新当前供品信息
+//            meritDetail.expire();
+//            MeritDetail result = addMeritDetail(meritDetail);
+//            return result;
         }
-        MeritDetail request = new MeritDetail(user, offerings.getId(), offerings.getMeritValue(), offerings.getType());
-        request.expire();
-        return meritDetailDao.create(request);
+
+        Trade trade = tradeService.trade(user, TradeTypeEnum.getByIndex(offerings.getType().getIndex()), offerings
+                .getMeritValue());
+        if (trade != null) {
+            MeritDetail request = new MeritDetail(user, offerings.getId(), offerings.getMeritValue(), offerings
+                    .getType());
+            request.expire();
+            return meritDetailDao.create(request);
+        }
+        throw new ServiceException(ServiceException.MERIT_POOL);
     }
 
     @Transactional

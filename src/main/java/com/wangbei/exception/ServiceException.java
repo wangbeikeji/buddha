@@ -3,6 +3,7 @@ package com.wangbei.exception;
 public class ServiceException extends RuntimeException {
 
 	public static final String UNKNOW_EXCEPTION = "1001";
+	public static final String MERIT_POOL="1002";
 	public static final String MENU_ADDITION_EXCEPTION="2001";
 	public static final String MENU_MODIFICATION_EXCEPTION = "2002";
 	
@@ -11,6 +12,8 @@ public class ServiceException extends RuntimeException {
 	public static final String USER_ADDHEREBY_DUPLICATE_EXCEPTION = "3003";
 	
 	public static final String TOKEN_VALIDATE_EXCEPTION = "5001";
+
+
 
 	private String type;
 	private String message;

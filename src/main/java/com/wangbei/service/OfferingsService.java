@@ -88,6 +88,7 @@ public class OfferingsService {
 		for (MeritDetail meritDetail : meritDetails) {
 			Offerings offerings = getOfferingsInfo(meritDetail.getOfferingsId());
 			if (offerings != null) {
+				offerings.setCreateTime(meritDetail.getCreateTime());
 				offerings.setExpireTime(meritDetail.getExpireTime());
 				result.put(meritDetail.getType().name(),offerings);
 			}

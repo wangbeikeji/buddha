@@ -27,7 +27,7 @@ public class Hereby implements Serializable{
     @Column(name = "joss_id")
     private Integer jossId;
     @Column(name = "create_time")
-    private Date createTime;
+    private Date createTime = new Date();
 
 
     public Hereby() {

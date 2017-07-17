@@ -1,7 +1,12 @@
 package com.wangbei.service;
 
+import com.wangbei.dao.AccountDao;
 import com.wangbei.dao.BegDao;
+import com.wangbei.entity.Account;
 import com.wangbei.entity.Beg;
+import com.wangbei.entity.Trade;
+import com.wangbei.exception.ServiceException;
+import com.wangbei.util.enums.TradeTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +22,26 @@ import java.util.List;
 @Service
 public class BegService {
 
-	@Autowired
-	private BegDao begDao;
+    @Autowired
+    private BegDao begDao;
+    @Autowired
+    private TradeService tradeService;
 
     @Transactional
-    public Beg addBeg(Integer user, Integer rune) {
+    public Beg addBeg(Integer user, Integer rune, Integer meritValue) {
 //        Beg beg = findByUser(user);
 //        if (beg != null && rune != null) {
 //            beg.setRuneId(rune);
 //            return begDao.create(beg);
 //        }
-        Beg request = new Beg(user, rune);
-        request.expire();
-        return begDao.create(request);
+        //首先检查用户当前账户功德是否足够
+        Trade trade = tradeService.trade(user, TradeTypeEnum.RUNE,meritValue);
+        if (trade != null) {
+            Beg request = new Beg(user, rune);
+            request.expire();
+            return begDao.create(request);
+        }
+        throw new ServiceException(ServiceException.MERIT_POOL);
     }
 
     @Transactional

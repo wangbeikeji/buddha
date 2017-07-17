@@ -33,6 +33,8 @@ public class Offerings implements Serializable {
 	@Column(name = "small_link")
 	private String smallLink;
 	@Transient
+	private Date createTime;
+	@Transient
 	private Date expireTime;
 
 	public Integer getId() {
@@ -97,5 +99,13 @@ public class Offerings implements Serializable {
 
 	public void setExpireTime(Date expireTime) {
 		this.expireTime = expireTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

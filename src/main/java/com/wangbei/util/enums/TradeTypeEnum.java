@@ -11,7 +11,7 @@ import java.util.Map;
  * @description 交易类型枚举
  */
 public enum TradeTypeEnum implements CommonalityEnum {
-    CHARGE(1, "充值"),SANDALWOOD(2, "清香"), FRUIT(3, "供果"), FLOWERS(4, "供花");
+    CHARGE(0, "充值"),SANDALWOOD(1, "清香"), FRUIT(2, "供果"), FLOWERS(3, "供花"),RUNE(4,"求符");
 
     private Integer index;
     private String trade;

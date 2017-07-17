@@ -69,6 +69,7 @@ public class RuneService {
 		for (Beg beg : begs) {
 			Rune rune = getRuneInfo(beg.getRuneId());
 			if (rune != null) {
+				rune.setCreateTime(beg.getCreateTime());
 				rune.setExpireTime(beg.getExpireTime());
 				result.add(rune);
 			}

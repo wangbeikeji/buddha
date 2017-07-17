@@ -162,10 +162,13 @@ public class UserController {
         Response<Beg> response = new Response<>();
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         if (authUserDetails.getUserId() == id) {
-            Beg beg = begService.addBeg(authUserDetails.getUserId(), rune);
-            if (beg != null) {
-                response = new Response<>(beg);
-                return response;
+            Rune runeInfo = runeService.getRuneInfo(rune);
+            if (runeInfo != null) {
+                Beg beg = begService.addBeg(authUserDetails.getUserId(), rune,runeInfo.getMeritValue());
+                if (beg != null) {
+                    response = new Response<>(beg);
+                    return response;
+                }
             }
             response.setCode("2003");
             response.setMessage("求符失败");
