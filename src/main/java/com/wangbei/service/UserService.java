@@ -1,6 +1,8 @@
 package com.wangbei.service;
 
+import com.wangbei.dao.AccountDao;
 import com.wangbei.dao.UserDao;
+import com.wangbei.entity.Account;
 import com.wangbei.entity.User;
 import com.wangbei.exception.ServiceException;
 
@@ -18,14 +20,20 @@ public class UserService {
 
 	@Autowired
 	private UserDao userDao;
-
+	@Autowired
+	private AccountDao accountDao;
 	@Transactional
 	public User addUser(User user) {
 		User checkUser = userDao.fetchUserByPhone(user.getPhone());
 		if (checkUser != null) {
 			throw new ServiceException(ServiceException.USER_REGISTER_EXIST_EXCEPTION);
 		}
-		return userDao.createUser(user);
+		User result = userDao.createUser(user);
+		if (result != null) {
+			//用户注册成功之后为当前用户初始化一个账户信息
+			accountDao.create(new Account(result.getId(), 0));
+		}
+		return result;
 	}
 
 	public User getUserByPhoneAndPassword(String phone, String password) {
