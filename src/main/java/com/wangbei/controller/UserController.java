@@ -11,7 +11,9 @@ import com.wangbei.security.jwt.TokenAuthenticationService;
 import com.wangbei.service.*;
 import com.wangbei.util.SafeCollectionUtil;
 import com.wangbei.util.enums.OfferingTypeEnum;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -116,7 +118,7 @@ public class UserController {
 
     @ApiOperation(value = "恭请其他佛")
     @PutMapping("/{id}/hereby/{hereby}")
-    public Response<Hereby> modificationHereby(@PathVariable Integer id ,@PathVariable Integer hereby, Integer joss) {
+    public Response<Hereby> modificationHereby(@PathVariable Integer id, @PathVariable Integer hereby, Integer joss) {
         Response<Hereby> response = new Response<>();
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         if (authUserDetails.getUserId() == id) {
@@ -166,7 +168,7 @@ public class UserController {
                 return response;
             }
             response.setCode("2003");
-            response.setMessage("求签成功");
+            response.setMessage("求符失败");
         }
         //若当前用户与请求的用户不相同
         response.setCode("2003");
@@ -207,5 +209,28 @@ public class UserController {
     @GetMapping("/{id}/meritdetail")
     public Response<MeritDetail> meritDetail(@PathVariable Integer id, @RequestParam OfferingTypeEnum type) {
         return new Response<>(meritDetailService.getByUserAndType(id, type));
+    }
+
+    /**
+     * @param
+     * @return com.wangbei.pojo.Response<java.lang.String>
+     * @author yuyidi 2017-07-17 15:51:08
+     * @method charge
+     * @description 充值
+     */
+    @ApiOperation(value = "账户充值")
+    @PostMapping("/{id}/charge/")
+    public Response<String> charge(@PathVariable Integer id, Integer meritValue) {
+        Response<String> response = new Response<>();
+        AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+        if (authUserDetails.getUserId() == id) {
+            String result = userService.charge(id, meritValue);
+            response.setResult(result);
+            return response;
+        }
+        //若当前用户与请求的用户不相同
+        response.setCode("2003");
+        response.setMessage("当前用户信息不匹配");
+        return response;
     }
 }

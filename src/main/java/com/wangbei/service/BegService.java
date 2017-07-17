@@ -22,11 +22,11 @@ public class BegService {
 
     @Transactional
     public Beg addBeg(Integer user, Integer rune) {
-        Beg beg = findByUser(user);
-        if (beg != null && rune != null) {
-            beg.setRuneId(rune);
-            return begDao.create(beg);
-        }
+//        Beg beg = findByUser(user);
+//        if (beg != null && rune != null) {
+//            beg.setRuneId(rune);
+//            return begDao.create(beg);
+//        }
         Beg request = new Beg(user, rune);
         request.expire();
         return begDao.create(request);
@@ -44,7 +44,7 @@ public class BegService {
         return begDao.retrieveByUser(user);
     }
 
-    public List<Beg> getByUserAndExpireTimeLessthan(Integer user, Date date) {
+    public List<Beg> getByUserAndExpireTimeGreaterThan(Integer user, Date date) {
         return begDao.begByUserAndExpireTimeGreaterThan(user, date);
     }
 }

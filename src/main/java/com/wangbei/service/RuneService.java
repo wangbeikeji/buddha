@@ -64,7 +64,7 @@ public class RuneService {
 	 */
 	public List<Rune> getRuneByUser(Integer user) {
 		//从功德详情中获取未过期的供品信息
-		List<Beg> begs = begService.getByUserAndExpireTimeLessthan(user, new Date());
+		List<Beg> begs = begService.getByUserAndExpireTimeGreaterThan(user, new Date());
 		List<Rune> result = new ArrayList<>();
 		for (Beg beg : begs) {
 			Rune rune = getRuneInfo(beg.getRuneId());

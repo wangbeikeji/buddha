@@ -3,9 +3,11 @@ package com.wangbei.service;
 import com.wangbei.dao.AccountDao;
 import com.wangbei.dao.UserDao;
 import com.wangbei.entity.Account;
+import com.wangbei.entity.Trade;
 import com.wangbei.entity.User;
 import com.wangbei.exception.ServiceException;
 
+import com.wangbei.util.enums.TradeTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,10 @@ public class UserService {
 	private UserDao userDao;
 	@Autowired
 	private AccountDao accountDao;
+	@Autowired
+	private TradeService tradeService;
+
+
 	@Transactional
 	public User addUser(User user) {
 		User checkUser = userDao.fetchUserByPhone(user.getPhone());
@@ -49,6 +55,7 @@ public class UserService {
 		return userDao.createUser(user);
 	}
 
+	@Transactional
 	public User resetPassword(String phone, String password) {
 		User user = userDao.fetchUserByPhone(phone);
 		if (user == null) {
@@ -58,4 +65,19 @@ public class UserService {
 		user.setPassword(password);
 		return userDao.updateUser(user);
 	}
+
+	@Transactional
+	public String charge(Integer user, Integer meritValue) {
+		Trade trade = tradeService.trade(user, TradeTypeEnum.CHARGE, meritValue);
+		if (trade != null) {
+			Account account = accountDao.findByUser(user);
+			if (account != null) {
+				account.setMeritValue(account.getMeritValue() + meritValue);
+				accountDao.update(account);
+				return "充值成功";
+			}
+		}
+		return "充值失败";
+	}
+
 }
