@@ -21,15 +21,16 @@ public class SendSmsClient {
 	private static final String domain = "dysmsapi.aliyuncs.com";
 
 	// 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
-	private static final String accessKeyId = "LTAIH93MX4FFsUVc";
-	private static final String accessKeySecret = "aXVVOPTu6ZhVv28MKyeA0zitZL2EFb";
-	private static final String smsSign = "我的Heap";
+	private static final String accessKeyId = "LTAIrqrtreYF8ghc";
+	private static final String accessKeySecret = "bPymzDrGMswIfVNjiIW9s2ADCSqWpZ";
+	private static final String smsSign = "网贝科技";
 	// 验证码模板，参数为:authCode
-	private static final String templateCode = "SMS_76385098";
+	private static final String templateCode = "SMS_77160048";
 	
 	public static void main(String[] args) {
 		Map<String, String> params = new HashMap<>();
-		params.put("authCode", "586933");
+		params.put("code", "586933");
+		params.put("type", "进行短信信息");
 		try {
 			SendSmsResponse result = SendSmsClient.sendSms("13928952254", params, null);
 			ObjectMapper objMapper = new ObjectMapper();

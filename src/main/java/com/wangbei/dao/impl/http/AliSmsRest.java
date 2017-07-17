@@ -42,8 +42,9 @@ public class AliSmsRest extends HttpRest<SendAuthCodeResult> implements SmsDao {
 			strBuilder.deleteCharAt(strBuilder.length() - 1);
 			// 验证码
 			Map<String, String> params = new HashMap<>();
-			String authCode = RandomUtil.generateRandomCode(6);
-			params.put("authCode", authCode);
+			String authCode = RandomUtil.generateRandomCode(4);
+			params.put("code", authCode);
+			params.put("type", "进行短信信息");
 			// 发送短信
 			try {
 				logger.info("Send sms request, phoneNumbers:" + strBuilder.toString() + ", authCode:" + authCode);

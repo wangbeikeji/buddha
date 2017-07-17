@@ -52,9 +52,6 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
 			}
-		} else {
-			HttpServletResponse httpResponse = (HttpServletResponse) response;
-			httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
 		}
 
 		filterChain.doFilter(request, response);
