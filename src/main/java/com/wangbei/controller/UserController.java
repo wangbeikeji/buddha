@@ -158,13 +158,13 @@ public class UserController {
 
     @ApiOperation(value = "求符")
     @PostMapping("/{id}/beg/")
-    public Response<Beg> additionBeg(@PathVariable Integer id, Integer divination) {
+    public Response<Beg> additionBeg(@PathVariable Integer id, Integer beg) {
         Response<Beg> response = new Response<>();
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         if (authUserDetails.getUserId() == id) {
-            Beg beg = begService.addBeg(authUserDetails.getUserId(), divination);
+            Beg begObj = begService.addBeg(authUserDetails.getUserId(), beg);
             if (beg != null) {
-                response = new Response<>(beg);
+                response = new Response<>(begObj);
                 return response;
             }
             response.setCode("2003");
