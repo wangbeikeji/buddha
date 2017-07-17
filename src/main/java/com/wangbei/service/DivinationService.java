@@ -1,7 +1,8 @@
 package com.wangbei.service;
 
-import java.util.List;
+import java.util.*;
 
+import com.wangbei.entity.Beg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,6 @@ public class DivinationService {
 	public List<Divination> list() {
 		return divinationDao.listDivination();
 	}
+
 
 }

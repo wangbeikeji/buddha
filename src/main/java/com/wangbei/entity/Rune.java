@@ -2,6 +2,7 @@ package com.wangbei.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author yuyidi 2017-07-10 21:24:10
@@ -25,6 +26,8 @@ public class Rune implements Serializable {
 	private String link;
 	@Column(name = "merit_value")
 	private Integer meritValue;
+	@Transient
+	private Date expireTime;
 
 	public Integer getId() {
 		return id;
@@ -74,4 +77,11 @@ public class Rune implements Serializable {
 		this.meritValue = meritValue;
 	}
 
+	public Date getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(Date expireTime) {
+		this.expireTime = expireTime;
+	}
 }

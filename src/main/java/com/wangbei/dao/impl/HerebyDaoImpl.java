@@ -51,11 +51,6 @@ public class HerebyDaoImpl implements HerebyDao{
     }
 
     @Override
-    public Integer updateJossByUser(Integer userId, Integer joss) {
-        return herebyRepository.updateJossByUser(userId,joss);
-    }
-
-    @Override
     public Hereby retrieveByUser(Integer user) {
         return herebyRepository.findByUserId(user);
     }

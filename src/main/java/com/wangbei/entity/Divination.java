@@ -5,6 +5,7 @@ import com.wangbei.util.enums.DivinationTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
 * @author yuyidi 2017-07-10 21:27:38
@@ -37,6 +38,9 @@ public class Divination implements Serializable {
     //签语
     @Column(name = "sketch")
     private String sketch;
+
+    @Transient
+    private Date expireTime;
 
     public Integer getId() {
         return id;
@@ -100,5 +104,13 @@ public class Divination implements Serializable {
 
     public void setSketch(String sketch) {
         this.sketch = sketch;
+    }
+
+    public Date getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
     }
 }

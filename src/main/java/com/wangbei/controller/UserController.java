@@ -1,7 +1,7 @@
 package com.wangbei.controller;
 
 import com.wangbei.entity.*;
-import com.wangbei.pojo.JossOfferings;
+import com.wangbei.pojo.JossSurrounding;
 import com.wangbei.pojo.Response;
 import com.wangbei.pojo.UserWithToken;
 import com.wangbei.pojo.ValidateCode;
@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +42,10 @@ public class UserController {
     private MeritDetailService meritDetailService;
     @Autowired
     private JossService jossService;
+    @Autowired
+    private RuneService runeService;
+    @Autowired
+    private BegService begService;
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
@@ -151,6 +156,26 @@ public class UserController {
         return response;
     }
 
+    @ApiOperation(value = "求符")
+    @PostMapping("/{id}/beg/")
+    public Response<Beg> additionBeg(@PathVariable Integer id, Integer divination) {
+        Response<Beg> response = new Response<>();
+        AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+        if (authUserDetails.getUserId() == id) {
+            Beg beg = begService.addBeg(authUserDetails.getUserId(), divination);
+            if (beg != null) {
+                response = new Response<>(beg);
+                return response;
+            }
+            response.setCode("2003");
+            response.setMessage("求签成功");
+        }
+        //若当前用户与请求的用户不相同
+        response.setCode("2003");
+        response.setMessage("当前用户信息不匹配");
+        return response;
+    }
+
     /**
      * @author yuyidi 2017-07-14 21:10:26
      * @class com.wangbei.controller.UserController
@@ -158,8 +183,8 @@ public class UserController {
      */
     @ApiOperation(value = "用户请佛及供品信息")
     @GetMapping("/{id}/joss/")
-    public Response<JossOfferings> jossOfferings(@PathVariable Integer id) {
-        Response<JossOfferings> response = new Response<>();
+    public Response<JossSurrounding> jossOfferings(@PathVariable Integer id) {
+        Response<JossSurrounding> response = new Response<>();
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         if (authUserDetails.getUserId() == id) {
             // 根据用户获取用户请佛信息
@@ -167,10 +192,13 @@ public class UserController {
             if (joss != null) {
                 //获取用户供品信息
                 Map<String, Offerings> offerings = offeringsService.getOfferingsByUser(id);
-                JossOfferings jossOfferings = new JossOfferings();
-                jossOfferings.setJoss(joss);
-                jossOfferings.setOfferings(offerings);
-                response.setResult(jossOfferings);
+                //获取用户的求符信息
+                List<Rune> runes = runeService.getRuneByUser(id);
+                JossSurrounding jossSurrounding = new JossSurrounding();
+                jossSurrounding.setJoss(joss);
+                jossSurrounding.setOfferings(offerings);
+                jossSurrounding.setRunes(runes);
+                response.setResult(jossSurrounding);
             }
         }
         return response;
