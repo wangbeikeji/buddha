@@ -86,8 +86,9 @@ public class OfferingsService {
 		//遍历功德详情，将用户供品信息按照类型分组
 		Map<String, Offerings> result = new HashMap<>();
 		for (MeritDetail meritDetail : meritDetails) {
-			Offerings offerings = getOfferingsInfo(meritDetail.getOfferings_id());
+			Offerings offerings = getOfferingsInfo(meritDetail.getOfferingsId());
 			if (offerings != null) {
+				offerings.setExpireTime(meritDetail.getExpireTime());
 				result.put(meritDetail.getType().name(),offerings);
 			}
 		}

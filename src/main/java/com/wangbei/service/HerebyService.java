@@ -23,18 +23,19 @@ public class HerebyService {
 
     @Transactional
     public Hereby addHereby(Integer user, Integer joss) {
-    	Hereby hereby = new Hereby(user, joss);
-		hereby.setCreateTime(new Date());
-		try {
-			return herebyDao.create(hereby);
-		} catch (Exception ex) {
-			throw new ServiceException(ServiceException.USER_ADDHEREBY_DUPLICATE_EXCEPTION);
-		}
+        Hereby hereby = findByUser(user);
+        if (hereby != null && joss != null) {
+            //若用户已经请佛，并想恭请其他佛，则更新当前供佛信息
+            hereby.setJossId(joss);
+            return herebyDao.create(hereby);
+        }
+        Hereby request = new Hereby(user, joss);
+        return herebyDao.create(request);
     }
 
     @Transactional
-    public Hereby modifyHereby(Integer id,Integer user, Integer joss) {
-        Hereby hereby = new Hereby(user,joss);
+    public Hereby modifyHereby(Integer id, Integer user, Integer joss) {
+        Hereby hereby = new Hereby(user, joss);
         hereby.setId(id);
         return herebyDao.update(hereby);
     }

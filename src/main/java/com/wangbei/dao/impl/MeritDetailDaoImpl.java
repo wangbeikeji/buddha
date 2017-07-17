@@ -3,6 +3,7 @@ package com.wangbei.dao.impl;
 import com.wangbei.dao.MeritDetailDao;
 import com.wangbei.dao.impl.jpa.MeritDetailRepository;
 import com.wangbei.entity.MeritDetail;
+import com.wangbei.util.enums.OfferingTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,5 +55,10 @@ public class MeritDetailDaoImpl implements MeritDetailDao {
     @Override
     public List<MeritDetail> meritDetailsByUserAndExpireTimeGreaterThan(Integer user, Date date) {
         return meritDetailRepository.findAllByUserIdAndExpireTimeGreaterThan(user,date);
+    }
+
+    @Override
+    public MeritDetail meritDetailByUserAndType(Integer user, OfferingTypeEnum type) {
+        return meritDetailRepository.findByUserIdAndType(user,type);
     }
 }
