@@ -8,6 +8,7 @@ public class ServiceException extends RuntimeException {
 	
 	public static final String USER_REGISTER_EXIST_EXCEPTION = "3001";
 	public static final String USER_PHONE_NOTEXIST_EXCEPTION = "3002";
+	public static final String USER_ADDHEREBY_DUPLICATE_EXCEPTION = "3003";
 	
 	public static final String TOKEN_VALIDATE_EXCEPTION = "5001";
 

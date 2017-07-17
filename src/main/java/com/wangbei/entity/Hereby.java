@@ -1,16 +1,20 @@
 package com.wangbei.entity;
 
-import org.joda.time.DateTime;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
-* @author yuyidi 2017-07-14 10:58:42
-* @class com.wangbei.entity.Hereby
-* @description 恭请佛
-*/
+ * @author yuyidi 2017-07-14 10:58:42
+ * @class com.wangbei.entity.Hereby
+ * @description 恭请佛
+ */
 @Entity
 @Table(name = "hereby")
 public class Hereby implements Serializable{
