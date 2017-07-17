@@ -158,17 +158,18 @@ public class UserController {
 
     @ApiOperation(value = "求符")
     @PostMapping("/{id}/beg/")
-    public Response<Beg> additionBeg(@PathVariable Integer id, Integer divination) {
+    public Response<Beg> additionBeg(@PathVariable Integer id, Integer rune) {
         Response<Beg> response = new Response<>();
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         if (authUserDetails.getUserId() == id) {
-            Beg beg = begService.addBeg(authUserDetails.getUserId(), divination);
+            Beg beg = begService.addBeg(authUserDetails.getUserId(), rune);
             if (beg != null) {
                 response = new Response<>(beg);
                 return response;
             }
             response.setCode("2003");
             response.setMessage("求符失败");
+
         }
         //若当前用户与请求的用户不相同
         response.setCode("2003");
