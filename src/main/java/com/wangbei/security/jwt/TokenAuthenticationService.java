@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wangbei.exception.ServiceException;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -32,21 +30,16 @@ public class TokenAuthenticationService {
 				.signWith(SignatureAlgorithm.HS512, SECRET).compact();
 	}
 
-	public static Map<String, Object> getTokenInfo(String token) {
-		try {
-			// 解析 Token
-			Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-					.getBody();
-			// 获取token中的信息并返回
-			Map<String, Object> result = new HashMap<>();
-			result.put("sub", claims.getSubject());
-			result.put("userId", claims.get("userId"));
-			result.put("authorities", claims.get("authorities"));
-			result.put("exp", claims.getExpiration());
-			return result;
-		} catch (Exception ex) {
-			throw new ServiceException(ServiceException.TOKEN_VALIDATE_EXCEPTION);
-		}
+	public static Map<String, Object> getTokenInfo(String token) throws Exception {
+		// 解析 Token
+		Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+		// 获取token中的信息并返回
+		Map<String, Object> result = new HashMap<>();
+		result.put("sub", claims.getSubject());
+		result.put("userId", claims.get("userId"));
+		result.put("authorities", claims.get("authorities"));
+		result.put("exp", claims.getExpiration());
+		return result;
 	}
 
 }

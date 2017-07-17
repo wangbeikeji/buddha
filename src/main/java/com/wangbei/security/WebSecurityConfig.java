@@ -33,6 +33,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
+		// 401或者403
+		http.authorizeRequests().antMatchers("/401.html").permitAll();
+		http.authorizeRequests().antMatchers("/403.html").permitAll();
+		http.authorizeRequests().antMatchers("/httpError/**").permitAll();
 		// 登陆和注册
 		http.authorizeRequests().antMatchers("/login").permitAll();
 		http.authorizeRequests().antMatchers("/user/register").permitAll();
