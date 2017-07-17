@@ -10,7 +10,9 @@ import com.wangbei.security.SecurityAuthService;
 import com.wangbei.security.jwt.TokenAuthenticationService;
 import com.wangbei.service.*;
 import com.wangbei.util.SafeCollectionUtil;
+import com.wangbei.util.enums.OfferingTypeEnum;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -91,7 +93,7 @@ public class UserController {
 
     @ApiOperation(value = "请佛")
     @PostMapping("/{id}/hereby/")
-    public Response<Hereby> additionHereby(@PathVariable Integer id, @RequestParam(required = true) Integer joss) {
+    public Response<Hereby> additionHereby(@PathVariable Integer id, Integer joss) {
         Response<Hereby> response = new Response<>();
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         if (authUserDetails.getUserId() == id) {
@@ -136,8 +138,7 @@ public class UserController {
             Offerings offeringsInfo = offeringsService.getOfferingsInfo(offerings);
             if (offeringsInfo != null) {
                 // 供品信息存在 添加供品功德详情
-                MeritDetail meritDetail = meritDetailService.addMeritDetail(id, offeringsInfo.getId(), offeringsInfo
-                        .getMeritValue(), offeringsInfo.getType());
+                MeritDetail meritDetail = meritDetailService.addMeritDetail(id, offeringsInfo);
                 if (meritDetail != null) {
                     response.setResult(meritDetail);
                 }
@@ -175,4 +176,10 @@ public class UserController {
         return response;
     }
 
+    @ApiOperation(value = "获取供品功德详情")
+    @ApiImplicitParam(name = "type", allowableValues = "1,2,3", paramType = "query", dataType = "int")
+    @GetMapping("/{id}/meritdetail")
+    public Response<MeritDetail> meritDetail(@PathVariable Integer id, @RequestParam OfferingTypeEnum type) {
+        return new Response<>(meritDetailService.getByUserAndType(id, type));
+    }
 }

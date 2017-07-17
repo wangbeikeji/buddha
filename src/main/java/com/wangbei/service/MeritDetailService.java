@@ -2,6 +2,7 @@ package com.wangbei.service;
 
 import com.wangbei.dao.MeritDetailDao;
 import com.wangbei.entity.MeritDetail;
+import com.wangbei.entity.Offerings;
 import com.wangbei.util.enums.OfferingTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,21 @@ public class MeritDetailService {
     private MeritDetailDao meritDetailDao;
 
     @Transactional
-    public MeritDetail addMeritDetail(Integer user, Integer offerings, Integer meritValue, OfferingTypeEnum type) {
-        //TODO 需根据当前用户与供品类型查询出对应的用户是否已经添加供品，
-        // 若已添加，则判断供品是否已经过期，如果没有过期，则提示不允许再次添加供品信息
-        MeritDetail meritDetail = new MeritDetail(user, offerings, meritValue, type);
-        meritDetail.expire();
-        return meritDetailDao.create(meritDetail);
+    public MeritDetail addMeritDetail(Integer user, Offerings offerings) {
+        MeritDetail meritDetail = getByUserAndType(user, offerings.getType());
+        if (meritDetail != null) {
+            if (meritDetail.getExpireTime().getTime() < System.currentTimeMillis()) {
+                //若还未过期
+                return meritDetail;
+            }
+            //若过期时间超过当前日期，则允许并更新当前供品信息
+            meritDetail.expire();
+            MeritDetail result = addMeritDetail(meritDetail);
+            return result;
+        }
+        MeritDetail request = new MeritDetail(user, offerings.getId(), offerings.getMeritValue(), offerings.getType());
+        request.expire();
+        return meritDetailDao.create(request);
     }
 
     @Transactional
@@ -36,14 +46,26 @@ public class MeritDetailService {
     }
 
     /**
-    * @author yuyidi 2017-07-15 15:16:58
-    * @method getByUserAndExpireTimeLessthan
-    * @param user
-    * @param date
-    * @return java.util.List<com.wangbei.entity.MeritDetail>
-    * @description 获取用户供佛的供品信息
-    */
+     * @param user
+     * @param date
+     * @return java.util.List<com.wangbei.entity.MeritDetail>
+     * @author yuyidi 2017-07-15 15:16:58
+     * @method getByUserAndExpireTimeLessthan
+     * @description 获取用户供佛的供品信息
+     */
     public List<MeritDetail> getByUserAndExpireTimeLessthan(Integer user, Date date) {
-        return meritDetailDao.meritDetailsByUserAndExpireTimeGreaterThan(user,date);
+        return meritDetailDao.meritDetailsByUserAndExpireTimeGreaterThan(user, date);
+    }
+
+    /**
+     * @param user
+     * @param type
+     * @return com.wangbei.entity.MeritDetail
+     * @author yuyidi 2017-07-17 09:59:04
+     * @method getByUserAndType
+     * @description 根据用户与供品类型获取供品功德详情
+     */
+    public MeritDetail getByUserAndType(Integer user, OfferingTypeEnum type) {
+        return meritDetailDao.meritDetailByUserAndType(user, type);
     }
 }

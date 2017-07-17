@@ -5,6 +5,7 @@ import com.wangbei.util.enums.OfferingTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author yuyidi 2017-07-10 21:41:42
@@ -31,6 +32,8 @@ public class Offerings implements Serializable {
 	private String link;
 	@Column(name = "small_link")
 	private String smallLink;
+	@Transient
+	private Date expireTime;
 
 	public Integer getId() {
 		return id;
@@ -88,4 +91,11 @@ public class Offerings implements Serializable {
 		this.smallLink = smallLink;
 	}
 
+	public Date getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(Date expireTime) {
+		this.expireTime = expireTime;
+	}
 }

@@ -1,6 +1,7 @@
 package com.wangbei.dao;
 
 import com.wangbei.entity.MeritDetail;
+import com.wangbei.util.enums.OfferingTypeEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
 public interface MeritDetailDao extends BaseDao<MeritDetail,Integer> {
 
     List<MeritDetail> meritDetailsByUserAndExpireTimeGreaterThan(Integer user,Date time);
-
+    MeritDetail meritDetailByUserAndType(Integer user, OfferingTypeEnum type);
 }

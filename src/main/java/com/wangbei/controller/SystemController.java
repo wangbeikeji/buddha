@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class SystemController {
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    @GetMapping("/payment")
-    public String payMent(PayEnum payEnum){
-        return payEnum.getPayment();
-    }
-
-    @GetMapping("/gender")
-    public String gender(GenderEnum gender){
-        return gender.getGender();
-    }
+//    @GetMapping("/payment")
+//    public String payMent(PayEnum payEnum){
+//        return payEnum.getPayment();
+//    }
+//
+//    @GetMapping("/gender")
+//    public String gender(GenderEnum gender){
+//        return gender.getGender();
+//    }
 }

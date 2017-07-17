@@ -1,6 +1,7 @@
 package com.wangbei.dao.impl.jpa;
 
 import com.wangbei.entity.MeritDetail;
+import com.wangbei.util.enums.OfferingTypeEnum;
 import org.springframework.data.repository.Repository;
 
 import java.util.Date;
@@ -14,4 +15,6 @@ public interface MeritDetailRepository extends Repository<MeritDetail, Integer>,
         Integer> {
 
     List<MeritDetail> findAllByUserIdAndExpireTimeGreaterThan(Integer user, Date date);
+
+    MeritDetail findByUserIdAndType(Integer user, OfferingTypeEnum type);
 }
