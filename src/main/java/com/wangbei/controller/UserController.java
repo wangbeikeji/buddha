@@ -166,7 +166,7 @@ public class UserController {
                 return response;
             }
             response.setCode("2003");
-            response.setMessage("求签成功");
+            response.setMessage("求符成功");
         }
         //若当前用户与请求的用户不相同
         response.setCode("2003");
