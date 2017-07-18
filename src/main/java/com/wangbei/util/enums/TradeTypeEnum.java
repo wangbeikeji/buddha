@@ -11,7 +11,23 @@ import java.util.Map;
  * @description 交易类型枚举
  */
 public enum TradeTypeEnum implements CommonalityEnum {
-    CHARGE(0, "充值"), SANDALWOOD(1, "清香"), FRUIT(2, "供果"), FLOWERS(3, "供花"), RUNE(4,"求符"), DIVINATION(5,"求签"), CHECKIN(6, "签到");
+    CHARGE(0, "充值"),
+    SANDALWOOD(1, "请香"),
+    FRUIT(2, "供果"),
+    FLOWERS(3, "供花"),
+    RUNE(4, "求符"),
+    DIVINATION(5,"求签"),
+    CHECKIN(6, "签到"),
+    FREELIFE(7, "放生");
+
+    private static Map<Integer, TradeTypeEnum> valueMap = new HashMap<>();
+
+    static {
+        for (TradeTypeEnum _enum : TradeTypeEnum.values()) {
+            valueMap.put(_enum.getIndex(), _enum);
+        }
+    }
+
 
     private Integer index;
     private String trade;
@@ -19,6 +35,14 @@ public enum TradeTypeEnum implements CommonalityEnum {
     TradeTypeEnum(Integer index, String trade) {
         this.index = index;
         this.trade = trade;
+    }
+
+    public static TradeTypeEnum getByIndex(Integer index) {
+        TradeTypeEnum result = valueMap.get(index);
+        if (result == null) {
+            throw new IllegalArgumentException("No element matches " + index);
+        }
+        return result;
     }
 
     @Override
@@ -29,22 +53,5 @@ public enum TradeTypeEnum implements CommonalityEnum {
     @JsonValue
     public String getTrade() {
         return trade;
-    }
-
-
-    private static Map<Integer, TradeTypeEnum> valueMap = new HashMap<>();
-
-    static {
-        for (TradeTypeEnum _enum : TradeTypeEnum.values()) {
-            valueMap.put(_enum.getIndex(), _enum);
-        }
-    }
-
-    public static TradeTypeEnum getByIndex(Integer index){
-        TradeTypeEnum result = valueMap.get(index);
-        if (result == null) {
-            throw new IllegalArgumentException("No element matches " + index);
-        }
-        return result;
     }
 }

@@ -3,6 +3,8 @@ package com.wangbei.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.wangbei.entity.*;
+import com.wangbei.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,15 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wangbei.entity.Beg;
-import com.wangbei.entity.Checkin;
-import com.wangbei.entity.Divination;
-import com.wangbei.entity.Hereby;
-import com.wangbei.entity.Joss;
-import com.wangbei.entity.MeritDetail;
-import com.wangbei.entity.Offerings;
-import com.wangbei.entity.Rune;
-import com.wangbei.entity.User;
 import com.wangbei.pojo.JossSurrounding;
 import com.wangbei.pojo.Response;
 import com.wangbei.pojo.UserShakeDivinationInfo;
@@ -31,16 +24,8 @@ import com.wangbei.pojo.ValidateCode;
 import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.security.jwt.TokenAuthenticationService;
-import com.wangbei.service.BegService;
-import com.wangbei.service.CheckinService;
-import com.wangbei.service.HerebyService;
-import com.wangbei.service.JossService;
-import com.wangbei.service.MeritDetailService;
-import com.wangbei.service.OfferingsService;
-import com.wangbei.service.RuneService;
-import com.wangbei.service.UserDivinationService;
-import com.wangbei.service.UserService;
 import com.wangbei.util.SafeCollectionUtil;
+import com.wangbei.util.enums.CreatureEnum;
 import com.wangbei.util.enums.OfferingTypeEnum;
 
 import io.swagger.annotations.Api;
@@ -71,6 +56,8 @@ public class UserController {
     private RuneService runeService;
     @Autowired
     private BegService begService;
+    @Autowired
+    private FreeLifeService freeLifeService;
     @Autowired
     private UserDivinationService userDivinationService;
     @Autowired
@@ -151,7 +138,9 @@ public class UserController {
         return response;
     }
 
-    @ApiOperation(value = "恭请其他佛")
+
+    @Deprecated
+    @ApiOperation(value = "恭请其他佛",hidden = true)
     @PutMapping("/{id}/hereby/{hereby}")
     public Response<Hereby> modificationHereby(@PathVariable Integer id, @PathVariable Integer hereby, Integer joss) {
         Response<Hereby> response = new Response<>();
@@ -283,6 +272,34 @@ public class UserController {
         if (authUserDetails.getUserId() == id) {
             String result = userService.charge(id, meritValue);
             response.setResult(result);
+            return response;
+        }
+        //若当前用户与请求的用户不相同
+        response.setCode("2003");
+        response.setMessage("当前用户信息不匹配");
+        return response;
+    }
+
+    /**
+    * @author yuyidi 2017-07-18 14:54:15
+    * @method freeLife
+    * @param id
+    * @param creature
+    * @param meritValue
+    * @return com.wangbei.pojo.Response<java.lang.String>
+    * @description 放生
+    */
+    @ApiOperation(value = "放生")
+    @ApiImplicitParam(name = "creature",allowableValues = "1,2,3",paramType = "query",dataType = "int")
+    @PostMapping("/{id}/freelife")
+    public Response<String> freeLife(@PathVariable Integer id, @RequestParam CreatureEnum creature, Integer meritValue) {
+        Response<String> response = new Response<>();
+        AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+        if (authUserDetails.getUserId() == id) {
+            FreeLife result = freeLifeService.addFreeLife(id,creature, meritValue);
+            if (result != null) {
+                response.setResult("功德无量");
+            }
             return response;
         }
         //若当前用户与请求的用户不相同
