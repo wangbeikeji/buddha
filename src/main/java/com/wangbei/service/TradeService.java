@@ -25,7 +25,7 @@ public class TradeService {
     @Transactional
     public Trade trade(Integer user, TradeTypeEnum type, Integer meritValue) {
         //校检用户
-        if(type != TradeTypeEnum.CHARGE){
+        if(type != TradeTypeEnum.CHARGE && type != TradeTypeEnum.CHECKIN){
             Account account = accountDao.findByUser(user);
             if(account == null) {
             	throw new ServiceException(ServiceException.MERIT_POOL);

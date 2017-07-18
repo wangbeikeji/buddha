@@ -27,7 +27,6 @@ public class UserService {
 	@Autowired
 	private TradeService tradeService;
 
-
 	@Transactional
 	public User addUser(User user) {
 		User checkUser = userDao.fetchUserByPhone(user.getPhone());
@@ -36,7 +35,7 @@ public class UserService {
 		}
 		User result = userDao.createUser(user);
 		if (result != null) {
-			//用户注册成功之后为当前用户初始化一个账户信息
+			// 用户注册成功之后为当前用户初始化一个账户信息
 			accountDao.create(new Account(result.getId(), 0));
 		}
 		return result;
@@ -48,6 +47,15 @@ public class UserService {
 
 	public User getUserByPhone(String phone) {
 		return userDao.fetchUserByPhone(phone);
+	}
+
+	public Integer getUserMeritValue(Integer userId) {
+		Integer meritValue = 0;
+		Account account = accountDao.findByUser(userId);
+		if (account != null) {
+			meritValue = account.getMeritValue();
+		}
+		return meritValue;
 	}
 
 	@Transactional

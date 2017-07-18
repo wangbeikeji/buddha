@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wangbei.entity.Beg;
+import com.wangbei.entity.Checkin;
 import com.wangbei.entity.Divination;
 import com.wangbei.entity.Hereby;
 import com.wangbei.entity.Joss;
@@ -31,6 +32,7 @@ import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.security.jwt.TokenAuthenticationService;
 import com.wangbei.service.BegService;
+import com.wangbei.service.CheckinService;
 import com.wangbei.service.HerebyService;
 import com.wangbei.service.JossService;
 import com.wangbei.service.MeritDetailService;
@@ -71,7 +73,9 @@ public class UserController {
     private BegService begService;
     @Autowired
     private UserDivinationService userDivinationService;
-
+    @Autowired
+    private CheckinService checkinService;
+    
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
     public Response<UserWithToken> addition(User user, Integer validateCode) {
@@ -81,6 +85,7 @@ public class UserController {
             if (validate != null && validate.getCode().equals(validateCode)) {
                 User userInfo = userService.addUser(user);
                 UserWithToken result = new UserWithToken(userInfo);
+                result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
                 result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
                 response = new Response<>(result);
                 return response;
@@ -98,9 +103,13 @@ public class UserController {
 
     @GetMapping("/getCurrent")
     @ApiOperation(value = "获取当前用户信息")
-    public Response<User> getCurrent() {
+    public Response<UserWithToken> getCurrent() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return new Response<>(userService.getUserByPhone(auth.getName()));
+        UserWithToken result = new UserWithToken(userService.getUserByPhone(auth.getName()));
+        if(result.getId() > 0) {
+        	result.setMeritValue(userService.getUserMeritValue(result.getId()));
+        }
+        return new Response<>(result);
     }
 
     @PutMapping("/resetPassword")
@@ -112,6 +121,7 @@ public class UserController {
             if (validate != null && validate.getCode().equals(validateCode)) {
                 User userInfo = userService.resetPassword(phone, password);
                 UserWithToken result = new UserWithToken(userInfo);
+                result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
                 result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
                 response = new Response<>(result);
                 return response;
@@ -252,6 +262,12 @@ public class UserController {
         return new Response<>(userDivinationService.explainDivination(id, userDivinationId));
     }
 
+    @ApiOperation(value = "用户签到")
+    @PutMapping("/{id}/checkin")
+    public Response<Checkin> checkin(@PathVariable Integer id) {
+        return new Response<>(checkinService.checkin(id));
+    }
+    
     /**
      * @param
      * @return com.wangbei.pojo.Response<java.lang.String>

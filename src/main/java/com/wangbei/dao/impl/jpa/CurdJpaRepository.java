@@ -1,11 +1,10 @@
 package com.wangbei.dao.impl.jpa;
 
-import com.wangbei.entity.Joss;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author Created by yuyidi on 2017/7/14.

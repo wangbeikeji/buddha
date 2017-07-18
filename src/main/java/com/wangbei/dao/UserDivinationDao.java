@@ -25,5 +25,5 @@ public interface UserDivinationDao {
 	public Page<UserDivination> pageUserDivination(int page, int limit);
 	
 	public List<UserDivination> listUserDivination();
-
+	
 }
