@@ -31,7 +31,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Account update(Account account) {
-        return null;
+        return accountRepository.save(account);
     }
 
     @Override

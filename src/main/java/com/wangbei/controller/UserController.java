@@ -1,27 +1,36 @@
 package com.wangbei.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import com.wangbei.entity.*;
+import com.wangbei.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wangbei.pojo.JossSurrounding;
 import com.wangbei.pojo.Response;
+import com.wangbei.pojo.UserShakeDivinationInfo;
 import com.wangbei.pojo.UserWithToken;
 import com.wangbei.pojo.ValidateCode;
 import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.security.jwt.TokenAuthenticationService;
-import com.wangbei.service.*;
 import com.wangbei.util.SafeCollectionUtil;
 import com.wangbei.util.enums.CreatureEnum;
 import com.wangbei.util.enums.OfferingTypeEnum;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author yuyidi 2017-07-06 17:39:59
@@ -49,7 +58,11 @@ public class UserController {
     private BegService begService;
     @Autowired
     private FreeLifeService freeLifeService;
-
+    @Autowired
+    private UserDivinationService userDivinationService;
+    @Autowired
+    private CheckinService checkinService;
+    
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
     public Response<UserWithToken> addition(User user, Integer validateCode) {
@@ -59,6 +72,7 @@ public class UserController {
             if (validate != null && validate.getCode().equals(validateCode)) {
                 User userInfo = userService.addUser(user);
                 UserWithToken result = new UserWithToken(userInfo);
+                result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
                 result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
                 response = new Response<>(result);
                 return response;
@@ -76,9 +90,13 @@ public class UserController {
 
     @GetMapping("/getCurrent")
     @ApiOperation(value = "获取当前用户信息")
-    public Response<User> getCurrent() {
+    public Response<UserWithToken> getCurrent() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return new Response<>(userService.getUserByPhone(auth.getName()));
+        UserWithToken result = new UserWithToken(userService.getUserByPhone(auth.getName()));
+        if(result.getId() > 0) {
+        	result.setMeritValue(userService.getUserMeritValue(result.getId()));
+        }
+        return new Response<>(result);
     }
 
     @PutMapping("/resetPassword")
@@ -90,6 +108,7 @@ public class UserController {
             if (validate != null && validate.getCode().equals(validateCode)) {
                 User userInfo = userService.resetPassword(phone, password);
                 UserWithToken result = new UserWithToken(userInfo);
+                result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
                 result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
                 response = new Response<>(result);
                 return response;
@@ -219,7 +238,25 @@ public class UserController {
     public Response<MeritDetail> meritDetail(@PathVariable Integer id, @RequestParam OfferingTypeEnum type) {
         return new Response<>(meritDetailService.getByUserAndType(id, type));
     }
+    
+    @ApiOperation(value = "用户摇签")
+    @PostMapping("/{id}/shakeDivination")
+    public Response<UserShakeDivinationInfo> shakeDivination(@PathVariable Integer id) {
+        return new Response<>(userDivinationService.shakeDivination(id));
+    }
+    
+    @ApiOperation(value = "用户解签")
+    @PutMapping("/{id}/explainDivination")
+    public Response<Divination> explainDivination(@PathVariable Integer id, @RequestParam Integer userDivinationId) {
+        return new Response<>(userDivinationService.explainDivination(id, userDivinationId));
+    }
 
+    @ApiOperation(value = "用户签到")
+    @PutMapping("/{id}/checkin")
+    public Response<Checkin> checkin(@PathVariable Integer id) {
+        return new Response<>(checkinService.checkin(id));
+    }
+    
     /**
      * @param
      * @return com.wangbei.pojo.Response<java.lang.String>

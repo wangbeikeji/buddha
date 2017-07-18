@@ -16,21 +16,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.wangbei.dao.UserDao;
 import com.wangbei.pojo.Response;
 import com.wangbei.pojo.UserWithToken;
 import com.wangbei.security.AuthUserDetails;
+import com.wangbei.service.UserService;
 import com.wangbei.util.JacksonUtil;
 
 import io.swagger.models.HttpMethod;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-	private UserDao userDao;
+	private UserService userService;
 
-	public JWTLoginFilter(String url, AuthenticationManager authManager, UserDao userDao) {
+	public JWTLoginFilter(String url, AuthenticationManager authManager, UserService userService) {
 		super(new AntPathRequestMatcher(url, HttpMethod.POST.name()));
-		this.userDao = userDao;
+		this.userService = userService;
 		setAuthenticationManager(authManager);
 	}
 
@@ -58,7 +58,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 		String token = TokenAuthenticationService.generateToken(authUser.getUserId(), auth.getName(),
 				grantedAuthStr.toString());
 		// step 3 : 返回token到客户端
-		UserWithToken user = new UserWithToken(userDao.fetchUserByPhone(auth.getName()));
+		UserWithToken user = new UserWithToken(userService.getUserByPhone(auth.getName()));
+		user.setMeritValue(userService.getUserMeritValue(user.getId()));
 		user.setToken(token);
 		Response<UserWithToken> result = new Response<UserWithToken>("200", user, "successful!");
 		res.setContentType("application/json;charset=utf-8");

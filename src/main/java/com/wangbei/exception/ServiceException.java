@@ -13,6 +13,8 @@ public class ServiceException extends RuntimeException {
 
 	public static final String USER_ADDHEREBY_DUPLICATE_EXCEPTION = "3003";
 
+	public static final String USER_ALREADY_CHECKIN_EXCEPTION = "3004";
+
 	public static final String TOKEN_VALIDATE_EXCEPTION = "5001";
 
 

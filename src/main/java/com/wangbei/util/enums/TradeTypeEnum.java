@@ -11,7 +11,14 @@ import java.util.Map;
  * @description 交易类型枚举
  */
 public enum TradeTypeEnum implements CommonalityEnum {
-    CHARGE(0, "充值"), SANDALWOOD(1, "请香"), FRUIT(2, "供果"), FLOWERS(3, "供花"), RUNE(4, "求符"), FREELIFE(5, "放生");
+    CHARGE(0, "充值"),
+    SANDALWOOD(1, "请香"),
+    FRUIT(2, "供果"),
+    FLOWERS(3, "供花"),
+    RUNE(4, "求符"),
+    DIVINATION(5,"求签"),
+    CHECKIN(6, "签到"),
+    FREELIFE(7, "放生");
 
     private static Map<Integer, TradeTypeEnum> valueMap = new HashMap<>();
 
@@ -20,6 +27,7 @@ public enum TradeTypeEnum implements CommonalityEnum {
             valueMap.put(_enum.getIndex(), _enum);
         }
     }
+
 
     private Integer index;
     private String trade;
