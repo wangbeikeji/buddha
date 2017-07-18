@@ -27,8 +27,11 @@ public class TradeService {
         //校检用户
         if(type != TradeTypeEnum.CHARGE){
             Account account = accountDao.findByUser(user);
+            if(account == null) {
+            	throw new ServiceException(ServiceException.MERIT_POOL);
+            }
             Integer meritsub = account.getMeritValue() - meritValue;
-            if (meritsub > 0) {
+            if (meritsub >= 0) {
                 //账户余额充足，扣款
                 account.setMeritValue(meritsub);
                 accountDao.update(account);

@@ -1,26 +1,49 @@
 package com.wangbei.controller;
 
-import com.wangbei.entity.*;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.wangbei.entity.Beg;
+import com.wangbei.entity.Divination;
+import com.wangbei.entity.Hereby;
+import com.wangbei.entity.Joss;
+import com.wangbei.entity.MeritDetail;
+import com.wangbei.entity.Offerings;
+import com.wangbei.entity.Rune;
+import com.wangbei.entity.User;
 import com.wangbei.pojo.JossSurrounding;
 import com.wangbei.pojo.Response;
+import com.wangbei.pojo.UserShakeDivinationInfo;
 import com.wangbei.pojo.UserWithToken;
 import com.wangbei.pojo.ValidateCode;
 import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.security.jwt.TokenAuthenticationService;
-import com.wangbei.service.*;
+import com.wangbei.service.BegService;
+import com.wangbei.service.HerebyService;
+import com.wangbei.service.JossService;
+import com.wangbei.service.MeritDetailService;
+import com.wangbei.service.OfferingsService;
+import com.wangbei.service.RuneService;
+import com.wangbei.service.UserDivinationService;
+import com.wangbei.service.UserService;
 import com.wangbei.util.SafeCollectionUtil;
 import com.wangbei.util.enums.OfferingTypeEnum;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author yuyidi 2017-07-06 17:39:59
@@ -46,6 +69,8 @@ public class UserController {
     private RuneService runeService;
     @Autowired
     private BegService begService;
+    @Autowired
+    private UserDivinationService userDivinationService;
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
@@ -213,6 +238,18 @@ public class UserController {
     @GetMapping("/{id}/meritdetail")
     public Response<MeritDetail> meritDetail(@PathVariable Integer id, @RequestParam OfferingTypeEnum type) {
         return new Response<>(meritDetailService.getByUserAndType(id, type));
+    }
+    
+    @ApiOperation(value = "用户摇签")
+    @PostMapping("/{id}/shakeDivination")
+    public Response<UserShakeDivinationInfo> shakeDivination(@PathVariable Integer id) {
+        return new Response<>(userDivinationService.shakeDivination(id));
+    }
+    
+    @ApiOperation(value = "用户解签")
+    @PutMapping("/{id}/explainDivination")
+    public Response<Divination> explainDivination(@PathVariable Integer id, @RequestParam Integer userDivinationId) {
+        return new Response<>(userDivinationService.explainDivination(id, userDivinationId));
     }
 
     /**

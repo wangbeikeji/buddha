@@ -3,6 +3,17 @@ package com.wangbei.util;
 public class RandomUtil {
 
 	/**
+	 * 获取[0, max)之前的整数，右开区间（即不包括最大数）
+	 * 
+	 * @param max
+	 *            最大数
+	 * @return 随机整数
+	 */
+	public static int getRandomInt(int max) {
+		return (int) (Math.random() * max);
+	}
+
+	/**
 	 * 生成随机码，一次最多生成10个随机数
 	 */
 	public static String generateRandomCode(int length) {
@@ -28,5 +39,7 @@ public class RandomUtil {
 		String result = first + second;
 
 		System.out.println("result:" + result);
+
+		System.out.println(getRandomInt(10));
 	}
 }
