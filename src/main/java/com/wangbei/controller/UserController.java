@@ -283,7 +283,7 @@ public class UserController {
 	 * @method charge
 	 * @description 充值
 	 */
-	@ApiOperation(value = "账户充值（type：0充值 7放生）")
+	@ApiOperation(value = "账户充值（type：0充值 7放生 8功德）")
 	@PostMapping("/{id}/charge/")
 	public Response<Trade> charge(@PathVariable Integer id, Integer meritValue, Integer type) {
 		Response<Trade> response = new Response<>();
