@@ -11,14 +11,14 @@ import javax.persistence.Table;
 
 /**
  * 
- * 数据版本
+ * app版本
  * 
  * @author luomengan
  *
  */
 @Entity
-@Table(name = "data_version")
-public class DataVersion {
+@Table(name = "app_version")
+public class AppVersion {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class DataVersion {
 	/**
 	 * 版本号
 	 */
-	private String version;
+	private Integer version;
 	/**
 	 * 创建时间
 	 */
@@ -45,11 +45,11 @@ public class DataVersion {
 		this.id = id;
 	}
 
-	public String getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 

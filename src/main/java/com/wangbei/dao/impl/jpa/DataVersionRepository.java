@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 
-import com.wangbei.entity.DataVersion;
+import com.wangbei.entity.AppVersion;
 
 /**
  * 数据版本 Repository
@@ -15,18 +15,18 @@ import com.wangbei.entity.DataVersion;
  * @author luomengan
  *
  */
-public interface DataVersionRepository extends Repository<DataVersion, Integer> {
+public interface DataVersionRepository extends Repository<AppVersion, Integer> {
 
-	DataVersion save(DataVersion dataVersion);
+	AppVersion save(AppVersion appVersion);
 
 	void delete(Integer id);
 
-	Page<DataVersion> findAll(Pageable pageable);
+	Page<AppVersion> findAll(Pageable pageable);
 	
-	List<DataVersion> findAll();
+	List<AppVersion> findAll();
 
-	DataVersion findById(Integer id);
+	AppVersion findById(Integer id);
 	
-	List<DataVersion> findByIsCurrent(boolean isCurrent, Sort sort);
+	List<AppVersion> findByIsCurrent(boolean isCurrent, Sort sort);
 	
 }

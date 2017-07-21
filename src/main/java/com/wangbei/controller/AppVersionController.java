@@ -11,52 +11,52 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wangbei.entity.DataVersion;
+import com.wangbei.entity.AppVersion;
 import com.wangbei.pojo.Response;
-import com.wangbei.service.DataVersionService;
+import com.wangbei.service.AppVersionService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * 数据版本 Controller
+ * App版本 Controller
  * 
  * @author luomengan
  *
  */
 @RestController
-@RequestMapping("/dataVersion")
-@Api(description = "数据版本接口列表")
-public class DataVersionController {
+@RequestMapping("/appVersion")
+@Api(description = "App版本接口列表")
+public class AppVersionController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	public DataVersionService dataVersionService;
+	public AppVersionService appVersionService;
 
 	@PostMapping("/")
-	@ApiOperation(value = "添加数据版本")
-	public Response<DataVersion> addition(DataVersion dataVersion) {
-		return new Response<>(dataVersionService.addDataVersion(dataVersion));
+	@ApiOperation(value = "添加App版本")
+	public Response<AppVersion> addition(AppVersion appVersion) {
+		return new Response<>(appVersionService.addDataVersion(appVersion));
 	}
 
 	@PutMapping("/")
-	@ApiOperation(value = "修改数据版本")
-	public Response<DataVersion> modification(DataVersion dataVersion) {
-		return new Response<>(dataVersionService.modifyDataVersion(dataVersion));
+	@ApiOperation(value = "修改App版本")
+	public Response<AppVersion> modification(AppVersion appVersion) {
+		return new Response<>(appVersionService.modifyDataVersion(appVersion));
 	}
 
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "删除数据版本")
+	@ApiOperation(value = "删除App版本")
 	public Response<Integer> delete(@PathVariable Integer id) {
-		dataVersionService.deleteDataVersion(id);
+		appVersionService.deleteDataVersion(id);
 		return new Response<Integer>(id);
 	}
 
 	@GetMapping("/getCurrent")
-	@ApiOperation(value = "获取当前数据版本")
-	public Response<String> getCurrent() {
-		return new Response<>(dataVersionService.getCurrent());
+	@ApiOperation(value = "获取当前App版本")
+	public Response<Integer> getCurrent() {
+		return new Response<>(appVersionService.getCurrent());
 	}
 
 }

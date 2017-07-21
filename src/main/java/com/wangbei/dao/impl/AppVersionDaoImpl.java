@@ -9,9 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 
-import com.wangbei.dao.DataVersionDao;
+import com.wangbei.dao.AppVersionDao;
 import com.wangbei.dao.impl.jpa.DataVersionRepository;
-import com.wangbei.entity.DataVersion;
+import com.wangbei.entity.AppVersion;
 
 /**
  * 数据版本 Dao实现
@@ -20,14 +20,14 @@ import com.wangbei.entity.DataVersion;
  *
  */
 @Repository
-public class DataVersionDaoImpl implements DataVersionDao {
+public class AppVersionDaoImpl implements AppVersionDao {
 
 	@Autowired
 	private DataVersionRepository dataVersionRepository;
 
 	@Override
-	public DataVersion createDataVersion(DataVersion dataVersion) {
-		return dataVersionRepository.save(dataVersion);
+	public AppVersion createDataVersion(AppVersion appVersion) {
+		return dataVersionRepository.save(appVersion);
 	}
 
 	@Override
@@ -36,27 +36,27 @@ public class DataVersionDaoImpl implements DataVersionDao {
 	}
 
 	@Override
-	public DataVersion updateDataVersion(DataVersion dataVersion) {
-		return dataVersionRepository.save(dataVersion);
+	public AppVersion updateDataVersion(AppVersion appVersion) {
+		return dataVersionRepository.save(appVersion);
 	}
 
 	@Override
-	public DataVersion retrieveDataVersionById(Integer id) {
+	public AppVersion retrieveDataVersionById(Integer id) {
 		return dataVersionRepository.findById(id);
 	}
 
 	@Override
-	public Page<DataVersion> pageDataVersion(int page, int limit) {
+	public Page<AppVersion> pageDataVersion(int page, int limit) {
 		return dataVersionRepository.findAll(new PageRequest(page, limit));
 	}
 
 	@Override
-	public List<DataVersion> listDataVersion() {
+	public List<AppVersion> listDataVersion() {
 		return dataVersionRepository.findAll();
 	}
 
 	@Override
-	public List<DataVersion> listCurrentVersion() {
+	public List<AppVersion> listCurrentVersion() {
 		return dataVersionRepository.findByIsCurrent(true,
 				new Sort(new Sort.Order(Direction.DESC, "version"), new Sort.Order(Direction.DESC, "createTime")));
 	}
