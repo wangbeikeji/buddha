@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+
+    <title>华人佛教分享</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-decoration: none;
+            font-family: "微软雅黑";
+        }
+
+        img {
+            display: block;
+            border: 0;
+        }
+
+        body {
+            width: 10rem;
+            margin: 0 auto;
+        }
+
+        .header {
+            height: 1.5rem;
+            background: #B35434;
+            width: 10rem;
+            position: relative;
+        }
+
+        .header p {
+            text-align: center;
+            font-size: .5rem;
+            line-height: 1.5rem;
+        }
+
+        .Land {
+            width: .4rem;
+            position: absolute;
+            left: .5rem;
+            top: 0.45rem;
+        }
+
+        .qian-img {
+            position: absolute;
+            top: 1.5rem;
+        }
+
+        .qian-title {
+            position: absolute;
+            width: 10rem;
+        }
+
+        .qian-title > img {
+            display: block;
+            margin: 0 auto;
+            width: 1rem;
+            margin-top: 1rem;
+        }
+
+        .qian-title > p {
+            width: 6.8rem;
+            margin: .75rem auto;
+            text-align: justify;
+            font-size: .375rem;
+            margin-left: 2.25rem;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 10rem;
+            background: #fff;
+            height: 1.5rem;
+        }
+
+        .footer > img {
+            width: 1rem;
+            float: left;
+            margin-left: .5rem;
+            margin-top: .25rem;
+        }
+
+        .footer > span {
+            line-height: 1.5rem;
+            margin-left: .3rem;
+            font-size: .4rem;
+        }
+
+        .footer > a {
+            color: #fff;
+            background: red;
+            padding: .1rem .25rem;
+            border-radius: 0.1rem;
+            float: right;
+            margin-top: .45rem;
+            margin-right: .75rem;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header class="header">
+    <p>分享</p>
+    <a href="javascript:history.back(1)">
+        <img class="Land" src="/image/Path.png" th:src="@{/image/Path.png}"/>
+    </a>
+</header>
+<img class="qian-img" src="/image/share/jq-qianneirong-bg.png" th:src="@{/image/share/jq-qianneirong-bg.png}"
+     width="100%"/>
+<section class="qian-title">
+    <img src="/image/share/jq-tishiicon.png" th:src="@{/image/share/jq-tishiicon.png}"/>
+    <p>
+        【概述】：
+        <span th:text="${divination.summarize}">此卦盘古初开天地之象，诸事皆吉也。此签家宅祈福，自身求财，秋冬大利，交易婚姻成，六甲生男，行人至，田蚕六畜好，寻人见，讼事吉，失物东北，疾病愈，山坟吉。</span>
+    </p>
+    <p>
+        【<span th:text="${divination.type.type}">上上签</span>】：<span th:text="${divination.reference}">钟离成道。</span>
+    </p>
+    <p>
+        【诗曰】：<span th:text="${divination.poem}">开天辟地作良缘 吉日良时万物全，若得此签非小可，人行忠正帝王宣。</span>
+    </p>
+    <p>
+        【解曰】：<span th:text="${divination.solution}">急速兆速 年未值时 观音降笔 先报君知。</span>
+    </p>
+    <p>
+        【签语】<span th:text="${divination.sketch}">此卦盘古初开天地之象，诸事皆吉也。</span>
+    </p>
+</section>
+<div class="footer">
+    <img src="/image/AppIcon29x29.png" th:src="@{/image/AppIcon29x29.png}"/>
+    <span>
+				华人佛教APP
+			</span>
+    <a href="#">
+        下载
+    </a>
+</div>
+</body>
+<script th:src="@{/js/share/divination.js}" src="/js/share/divination.js"/>
+</html>
