@@ -3,6 +3,7 @@ package com.wangbei.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.wangbei.util.FreeLiveResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -322,7 +323,7 @@ public class UserController {
 		if (authUserDetails.getUserId() == id) {
 			FreeLife result = freeLifeService.addFreeLife(id, creature, tradeNo);
 			if (result != null) {
-				response.setResult("功德无量");
+				response.setResult(FreeLiveResponse.random());
 			}
 			return response;
 		}
