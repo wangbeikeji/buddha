@@ -3,6 +3,7 @@ package com.wangbei.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.wangbei.util.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -301,7 +302,11 @@ public class UserController {
 	@ApiOperation(value = "验证充值是否完成")
 	@PostMapping("/validateCharge/")
 	public Response<TradeWithUserMeritValue> validateCharge(String tradeNo) {
-		return new Response<>(userService.validateCharge(tradeNo));
+		Response<TradeWithUserMeritValue> response = new Response<>();
+		TradeWithUserMeritValue result = userService.validateCharge(tradeNo);
+		response.setResult(result);
+		response.setMessage(MessageResponse.randomMerit());
+		return response;
 	}
 
 	/**
@@ -316,13 +321,14 @@ public class UserController {
 	@ApiOperation(value = "放生（1千年龟，2百灵鸟，3锦鲤）")
 	@ApiImplicitParam(name = "creature", allowableValues = "1,2,3", paramType = "query", dataType = "int")
 	@PostMapping("/{id}/freelife")
-	public Response<String> freeLife(@PathVariable Integer id, @RequestParam CreatureEnum creature, @RequestParam(required = false) String tradeNo) {
-		Response<String> response = new Response<>();
+	public Response<FreeLife> freeLife(@PathVariable Integer id, @RequestParam CreatureEnum creature, @RequestParam(required = false) String tradeNo) {
+		Response<FreeLife> response = new Response<>();
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
 		if (authUserDetails.getUserId() == id) {
 			FreeLife result = freeLifeService.addFreeLife(id, creature, tradeNo);
 			if (result != null) {
-				response.setResult("功德无量");
+				response.setResult(result);
+				response.setMessage(MessageResponse.randomFreeLive());
 			}
 			return response;
 		}
