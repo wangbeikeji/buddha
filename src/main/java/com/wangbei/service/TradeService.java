@@ -42,7 +42,8 @@ public class TradeService {
 		}
 		// step 2 : 判断增加功德还是扣除功德
 		boolean isIncrease = false;
-		if (type == TradeTypeEnum.CHARGE || type == TradeTypeEnum.CHECKIN || type == TradeTypeEnum.FREELIFE || type == TradeTypeEnum.MERIT) {
+		if (type == TradeTypeEnum.CHARGE || type == TradeTypeEnum.CHECKIN || type == TradeTypeEnum.FREELIFE
+				|| type == TradeTypeEnum.MERIT) {
 			isIncrease = true;
 		}
 		// step 3 : 得到最终功德数
@@ -51,18 +52,18 @@ public class TradeService {
 		if (finalMeritValue < 0) {
 			throw new ServiceException(ServiceException.MERIT_POOL);
 		}
-		// step 4 : 更新账户功德数（充值或者放生不更新，等确认充值成功再更新）
+		// step 4 : 更新账户功德数（充值、放生、功德箱不更新，等确认充值成功再更新）
 		if (type != TradeTypeEnum.CHARGE && type != TradeTypeEnum.FREELIFE && type != TradeTypeEnum.MERIT) {
 			account.setMeritValue(finalMeritValue);
 			accountDao.update(account);
 		}
-		// step 5 : 保存交易记录（交易状态默认为已完成，充值或者放生为待完成）
+		// step 5 : 保存交易记录（交易状态默认为已完成，充值、放生、功德箱为待完成）
 		Trade trade = new Trade();
 		trade.setUserId(user);
 		trade.setType(type);
 		trade.setMeritValue(meritValue);
 		trade.setTradeNo(generateTradeNo());
-		if (type != TradeTypeEnum.CHARGE && type != TradeTypeEnum.FREELIFE) {
+		if (type != TradeTypeEnum.CHARGE && type != TradeTypeEnum.FREELIFE && type != TradeTypeEnum.MERIT) {
 			trade.setStatus(TradeStatusEnum.COMPLETED);
 		} else {
 			trade.setStatus(TradeStatusEnum.PENDING);
