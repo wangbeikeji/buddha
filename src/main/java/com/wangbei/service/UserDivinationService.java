@@ -1,5 +1,6 @@
 package com.wangbei.service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -70,23 +71,8 @@ public class UserDivinationService {
 		// TODO 后面需将所有签进行缓存，不应每次都去查询数据库
 		List<Divination> list = divinationDao.listDivination();
 		if (list != null && list.size() > 0) {
-			Divination divination = null;
-			// step 1 : 从已有的签中随机获取一个签，随机规则如下
-			// 当第一次随机的签为上签或者上上签时，取该签
-			// 当第一次随机的签为中签时，再随机第二，取该签
-			// 当第一次随机的签为下签或者下下签时，再随机第二，如为下签或者下下签，再随机第三次，取签
-			int index = RandomUtil.getRandomInt(list.size());
-			if (list.get(index).getType() == DivinationTypeEnum.MIDDLE) {
-				index = RandomUtil.getRandomInt(list.size());
-			} else if (list.get(index).getType() == DivinationTypeEnum.DOWN
-					|| list.get(index).getType() == DivinationTypeEnum.DOWNDOWN) {
-				index = RandomUtil.getRandomInt(list.size());
-				if (list.get(index).getType() == DivinationTypeEnum.DOWN
-						|| list.get(index).getType() == DivinationTypeEnum.DOWNDOWN) {
-					index = RandomUtil.getRandomInt(list.size());
-				}
-			}
-			divination = list.get(index);
+			// step 1 : 从已有的签中随机获取一个签
+			Divination divination = randomDivination2(list);
 			// step 2 : 保存用户的这次摇签记录
 			UserDivination userDivination = new UserDivination();
 			userDivination.setDivinationId(divination.getId());
@@ -104,6 +90,50 @@ public class UserDivinationService {
 			return result;
 		}
 		return result;
+	}
+	
+	@Deprecated
+	@SuppressWarnings("unused")
+	private Divination randomDivination1(List<Divination> list) {
+		// 从已有的签中随机获取一个签，随机规则如下
+		// 当第一次随机的签为上签或者上上签时，取该签
+		// 当第一次随机的签为中签时，再随机第二，取该签
+		// 当第一次随机的签为下签或者下下签时，再随机第二，如为下签或者下下签，再随机第三次，取签
+		int index = RandomUtil.getRandomInt(list.size());
+		if (list.get(index).getType() == DivinationTypeEnum.MIDDLE) {
+			index = RandomUtil.getRandomInt(list.size());
+		} else if (list.get(index).getType() == DivinationTypeEnum.DOWN
+				|| list.get(index).getType() == DivinationTypeEnum.DOWNDOWN) {
+			index = RandomUtil.getRandomInt(list.size());
+			if (list.get(index).getType() == DivinationTypeEnum.DOWN
+					|| list.get(index).getType() == DivinationTypeEnum.DOWNDOWN) {
+				index = RandomUtil.getRandomInt(list.size());
+			}
+		}
+		return list.get(index);
+	}
+	
+	private Divination randomDivination2(List<Divination> list) {
+		int size = list.size();
+		// 遍历，增加上签、上上签、中签出现的几率
+		for(int i = 0; i < size; i++) {
+			Divination div = list.get(i);
+			if(div.getType() == DivinationTypeEnum.UP || div.getType() == DivinationTypeEnum.UPUP) {
+				list.add(div);
+				list.add(div);
+				list.add(div);
+				list.add(div);
+				list.add(div);
+				list.add(div);
+			} else if(div.getType() == DivinationTypeEnum.MIDDLE) {
+				list.add(div);
+			}
+		}
+		// 打乱list中元素的顺序
+		Collections.shuffle(list);
+		// 随机获取一个签的位置
+		int index = RandomUtil.getRandomInt(list.size());
+		return list.get(index);
 	}
 
 	public Divination explainDivination(Integer userId, Integer userDivinationId) {
