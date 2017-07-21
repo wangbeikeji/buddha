@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -56,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/document/**").permitAll();
 		http.authorizeRequests().antMatchers("/attachment/**").permitAll();
 		http.authorizeRequests().antMatchers("/editorupload/**").permitAll();
+
 		// 部分开放接口
 		http.authorizeRequests().antMatchers("/offerings/groupByType").permitAll();
 		http.authorizeRequests().antMatchers("/joss/list").permitAll();
@@ -72,6 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/upload/**").permitAll();
 		// 后台管理相关接口和页面
 		http.authorizeRequests().antMatchers("/admin/**").permitAll();
+		http.authorizeRequests().antMatchers("/share/**").permitAll();
 
 		http.authorizeRequests().antMatchers("/**").authenticated();
 
@@ -82,4 +85,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+//		super.configure(web);
+		web.ignoring().antMatchers("/image/**", "/js/**", "/css/**");
+	}
 }
