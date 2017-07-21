@@ -25,7 +25,7 @@ public class FileManager {
 		this.rootPath = (String)conf.get( "rootPath" );
 		this.dir = this.rootPath + (String)conf.get( "dir" );
 		this.allowFiles = this.getAllowFiles( conf.get("allowFiles") );
-		this.count = (Integer)conf.get( "count" );
+		this.count = new Long((Long)conf.get( "count" )).intValue();
 		
 	}
 	
