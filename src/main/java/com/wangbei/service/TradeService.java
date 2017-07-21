@@ -42,7 +42,7 @@ public class TradeService {
 		}
 		// step 2 : 判断增加功德还是扣除功德
 		boolean isIncrease = false;
-		if (type == TradeTypeEnum.CHARGE || type == TradeTypeEnum.CHECKIN || type == TradeTypeEnum.FREELIFE) {
+		if (type == TradeTypeEnum.CHARGE || type == TradeTypeEnum.CHECKIN || type == TradeTypeEnum.FREELIFE || type == TradeTypeEnum.MERIT) {
 			isIncrease = true;
 		}
 		// step 3 : 得到最终功德数
@@ -52,7 +52,7 @@ public class TradeService {
 			throw new ServiceException(ServiceException.MERIT_POOL);
 		}
 		// step 4 : 更新账户功德数（充值或者放生不更新，等确认充值成功再更新）
-		if (type != TradeTypeEnum.CHARGE && type != TradeTypeEnum.FREELIFE) {
+		if (type != TradeTypeEnum.CHARGE && type != TradeTypeEnum.FREELIFE && type != TradeTypeEnum.MERIT) {
 			account.setMeritValue(finalMeritValue);
 			accountDao.update(account);
 		}

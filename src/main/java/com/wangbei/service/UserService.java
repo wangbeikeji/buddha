@@ -82,7 +82,7 @@ public class UserService {
 	@Transactional
 	public Trade charge(Integer user, Integer meritValue, Integer type) {
 		TradeTypeEnum typeEnum = TradeTypeEnum.getByIndex(type);
-		if (!(typeEnum == TradeTypeEnum.CHARGE || typeEnum == TradeTypeEnum.FREELIFE)) {
+		if (!(typeEnum == TradeTypeEnum.CHARGE || typeEnum == TradeTypeEnum.FREELIFE || typeEnum == TradeTypeEnum.MERIT)) {
 			throw new ServiceException(ServiceException.CHARGETYPE_NOTMATCH_EXCEPTION);
 		}
 		return tradeService.trade(user, typeEnum, meritValue);

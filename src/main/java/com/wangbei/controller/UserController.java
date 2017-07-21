@@ -309,7 +309,7 @@ public class UserController {
 	 * @method freeLife
 	 * @param id
 	 * @param creature
-	 * @param meritValue
+	 * @param tradeNo
 	 * @return com.wangbei.pojo.Response<java.lang.String>
 	 * @description 放生
 	 */
