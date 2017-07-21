@@ -9,9 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wangbei.dao.AccountDao;
 import com.wangbei.dao.CheckinDao;
-import com.wangbei.entity.Account;
 import com.wangbei.entity.Checkin;
 import com.wangbei.entity.Trade;
 import com.wangbei.exception.ServiceException;
@@ -36,9 +34,6 @@ public class CheckinService {
 
 	@Autowired
 	private TradeService tradeService;
-
-	@Autowired
-	private AccountDao accountDao;
 
 	public Checkin getCheckinInfo(Integer id) {
 		return checkinDao.retrieveCheckinById(id);
@@ -83,19 +78,7 @@ public class CheckinService {
 			throw new ServiceException(ServiceException.USER_ALREADY_CHECKIN_EXCEPTION);
 		} else {
 			// 增加功德数
-			Trade trade = tradeService.trade(userId, TradeTypeEnum.CHECKIN, checkinMeritValue);
-			if (trade != null) {
-				Account account = accountDao.findByUser(userId);
-				if (account != null) {
-					account.setMeritValue(account.getMeritValue() + checkinMeritValue);
-					accountDao.update(account);
-				} else {
-					account = new Account();
-					account.setUserId(userId);
-					account.setMeritValue(checkinMeritValue);
-					accountDao.create(account);
-				}
-			}
+			tradeService.trade(userId, TradeTypeEnum.CHECKIN, checkinMeritValue);
 			// 保存签到记录
 			Checkin checkin = new Checkin();
 			checkin.setCheckinTime(new Date());

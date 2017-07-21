@@ -3,6 +3,7 @@ package com.wangbei.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
+		http.headers().frameOptions().disable();
 		// 401或者403
 		http.authorizeRequests().antMatchers("/401.html").permitAll();
 		http.authorizeRequests().antMatchers("/403.html").permitAll();
@@ -49,21 +51,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/swagger-resources/**").permitAll();
 		http.authorizeRequests().antMatchers("/v2/api-docs").permitAll();
 		http.authorizeRequests().antMatchers("/configuration/**").permitAll();
-		// 图片
+		// 静态资源
 		http.authorizeRequests().antMatchers("/picture/**").permitAll();
-		// 文档
 		http.authorizeRequests().antMatchers("/document/**").permitAll();
+		http.authorizeRequests().antMatchers("/attachment/**").permitAll();
+		http.authorizeRequests().antMatchers("/editorupload/**").permitAll();
 		// 部分开放接口
 		http.authorizeRequests().antMatchers("/offerings/groupByType").permitAll();
 		http.authorizeRequests().antMatchers("/joss/list").permitAll();
 		http.authorizeRequests().antMatchers("/rune/list").permitAll();
 		http.authorizeRequests().antMatchers("/knowledge/pageByType").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/knowledge/**").permitAll();
 		http.authorizeRequests().antMatchers("/sutra/page").permitAll();
 		http.authorizeRequests().antMatchers("/sutra/list").permitAll();
 		http.authorizeRequests().antMatchers("/banner/page").permitAll();
 		http.authorizeRequests().antMatchers("/banner/pageByType").permitAll();
 		http.authorizeRequests().antMatchers("/banner/list").permitAll();
 		http.authorizeRequests().antMatchers("/banner/listByType").permitAll();
+		http.authorizeRequests().antMatchers("/dataVersion/getCurrent").permitAll();
+		http.authorizeRequests().antMatchers("/upload/**").permitAll();
+		// 后台管理相关接口和页面
+		http.authorizeRequests().antMatchers("/admin/**").permitAll();
 
 		http.authorizeRequests().antMatchers("/**").authenticated();
 

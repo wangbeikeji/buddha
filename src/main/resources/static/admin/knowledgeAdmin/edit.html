@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- css -->
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/custom.css" rel="stylesheet">
+
+<!-- js -->
+<script src="../js/jquery-2.1.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ueditor/third-party/zeroclipboard/ZeroClipboard.min.js"></script>
+<script src="../js/ueditor/ueditor.config.js"></script>
+<script src="../js/ueditor/ueditor.parse.js"></script>
+<script src="../js/ueditor/ueditor.all.js"></script>
+<script type="text/javascript">
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+
+$(function(){
+	var uEditorLink = UE.getEditor('knowledgeLinkEditor');
+	var uEditorContext = UE.getEditor('knowledgeContextEditor');
+	var id = GetQueryString("id");
+	// 给编辑表单赋值
+	$.ajax({ 
+		url: "/buddha/knowledge/" + id, 
+		type: "get",
+		headers: {
+			Authorization: "eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6IiIsInVzZXJJZCI6Mywic3ViIjoiMTM5Mjg5NTIyNTQiLCJleHAiOjQ0NzAwMDA2OTY1fQ._r485hISBsKmopDQ8JysYg3O9j85ae_ulpLDt1BnKqUq3XvpNjUWsS_YoL9KTH9Vnhy2_EPJeCj83ADBKyV4bg"
+		},
+		dataType: "json",
+		success: function(response) {
+			if(response.code === "200") {
+				$("#editKnowledgeForm input[name=id]").val(id);
+				$("#editKnowledgeForm input[name=title]").val(response.result.title);
+				$("#editKnowledgeForm input[name=summary]").val(response.result.summary);
+				var intType = "1";
+				if(response.result.type == "资讯") {
+					intType = "1";
+				} else if(response.result.type == "故事") {
+					intType = "2";
+				} else if(response.result.type == "入门") {
+					intType = "3";
+				}
+				$("#editKnowledgeForm select[name=type]").val(intType);
+				
+				var link = '<img src="/buddha' + response.result.link +  '" title="none"/>';
+				uEditorLink.ready(function() { 
+					uEditorLink.setContent(link); 
+				});
+				uEditorContext.ready(function() { 
+					uEditorContext.setContent(response.result.context); 
+				});
+			} else {
+				alert(response.message);
+			}
+		}
+	});
+	// 修改
+	$("#editKnowledgeBtn").click(function() {
+		$.ajax({ 
+			url: "/buddha/knowledge/", 
+			type: "put",
+			headers: {
+				Authorization: "eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6IiIsInVzZXJJZCI6Mywic3ViIjoiMTM5Mjg5NTIyNTQiLCJleHAiOjQ0NzAwMDA2OTY1fQ._r485hISBsKmopDQ8JysYg3O9j85ae_ulpLDt1BnKqUq3XvpNjUWsS_YoL9KTH9Vnhy2_EPJeCj83ADBKyV4bg"
+			},
+			dataType: "json",
+			data: $("#editKnowledgeForm").serialize(),
+			success: function(response) {
+				if(response.code === "200") {
+					window.location.href = "list.html";
+				} else {
+					alert(response.message);
+				}
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<div class="bs-callout bs-callout-info" id="callout-type-dl-truncate">
+				<h4>佛学知识修改页面</h4>
+				<p>可以修改佛学资讯、佛学故事、佛学入门。</p>
+			</div>
+
+			<div class="button-list">
+				<a class="btn btn-default" href="list.html" role="button"> 返 回 </a>
+			</div>
+
+			<div class="bs-callout bs-callout-info" id="callout-type-dl-truncate">
+				<form id="editKnowledgeForm" class="form-horizontal">
+					<input type="hidden" name="id" />
+					<div class="form-group">
+						<label class="col-sm-1 control-label">标题</label>
+						<div class="col-sm-10">
+							<input name="title" type="text" class="form-control" placeholder="标题">
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label">摘要</label>
+						<div class="col-sm-10">
+							<input name="summary" type="text" class="form-control" placeholder="摘要">
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label">类型</label>
+						<div class="col-sm-10">
+							<select name="type" class="form-control">
+							  	<option value="1">咨询</option>
+							  	<option value="2">故事</option>
+							  	<option value="3">入门</option>
+							</select>
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label">缩略图</label>
+						<div class="col-sm-10">
+							<script type="text/plain" name="link" id="knowledgeLinkEditor" style="min-height: 300px;"></script>
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label">内容</label>
+						<div class="col-sm-10">
+							<script type="text/plain" name="context" id="knowledgeContextEditor" style="min-height: 300px;"></script>
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-1 col-sm-10">
+							<button id="editKnowledgeBtn" type="button" class="btn btn-default">　修　改　</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+</body>
+</html>

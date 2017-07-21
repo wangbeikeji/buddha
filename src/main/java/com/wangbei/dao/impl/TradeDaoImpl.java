@@ -16,36 +16,41 @@ import java.util.List;
 @Repository
 public class TradeDaoImpl implements TradeDao {
 
-    @Autowired
-    private TradeRepository tradeRepository;
+	@Autowired
+	private TradeRepository tradeRepository;
 
-    @Override
-    public Trade create(Trade trade) {
-        return tradeRepository.save(trade);
-    }
+	@Override
+	public Trade create(Trade trade) {
+		return tradeRepository.save(trade);
+	}
 
-    @Override
-    public void deleteById(Integer id) {
+	@Override
+	public void deleteById(Integer id) {
 
-    }
+	}
 
-    @Override
-    public Trade update(Trade trade) {
-        return null;
-    }
+	@Override
+	public Trade update(Trade trade) {
+		return null;
+	}
 
-    @Override
-    public Trade retrieveById(Integer id) {
-        return null;
-    }
+	@Override
+	public Trade retrieveById(Integer id) {
+		return null;
+	}
 
-    @Override
-    public Page<Trade> page(int page, int limit) {
-        return null;
-    }
+	@Override
+	public Page<Trade> page(int page, int limit) {
+		return null;
+	}
 
-    @Override
-    public List<Trade> list() {
-        return null;
-    }
+	@Override
+	public List<Trade> list() {
+		return null;
+	}
+
+	@Override
+	public Trade retrieveByTradeNo(String tradeNo) {
+		return tradeRepository.findByTradeNo(tradeNo);
+	}
 }

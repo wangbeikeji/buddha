@@ -9,4 +9,6 @@ import org.springframework.data.repository.Repository;
  */
 public interface TradeRepository extends CurdJpaRepository<Trade, Integer>, Repository<Trade, Integer> {
 
+	Trade findByTradeNo(String tradeNo);
+	
 }

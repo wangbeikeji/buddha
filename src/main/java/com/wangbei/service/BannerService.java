@@ -29,11 +29,35 @@ public class BannerService {
 
 	@Transactional
 	public Banner addBanner(Banner banner) {
+		String link = banner.getLink(); 
+		if(link != null && link.indexOf("<img src=") >= 0) {
+			// 表示当前为富文件编辑器添加的，对link进行处理
+			int imgIndex = link.indexOf("<img src=");
+			int titleIndex = link.indexOf("title=");
+			
+			if(imgIndex > 0 && titleIndex > 0){
+				link = link.substring(imgIndex + 10, titleIndex - 2);
+				link = link.substring(link.indexOf("buddha") + 6);
+				banner.setLink(link);
+			}
+		}
 		return bannerDao.createBanner(banner);
 	}
 
 	@Transactional
 	public Banner modifyBanner(Banner banner) {
+		String link = banner.getLink(); 
+		if(link != null && link.indexOf("<img src=") >= 0) {
+			// 表示当前为富文件编辑器添加的，对link进行处理
+			int imgIndex = link.indexOf("<img src=");
+			int titleIndex = link.indexOf("title=");
+			
+			if(imgIndex > 0 && titleIndex > 0){
+				link = link.substring(imgIndex + 10, titleIndex - 2);
+				link = link.substring(link.indexOf("buddha") + 6);
+				banner.setLink(link);
+			}
+		}
 		return bannerDao.updateBanner(banner);
 	}
 

@@ -1,5 +1,7 @@
 package com.wangbei.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +75,12 @@ public class KnowledgeController {
 	public Response<Page<Knowledge>> knowledges(int page, int limit) {
 		Response<Page<Knowledge>> result = new Response<>((Page<Knowledge>) knowledgeService.knowledges(page, limit));
 		return result;
+	}
+	
+	@GetMapping("/list")
+	@ApiOperation(value = "获取佛学知识列表")
+	public Response<List<Knowledge>> list() {
+		return new Response<>(knowledgeService.list());
 	}
 
 }

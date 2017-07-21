@@ -1,5 +1,7 @@
 package com.wangbei.dao.impl.jpa;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
@@ -22,6 +24,8 @@ public interface KnowledgeRepository extends Repository<Knowledge, Integer> {
 	Page<Knowledge> findAll(Pageable pageable);
 
 	Page<Knowledge> findByType(KnowledgeTypeEnum type, Pageable pageable);
+	
+	List<Knowledge> findAll();
 
 	Knowledge findById(Integer id);
 	

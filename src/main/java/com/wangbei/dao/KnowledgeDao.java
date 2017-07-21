@@ -1,5 +1,7 @@
 package com.wangbei.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.wangbei.entity.Knowledge;
@@ -24,5 +26,7 @@ public interface KnowledgeDao {
 	public Page<Knowledge> pageKnowledgeByType(KnowledgeTypeEnum type, int page, int limit);
 
 	public Page<Knowledge> pageKnowledge(int page, int limit);
+	
+	public List<Knowledge> listKnowledge();
 	
 }

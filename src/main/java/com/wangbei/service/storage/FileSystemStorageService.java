@@ -1,5 +1,6 @@
 package com.wangbei.service.storage;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,14 +12,23 @@ import java.nio.channels.WritableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.wangbei.ueditor.ActionEnter;
 
 @Service
 public class FileSystemStorageService {
 
 	private final Path rootLocation;
+	
+	@Value("${custom.outer.resources}")
+	private String outerResources;
 
 	@Autowired
 	public FileSystemStorageService(StorageProperties properties) {
@@ -64,6 +74,21 @@ public class FileSystemStorageService {
 				desc.write(buffer);
 			}
 			buffer.clear();
+		}
+	}
+	
+	public void uploadAttachment(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+		try {
+			servletRequest.setCharacterEncoding("utf-8");
+			servletResponse.setHeader("Content-Type", "text/html");
+			File file = new File(outerResources + "editorupload");
+			String rootPath = file.getParentFile().getAbsolutePath();
+			// String rootPath = servletRequest.getServletContext().getRealPath("/");
+			String result = new ActionEnter(servletRequest, rootPath).exec().toString();
+			System.out.println("result:" + result);
+			servletResponse.getWriter().write(result);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 

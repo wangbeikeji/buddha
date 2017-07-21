@@ -1,5 +1,7 @@
 package com.wangbei.dao.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,6 +52,11 @@ public class KnowledgeDaoImpl implements KnowledgeDao {
 	@Override
 	public Page<Knowledge> pageKnowledge(int page, int limit) {
 		return knowledgeRepository.findAll(new PageRequest(page, limit));
+	}
+
+	@Override
+	public List<Knowledge> listKnowledge() {
+		return knowledgeRepository.findAll();
 	}
 
 }

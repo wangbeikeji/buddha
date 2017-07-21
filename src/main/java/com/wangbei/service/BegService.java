@@ -1,18 +1,17 @@
 package com.wangbei.service;
 
-import com.wangbei.dao.AccountDao;
-import com.wangbei.dao.BegDao;
-import com.wangbei.entity.Account;
-import com.wangbei.entity.Beg;
-import com.wangbei.entity.Trade;
-import com.wangbei.exception.ServiceException;
-import com.wangbei.util.enums.TradeTypeEnum;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import com.wangbei.dao.BegDao;
+import com.wangbei.entity.Beg;
+import com.wangbei.entity.Trade;
+import com.wangbei.exception.ServiceException;
+import com.wangbei.util.enums.TradeTypeEnum;
 
 /**
  * @author yuyidi 2017-07-14 11:33:00
@@ -35,7 +34,7 @@ public class BegService {
 //            return begDao.create(beg);
 //        }
         //首先检查用户当前账户功德是否足够
-        Trade trade = tradeService.trade(user, TradeTypeEnum.RUNE,meritValue);
+        Trade trade = tradeService.trade(user, TradeTypeEnum.RUNE, meritValue);
         if (trade != null) {
             Beg request = new Beg(user, rune);
             request.expire();

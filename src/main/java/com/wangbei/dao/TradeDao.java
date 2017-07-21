@@ -7,4 +7,7 @@ import com.wangbei.entity.Trade;
  * @desc
  */
 public interface TradeDao extends BaseDao<Trade,Integer> {
+	
+	Trade retrieveByTradeNo(String tradeNo);
+	
 }
