@@ -51,6 +51,7 @@ $(function() {
 					trHtml += "<td>" + data.id + "</td>";
 					trHtml += "<td>" + data.title + "</td>";
 					trHtml += "<td>" + data.type + "</td>";
+					trHtml += "<td>" + (data.sortNum?data.sortNum:"") + "</td>";
 					trHtml += "<td>";
 					trHtml += '<a class="operate edit" href="edit.html?id=' + data.id + '" target="_self">修改</a>';
 					trHtml += '　';
@@ -88,6 +89,7 @@ $(function() {
 						<th>序号</th>
 						<th>标题</th>
 						<th>类型</th>
+						<th>排序</th>
 						<th>操作</th>
 					</tr>
 				</thead>

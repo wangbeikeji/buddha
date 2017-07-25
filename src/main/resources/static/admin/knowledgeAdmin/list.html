@@ -72,6 +72,7 @@ $(function() {
 					trHtml += "<td>" + data.id + "</td>";
 					trHtml += "<td>" + data.title + "</td>";
 					trHtml += "<td>" + data.type + "</td>";
+					trHtml += "<td>" + (data.sortNum?data.sortNum:"") + "</td>";
 					trHtml += "<td>";
 					trHtml += '<a class="operate preview" id="' + data.id + '">预览</a>';
 					trHtml += '　';
@@ -111,6 +112,7 @@ $(function() {
 						<th>序号</th>
 						<th>标题</th>
 						<th>类型</th>
+						<th>排序</th>
 						<th>操作</th>
 					</tr>
 				</thead>

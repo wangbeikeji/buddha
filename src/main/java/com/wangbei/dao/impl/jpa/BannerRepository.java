@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 
 import com.wangbei.entity.Banner;
@@ -27,7 +28,7 @@ public interface BannerRepository extends Repository<Banner, Integer> {
 
 	List<Banner> findAll();
 
-	List<Banner> findByType(BannerTypeEnum type);
+	List<Banner> findByType(BannerTypeEnum type, Sort sort);
 
 	Banner findById(Integer id);
 

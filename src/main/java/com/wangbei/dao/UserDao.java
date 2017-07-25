@@ -9,6 +9,8 @@ import com.wangbei.entity.User;
  */
 public interface UserDao {
 	
+	public User retrieveUserById(Integer id);
+	
 	public User createUser(User user);
 	
 	public User updateUser(User user);

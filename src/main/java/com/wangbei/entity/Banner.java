@@ -50,6 +50,11 @@ public class Banner implements Serializable {
 	 */
 	@Column(name = "content_link", length = 255)
 	private String contentLink;
+	/**
+	 * 排序
+	 */
+	@Column(name = "sort_num")
+	private Integer sortNum;
 
 	public Integer getId() {
 		return id;
@@ -89,6 +94,14 @@ public class Banner implements Serializable {
 
 	public void setContentLink(String contentLink) {
 		this.contentLink = contentLink;
+	}
+
+	public Integer getSortNum() {
+		return sortNum;
+	}
+
+	public void setSortNum(Integer sortNum) {
+		this.sortNum = sortNum;
 	}
 
 }

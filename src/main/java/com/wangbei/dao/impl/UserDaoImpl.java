@@ -36,4 +36,9 @@ public class UserDaoImpl implements UserDao {
 	public User updateUser(User user) {
 		return userRepository.save(user);
 	}
+
+	@Override
+	public User retrieveUserById(Integer id) {
+		return userRepository.findById(id);
+	}
 }

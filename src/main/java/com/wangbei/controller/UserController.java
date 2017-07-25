@@ -3,10 +3,7 @@ package com.wangbei.controller;
 import java.util.List;
 import java.util.Map;
 
-import com.wangbei.util.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +42,7 @@ import com.wangbei.service.OfferingsService;
 import com.wangbei.service.RuneService;
 import com.wangbei.service.UserDivinationService;
 import com.wangbei.service.UserService;
+import com.wangbei.util.MessageResponse;
 import com.wangbei.util.SafeCollectionUtil;
 import com.wangbei.util.enums.CreatureEnum;
 import com.wangbei.util.enums.OfferingTypeEnum;
@@ -112,9 +110,9 @@ public class UserController {
 	@GetMapping("/getCurrent")
 	@ApiOperation(value = "获取当前用户信息")
 	public Response<UserWithToken> getCurrent() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserWithToken result = new UserWithToken(userService.getUserByPhone(auth.getName()));
-		if (result.getId() > 0) {
+		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+		UserWithToken result = new UserWithToken(userService.getUser(authUserDetails.getUserId()));
+		if (result.getId() != null && result.getId() > 0) {
 			result.setMeritValue(userService.getUserMeritValue(result.getId()));
 		}
 		return new Response<>(result);

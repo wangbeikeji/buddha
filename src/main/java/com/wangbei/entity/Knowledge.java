@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 import com.wangbei.awre.converter.KnowledgeTypeEnumConverter;
 import com.wangbei.util.enums.KnowledgeTypeEnum;
 
@@ -24,7 +26,7 @@ import com.wangbei.util.enums.KnowledgeTypeEnum;
 public class Knowledge implements Serializable {
 
 	private static final long serialVersionUID = 200132137993323273L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -52,6 +54,7 @@ public class Knowledge implements Serializable {
 	/**
 	 * 内容
 	 */
+	@Type(type = "text")
 	@Column(name = "context")
 	private String context;
 	/**
@@ -59,6 +62,11 @@ public class Knowledge implements Serializable {
 	 */
 	@Column(name = "create_time")
 	private Date createTime;
+	/**
+	 * 排序
+	 */
+	@Column(name = "sort_num")
+	private Integer sortNum;
 
 	public Integer getId() {
 		return id;
@@ -115,4 +123,13 @@ public class Knowledge implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
+	public Integer getSortNum() {
+		return sortNum;
+	}
+
+	public void setSortNum(Integer sortNum) {
+		this.sortNum = sortNum;
+	}
+
 }

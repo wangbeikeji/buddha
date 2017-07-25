@@ -167,6 +167,7 @@ public final class ConfigManager {
 			ConfigBean configBean = JacksonUtil.decode(configContent, ConfigBean.class);
 			this.configBean = configBean;
 		} catch (Exception e) {
+			e.printStackTrace();
 			this.configBean = null;
 		}
 

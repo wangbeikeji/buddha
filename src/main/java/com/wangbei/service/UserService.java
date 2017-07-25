@@ -31,6 +31,10 @@ public class UserService {
 	private TradeDao tradeDao;
 	@Autowired
 	private TradeService tradeService;
+	
+	public User getUser(Integer id) {
+		return userDao.retrieveUserById(id);
+	}
 
 	@Transactional
 	public User addUser(User user) {

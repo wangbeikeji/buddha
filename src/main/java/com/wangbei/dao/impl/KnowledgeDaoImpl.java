@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 
 import com.wangbei.dao.KnowledgeDao;
@@ -46,12 +49,14 @@ public class KnowledgeDaoImpl implements KnowledgeDao {
 
 	@Override
 	public Page<Knowledge> pageKnowledgeByType(KnowledgeTypeEnum type, int page, int limit) {
-		return knowledgeRepository.findByType(type, new PageRequest(page, limit));
+		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.ASC, "sortNum")));
+		return knowledgeRepository.findByType(type, pageable);
 	}
 
 	@Override
 	public Page<Knowledge> pageKnowledge(int page, int limit) {
-		return knowledgeRepository.findAll(new PageRequest(page, limit));
+		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.ASC, "sortNum")));
+		return knowledgeRepository.findAll(pageable);
 	}
 
 	@Override
