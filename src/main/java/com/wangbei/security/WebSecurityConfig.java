@@ -57,7 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/document/**").permitAll();
 		http.authorizeRequests().antMatchers("/attachment/**").permitAll();
 		http.authorizeRequests().antMatchers("/editorupload/**").permitAll();
-
 		// 部分开放接口
 		http.authorizeRequests().antMatchers("/offerings/groupByType").permitAll();
 		http.authorizeRequests().antMatchers("/joss/list").permitAll();
@@ -75,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// 后台管理相关接口和页面
 		http.authorizeRequests().antMatchers("/admin/**").permitAll();
 		http.authorizeRequests().antMatchers("/share/**").permitAll();
-
+		http.authorizeRequests().antMatchers("/system/ping").permitAll();
 		http.authorizeRequests().antMatchers("/**").authenticated();
 
 		// 添加一个过滤器 所有访问 /login 的请求交给 JWTLoginFilter 来处理 这个类处理所有的JWT相关内容
@@ -87,7 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-//		super.configure(web);
-		web.ignoring().antMatchers("/image/**", "/js/**", "/css/**");
+		super.configure(web);
+		web.ignoring().antMatchers("/css/**", "/image/**", "/js/**");
 	}
 }

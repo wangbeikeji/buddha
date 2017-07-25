@@ -128,15 +128,71 @@
 		    <artifactId>commons-io</artifactId>
 		    <version>2.5</version>
 		</dependency>
+		<dependency>
+			<groupId>com.alipay</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+			<version>20170615110434</version>
+		</dependency>
 	</dependencies>
 
 	<build>
+
+		<filters>
+			<filter>filters/${active}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>application-dev.properties</exclude>
+					<exclude>application-prod.properties</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>static/**</include>
+					<include>templates/**</include>
+					<include>*.json</include>
+					<include>application-${active}.properties</include>
+					<include>application.properties</include>
+				</includes>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
         </plugins>
-	</build>
 
+	</build>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<active>dev</active>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-devtools</artifactId>
+					<optional>true</optional>
+					<!--依赖不会传递-->
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<active>prod</active>
+			</properties>
+		</profile>
+	</profiles>
 </project>

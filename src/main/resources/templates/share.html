@@ -78,10 +78,24 @@
             height: 1.5rem;
         }
 
+        .footer>a{
+            color: #fff;
+            background: #B35434;
+            border-radius: 0.1rem;
+            float: right;
+            margin-top: .45rem;
+            margin-right: .75rem;
+            width: 1.7rem;
+            height: .64rem;
+            line-height: .64rem;
+            font-size: .4rem;
+            text-align: center;
+        }
+
         .footer > img {
             width: 1rem;
             float: left;
-            margin-left: .5rem;
+            margin-left: .75rem;
             margin-top: .25rem;
         }
 
@@ -118,6 +132,7 @@
     <img src="/image/share/jq-tishiicon.png" th:src="@{/image/share/jq-tishiicon.png}"/>
     <p>
         【概述】：
+        <!--/*@thymesVar id="divination.summarize" type="com.wangbei.entity.Divination"*/-->
         <span th:text="${divination.summarize}">此卦盘古初开天地之象，诸事皆吉也。此签家宅祈福，自身求财，秋冬大利，交易婚姻成，六甲生男，行人至，田蚕六畜好，寻人见，讼事吉，失物东北，疾病愈，山坟吉。</span>
     </p>
     <p>
@@ -136,9 +151,9 @@
 <div class="footer">
     <img src="/image/AppIcon29x29.png" th:src="@{/image/AppIcon29x29.png}"/>
     <span>
-				华人佛教APP
+				华人佛教app
 			</span>
-    <a href="#">
+    <a href="https://itunes.apple.com/us/app/华人佛教/id1261246809?l=zh&amp;ls=1&amp;mt=8">
         下载
     </a>
 </div>
