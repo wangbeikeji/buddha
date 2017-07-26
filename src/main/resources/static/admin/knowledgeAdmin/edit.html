@@ -50,7 +50,7 @@ $(function(){
 				}
 				$("#editKnowledgeForm select[name=type]").val(intType);
 				
-				var link = '<img src="/buddha' + response.result.link +  '" title="none"/>';
+				var link = '<img src="' + response.result.link +  '" title="none"/>';
 				uEditorLink.ready(function() { 
 					uEditorLink.setContent(link); 
 				});
