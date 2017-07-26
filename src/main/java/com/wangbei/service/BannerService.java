@@ -38,7 +38,7 @@ public class BannerService {
 			if(imgIndex > 0 && titleIndex > 0){
 				link = link.substring(imgIndex + 10, titleIndex - 2);
 				link = link.substring(link.indexOf("buddha") + 6);
-				banner.setLink(link);
+				banner.setLink("http:"+link);
 			}
 		}
 		return bannerDao.createBanner(banner);
@@ -55,7 +55,7 @@ public class BannerService {
 			if(imgIndex > 0 && titleIndex > 0){
 				link = link.substring(imgIndex + 10, titleIndex - 2);
 				link = link.substring(link.indexOf("buddha") + 6);
-				banner.setLink(link);
+				banner.setLink("http:"+link);
 			}
 		}
 		return bannerDao.updateBanner(banner);
