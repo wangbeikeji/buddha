@@ -49,14 +49,19 @@ public class KnowledgeDaoImpl implements KnowledgeDao {
 
 	@Override
 	public Page<Knowledge> pageKnowledgeByType(KnowledgeTypeEnum type, int page, int limit) {
-		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.ASC, "sortNum")));
+		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.DESC, "sortNum")));
 		return knowledgeRepository.findByType(type, pageable);
 	}
 
 	@Override
 	public Page<Knowledge> pageKnowledge(int page, int limit) {
-		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.ASC, "sortNum")));
+		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.DESC, "sortNum")));
 		return knowledgeRepository.findAll(pageable);
+	}
+
+	@Override
+	public List<Knowledge> listKnowledgeByType(KnowledgeTypeEnum type) {
+		return knowledgeRepository.findByType(type);
 	}
 
 	@Override

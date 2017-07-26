@@ -36,6 +36,10 @@ public class AppVersion {
 	 * 是否为当前版本
 	 */
 	private Boolean isCurrent;
+	/**
+	 * 是否上线
+	 */
+	private Boolean isOnline;
 
 	public Integer getId() {
 		return id;
@@ -67,6 +71,14 @@ public class AppVersion {
 
 	public void setIsCurrent(Boolean isCurrent) {
 		this.isCurrent = isCurrent;
+	}
+
+	public Boolean getIsOnline() {
+		return isOnline;
+	}
+
+	public void setIsOnline(Boolean isOnline) {
+		this.isOnline = isOnline;
 	}
 
 }

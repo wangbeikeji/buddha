@@ -5,14 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wangbei.dao.AccountDao;
-import com.wangbei.dao.TradeDao;
 import com.wangbei.dao.UserDao;
 import com.wangbei.entity.Account;
 import com.wangbei.entity.Trade;
 import com.wangbei.entity.User;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.pojo.TradeWithUserMeritValue;
-import com.wangbei.util.enums.TradeStatusEnum;
+import com.wangbei.util.enums.PaymentTypeEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
 
 /**
@@ -28,10 +27,8 @@ public class UserService {
 	@Autowired
 	private AccountDao accountDao;
 	@Autowired
-	private TradeDao tradeDao;
-	@Autowired
 	private TradeService tradeService;
-	
+
 	public User getUser(Integer id) {
 		return userDao.retrieveUserById(id);
 	}
@@ -85,25 +82,15 @@ public class UserService {
 
 	@Transactional
 	public Trade charge(Integer user, Integer meritValue, Integer type) {
-		TradeTypeEnum typeEnum = TradeTypeEnum.getByIndex(type);
-		if (!(typeEnum == TradeTypeEnum.CHARGE || typeEnum == TradeTypeEnum.FREELIFE || typeEnum == TradeTypeEnum.MERIT)) {
-			throw new ServiceException(ServiceException.CHARGETYPE_NOTMATCH_EXCEPTION);
-		}
-		return tradeService.trade(user, typeEnum, meritValue);
+		String tradeNo = TradeService.generateTradeNo();
+		return tradeService.paymentTrade(tradeNo, null, user, TradeTypeEnum.getByIndex(type), PaymentTypeEnum.ApplePay,
+				meritValue, null);
 	}
 
 	@Transactional
 	public TradeWithUserMeritValue validateCharge(String tradeNo) {
-		Trade trade = tradeDao.retrieveByTradeNo(tradeNo);
-		if (trade == null) {
-			throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
-		}
-		trade.setStatus(TradeStatusEnum.COMPLETED);
-
+		Trade trade = tradeService.completePaymentTrade(tradeNo);
 		Account account = accountDao.findByUser(trade.getUserId());
-		account.setMeritValue(account.getMeritValue() + trade.getMeritValue());
-		accountDao.update(account);
-
 		TradeWithUserMeritValue result = new TradeWithUserMeritValue(trade);
 		result.setUserMeritValue(account.getMeritValue());
 		return result;

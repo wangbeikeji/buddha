@@ -77,10 +77,16 @@ public class KnowledgeController {
 		return result;
 	}
 	
+	@GetMapping("/listByType")
+	@ApiOperation(value = "根据类型获取佛学知识列表（1:资讯,2:故事,3:入门）")
+	public Response<List<Knowledge>> listByType(int type) {
+		return new Response<>(knowledgeService.listByType(KnowledgeTypeEnum.getByIndex(type)));
+	}
+	
 	@GetMapping("/list")
 	@ApiOperation(value = "获取佛学知识列表")
 	public Response<List<Knowledge>> list() {
 		return new Response<>(knowledgeService.list());
 	}
-
+	
 }

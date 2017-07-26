@@ -76,6 +76,10 @@ public class KnowledgeService {
 		return knowledgeDao.pageKnowledge(page, limit);
 	}
 	
+	public List<Knowledge> listByType(KnowledgeTypeEnum type) {
+		return knowledgeDao.listKnowledgeByType(type);
+	}
+	
 	public List<Knowledge> list() {
 		return knowledgeDao.listKnowledge();
 	}

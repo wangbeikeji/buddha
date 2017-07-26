@@ -11,8 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.wangbei.awre.converter.PaymentTypeEnumConverter;
 import com.wangbei.awre.converter.TradeStatusEnumConverter;
 import com.wangbei.awre.converter.TradeTypeEnumConverter;
+import com.wangbei.util.enums.PaymentTypeEnum;
 import com.wangbei.util.enums.TradeStatusEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
 
@@ -23,9 +25,9 @@ import com.wangbei.util.enums.TradeTypeEnum;
 @Table(name = "trade")
 @Entity
 public class Trade implements Serializable {
-	
+
 	private static final long serialVersionUID = -4758687958524782093L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -46,8 +48,14 @@ public class Trade implements Serializable {
 	@Column(name = "trade_no", unique = true)
 	private String tradeNo;
 	/**
+	 * 第三方交易流水号
+	 */
+	@Column(name = "third_trade_no")
+	private String thirdTradeNo;
+	/**
 	 * 交易状态
 	 */
+	@Column(name = "status")
 	@Convert(converter = TradeStatusEnumConverter.class)
 	private TradeStatusEnum status;
 	/**
@@ -55,6 +63,14 @@ public class Trade implements Serializable {
 	 */
 	@Column(name = "merit_value")
 	private Integer meritValue;
+	/**
+	 * 总金额
+	 */
+	@Column(name = "total_fee")
+	private Double totalFee;
+	@Column(name = "payment_type")
+	@Convert(converter = PaymentTypeEnumConverter.class)
+	private PaymentTypeEnum paymentType;
 	/**
 	 * 创建时间
 	 */
@@ -116,4 +132,29 @@ public class Trade implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
+	public Double getTotalFee() {
+		return totalFee;
+	}
+
+	public void setTotalFee(Double totalFee) {
+		this.totalFee = totalFee;
+	}
+
+	public PaymentTypeEnum getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(PaymentTypeEnum paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public String getThirdTradeNo() {
+		return thirdTradeNo;
+	}
+
+	public void setThirdTradeNo(String thirdTradeNo) {
+		this.thirdTradeNo = thirdTradeNo;
+	}
+
 }

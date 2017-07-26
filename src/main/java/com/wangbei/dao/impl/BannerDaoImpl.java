@@ -49,13 +49,13 @@ public class BannerDaoImpl implements BannerDao {
 
 	@Override
 	public Page<Banner> pageBanner(int page, int limit) {
-		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.ASC, "sortNum")));
+		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.DESC, "sortNum")));
 		return bannerRepository.findAll(pageable);
 	}
 
 	@Override
 	public Page<Banner> pageBannerByType(BannerTypeEnum type, int page, int limit) {
-		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.ASC, "sortNum")));
+		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.DESC, "sortNum")));
 		return bannerRepository.findByType(type, pageable);
 	}
 
@@ -66,7 +66,7 @@ public class BannerDaoImpl implements BannerDao {
 
 	@Override
 	public List<Banner> listBannerByType(BannerTypeEnum type) {
-		Sort sort = new Sort(new Sort.Order(Direction.ASC, "sortNum"));
+		Sort sort = new Sort(new Sort.Order(Direction.DESC, "sortNum"));
 		return bannerRepository.findByType(type, sort);
 	}
 
