@@ -36,7 +36,7 @@ public class LexinSmsRest extends HttpRest<SendAuthCodeResult> implements SmsDao
 
 			String result = doGetString(url);
 			System.out.println(result);
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			logger.error("md5加密失败!");
 		}
 		return null;

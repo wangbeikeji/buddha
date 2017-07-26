@@ -37,6 +37,7 @@ $(function(){
 			if(response.code === "200") {
 				$("#editBannerForm input[name=id]").val(id);
 				$("#editBannerForm input[name=title]").val(response.result.title);
+				$("#editBannerForm input[name=sortNum]").val(response.result.sortNum);
 				$("#editBannerForm input[name=contentLink]").val(response.result.contentLink);
 				var intType = "1";
 				if(response.result.type == "资讯") {

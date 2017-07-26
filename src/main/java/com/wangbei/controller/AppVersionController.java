@@ -58,5 +58,11 @@ public class AppVersionController {
 	public Response<Integer> getCurrent() {
 		return new Response<>(appVersionService.getCurrent());
 	}
+	
+	@GetMapping("/isOnline")
+	@ApiOperation(value = "是否上线")
+	public Response<Boolean> isOnline() {
+		return new Response<>(appVersionService.isOnline());
+	}
 
 }

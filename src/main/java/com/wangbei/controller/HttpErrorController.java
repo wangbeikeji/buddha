@@ -28,10 +28,6 @@ public class HttpErrorController {
 
 	@RequestMapping("/404")
 	public Response<String> httpError404(HttpServletRequest request) {
-		String sign = request.getParameter("sign");
-		if(sign == null) {
-			throw new NullPointerException();
-		}
 		return new Response<String>("404", null, "无效请求!");
 	}
 

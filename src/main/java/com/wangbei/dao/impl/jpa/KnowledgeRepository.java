@@ -26,6 +26,8 @@ public interface KnowledgeRepository extends Repository<Knowledge, Integer> {
 	Page<Knowledge> findByType(KnowledgeTypeEnum type, Pageable pageable);
 	
 	List<Knowledge> findAll();
+	
+	List<Knowledge> findByType(KnowledgeTypeEnum type);
 
 	Knowledge findById(Integer id);
 	

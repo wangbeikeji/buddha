@@ -1,5 +1,7 @@
 package com.wangbei.util;
 
+import java.util.UUID;
+
 public class RandomUtil {
 
 	/**
@@ -30,6 +32,15 @@ public class RandomUtil {
 			js *= 10;
 		}
 		return String.valueOf(Math.round((code * js)));
+	}
+
+	/**
+	 * 获取随机字符串 Nonce Str
+	 *
+	 * @return String 随机字符串
+	 */
+	public static String generateNonceStr() {
+		return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);
 	}
 
 	public static void main(String[] args) {

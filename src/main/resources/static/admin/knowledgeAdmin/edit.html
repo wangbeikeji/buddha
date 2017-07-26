@@ -38,6 +38,7 @@ $(function(){
 			if(response.code === "200") {
 				$("#editKnowledgeForm input[name=id]").val(id);
 				$("#editKnowledgeForm input[name=title]").val(response.result.title);
+				$("#editKnowledgeForm input[name=sortNum]").val(response.result.sortNum);
 				$("#editKnowledgeForm input[name=summary]").val(response.result.summary);
 				var intType = "1";
 				if(response.result.type == "资讯") {
@@ -63,6 +64,9 @@ $(function(){
 	});
 	// 修改
 	$("#editKnowledgeBtn").click(function() {
+		if($("#editKnowledgeForm input[name=sortNum]").val() == "") {
+			$("#editKnowledgeForm input[name=sortNum]").val("0");
+		}
 		$.ajax({ 
 			url: "/buddha/knowledge/", 
 			type: "put",
@@ -73,7 +77,7 @@ $(function(){
 			data: $("#editKnowledgeForm").serialize(),
 			success: function(response) {
 				if(response.code === "200") {
-					window.location.href = "list.html";
+					window.history.back();
 				} else {
 					alert(response.message);
 				}
@@ -88,12 +92,11 @@ $(function(){
 		<div class="col-md-2"></div>
 		<div class="col-md-8">
 			<div class="bs-callout bs-callout-info" id="callout-type-dl-truncate">
-				<h4>佛学知识修改页面</h4>
-				<p>可以修改佛学资讯、佛学故事、佛学入门。</p>
+				<h4>修改页面</h4>
 			</div>
 
 			<div class="button-list">
-				<a class="btn btn-default" href="list.html" role="button"> 返 回 </a>
+				<a class="btn btn-default" href="javascript:;" onclick="history.back();" role="button"> 返 回 </a>
 			</div>
 
 			<div class="bs-callout bs-callout-info" id="callout-type-dl-truncate">

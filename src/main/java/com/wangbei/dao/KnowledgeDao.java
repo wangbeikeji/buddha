@@ -27,6 +27,8 @@ public interface KnowledgeDao {
 
 	public Page<Knowledge> pageKnowledge(int page, int limit);
 	
+	public List<Knowledge> listKnowledgeByType(KnowledgeTypeEnum type);
+	
 	public List<Knowledge> listKnowledge();
 	
 }
