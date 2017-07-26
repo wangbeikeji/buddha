@@ -29,18 +29,14 @@ public class MeritDetailService {
 
     @Transactional
     public MeritDetail addMeritDetail(Integer user, Offerings offerings) {
-        MeritDetail meritDetail = getByUserAndType(user, offerings.getType());
-        if (meritDetail != null) {
-            if (meritDetail.getExpireTime().getTime() < System.currentTimeMillis()) {
-                //若还未过期
-                return meritDetail;
-            }
-//            //若过期时间超过当前日期，则允许并更新当前供品信息
-//            meritDetail.expire();
-//            MeritDetail result = addMeritDetail(meritDetail);
-//            return result;
-        }
-
+//        Date expire = new Date();
+//        MeritDetail meritDetail = getByUserAndType(user, offerings.getType(), expire);
+//        if (meritDetail != null) {
+//            if (meritDetail.getExpireTime().getTime() < expire.getTime()) {
+//
+//            }
+//            return meritDetail;
+//        }
         Trade trade = tradeService.trade(user, TradeTypeEnum.getByIndex(offerings.getType().getIndex()), offerings
                 .getMeritValue());
         if (trade != null) {
