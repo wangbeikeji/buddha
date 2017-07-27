@@ -7,11 +7,15 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.wangbei.util.RandomUtil;
 import com.wangbei.util.constants.AlipayConfigConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -33,7 +37,7 @@ public class AliPayService {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody("我是测试数据");
         model.setSubject("App支付测试Java");
-        model.setOutTradeNo("1234567890123");
+        model.setOutTradeNo(RandomUtil.generateRandomCode(10));
         model.setTimeoutExpress("30m");
         model.setTotalAmount("0.01");
         model.setProductCode("QUICK_MSECURITY_PAY");
@@ -44,15 +48,16 @@ public class AliPayService {
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
             String result = response.getBody();
             logger.info("订单支付请求完成:{}", result);
-            return result;
+            return URLDecoder.decode(result,"UTF-8");
         } catch (AlipayApiException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     public String callback(Map<String, String> params) throws AlipayApiException {
-        //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
         boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfigConstant.ALIPAY_PUBLIC_KEY,
                 AlipayConfigConstant.CHARSET, AlipayConfigConstant.SIGNTYPE);
         if (flag) {
@@ -63,6 +68,7 @@ public class AliPayService {
             //支付交易状态
             String status = params.get("trade_status");
             logger.info("商户订单号：{},支付宝交易号:{},交易状态为:{}", outTradeNo, tradeNo, status);
+            //交易成功后，需要判断当前商户订单是否已经处理 并处理当前订单状态
             return "success";
         }
         return "fail";

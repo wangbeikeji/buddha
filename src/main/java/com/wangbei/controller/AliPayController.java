@@ -33,6 +33,13 @@ public class AliPayController {
         return new Response<>(paymentService.pay());
     }
 
+    /**
+    * @author yuyidi 2017-07-27 14:28:27
+    * @method callback
+    * @param request
+    * @return java.lang.String
+    * @description 支付宝服务器异步通知支付结果
+    */
     @PostMapping("/callback")
     public String callback(HttpServletRequest request) throws AlipayApiException {
         Map<String, String> params = new HashMap<>();
@@ -57,10 +64,11 @@ public class AliPayController {
      * @method sync
      * @param
      * @return com.wangbei.pojo.Response<java.lang.String>
-     * @description 主动请求返回
+     * @description 客户端同步支付结果返回，服务器端验签并解析支付结果，并返回最终支付结果给客户端
      */
     @GetMapping("/sync")
     public Response<String> sync() {
+
         return null;
     }
 

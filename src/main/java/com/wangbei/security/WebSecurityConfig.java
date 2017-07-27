@@ -78,7 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/admin/**").permitAll();
 		http.authorizeRequests().antMatchers("/share/**").permitAll();
 		http.authorizeRequests().antMatchers("/system/ping").permitAll();
-		http.authorizeRequests().antMatchers("/pay/callback", "/pay/auth").permitAll();
+
+		http.authorizeRequests().antMatchers("/pay/**").permitAll();
 		http.authorizeRequests().antMatchers("/**").authenticated();
 
 		// 添加一个过滤器 所有访问 /login 的请求交给 JWTLoginFilter 来处理 这个类处理所有的JWT相关内容
