@@ -2,9 +2,6 @@ package com.wangbei.service.wxpay.api;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,11 +116,9 @@ public class WxPayApi {
 		return result;
 	}
 	
-	public static WxPayData getNotifyData(HttpServletRequest request) {
+	public static WxPayData getNotifyData(String xml) {
 		WxPayData result = new WxPayData();
 		try {
-			byte[] bytes = IOUtils.toByteArray(request.getInputStream());
-			String xml = new String(bytes, "UTF-8");
 			WxPayData data = new WxPayData();
 			data.fromXml(xml);
 			if (!data.checkSign(WxPayConfig.KEY)) {

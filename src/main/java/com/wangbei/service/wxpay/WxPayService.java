@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,8 +183,8 @@ public class WxPayService {
 		return trade;
 	}
 
-	public String receiveNotify(HttpServletRequest request) {
-		WxPayData notifyResult = WxPayApi.getNotifyData(request);
+	public String receiveNotify(String xml) {
+		WxPayData notifyResult = WxPayApi.getNotifyData(xml);
 		if ("SUCCESS".equals(notifyResult.getValue("return_code").toString())) {
 			String tradeNo = notifyResult.getValue("tradeNo").toString();
 			tradeService.completePaymentTrade(tradeNo);

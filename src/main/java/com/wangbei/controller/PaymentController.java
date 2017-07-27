@@ -1,9 +1,11 @@
 package com.wangbei.controller;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,11 +48,17 @@ public class PaymentController {
 	public Response<Trade> wxOrderQuery(String tradeNo) {
 		return new Response<>(wxPayService.orderQuery(tradeNo));
 	}
-	
+
 	@GetMapping("/wxNotify")
 	@ApiOperation(value = "微信支付回调通知")
 	public String wxNotify(HttpServletRequest request) {
-		return wxPayService.receiveNotify(request);
+		try {
+			byte[] bytes = IOUtils.toByteArray(request.getInputStream());
+			String xml = new String(bytes, "UTF-8");
+			return wxPayService.receiveNotify(xml);
+		} catch (IOException e) {
+			throw new RuntimeException("读取微信支付回调请求内容失败!", e);
+		}
 	}
-	
+
 }
