@@ -42,7 +42,9 @@ public class AliPayService {
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
-            return response.getBody();
+            String result = response.getBody();
+            logger.info("订单支付请求完成:{}", result);
+            return result;
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -60,7 +62,8 @@ public class AliPayService {
             String tradeNo = params.get("trade_no");
             //支付交易状态
             String status = params.get("trade_status");
-            logger.info("商户订单号：{},支付宝交易号:{},交易状态为:{}",outTradeNo,tradeNo,status);
+            logger.info("商户订单号：{},支付宝交易号:{},交易状态为:{}", outTradeNo, tradeNo, status);
+            return "success";
         }
         return "fail";
     }
