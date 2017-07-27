@@ -60,6 +60,7 @@ public class TradeService {
 		trade.setUserId(user);
 		trade.setType(type);
 		trade.setMeritValue(meritValue);
+		trade.setPaymentType(PaymentTypeEnum.MeritPay);
 		trade.setTradeNo(generateTradeNo());
 		trade.setStatus(TradeStatusEnum.COMPLETED);
 		return tradeDao.create(trade);

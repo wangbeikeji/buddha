@@ -13,11 +13,13 @@ import java.util.Map;
  */
 public enum PaymentTypeEnum implements CommonalityEnum {
 
-	ApplePay(0, "苹果支付"),
+	ApplePay(1, "苹果支付"),
 
-	WxPay(1, "微信支付"),
+	WxPay(2, "微信支付"),
 
-	AliPay(2, "阿里支付");
+	AliPay(3, "阿里支付"),
+	
+	MeritPay(4, "功德支付");
 
 	private static Map<Integer, PaymentTypeEnum> valueMap = new HashMap<>();
 

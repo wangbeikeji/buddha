@@ -316,8 +316,8 @@ public class UserController {
 	 * @return com.wangbei.pojo.Response<java.lang.String>
 	 * @description 放生
 	 */
-	@ApiOperation(value = "放生（1千年龟，2百灵鸟，3锦鲤）")
-	@ApiImplicitParam(name = "creature", allowableValues = "1,2,3", paramType = "query", dataType = "int")
+	@ApiOperation(value = "放生（1千年龟，2百灵鸟，3锦鲤，4兔子，5狐狸）")
+	@ApiImplicitParam(name = "creature", allowableValues = "1,2,3,4,5", paramType = "query", dataType = "int")
 	@PostMapping("/{id}/freelife")
 	public Response<FreeLife> freeLife(@PathVariable Integer id, @RequestParam CreatureEnum creature, @RequestParam(required = false) String tradeNo) {
 		Response<FreeLife> response = new Response<>();
