@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public enum CreatureEnum implements CommonalityEnum {
 
-    TORTOISE(1, "千年龟"), BIRD(2, "百灵鸟"), FISH(3, "锦鲤");
+    TORTOISE(1, "千年龟"), BIRD(2, "百灵鸟"), FISH(3, "锦鲤"), RABBIT(4, "兔子"), FOX(5, "狐狸");
 
     private Integer index;
     private String type;
