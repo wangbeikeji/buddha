@@ -17,5 +17,7 @@ public interface OrderRepository extends CurdJpaRepository<Orders, Integer>, Rep
     @Modifying
     @Query("update Orders o set o.status = ?3,o.modifyTime=?4,o.thiridOrderNo=?2 where o.orderNo=?1")
     Integer updateStatusAndTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum, Date modifyTime);
+    
+    Orders findByTradeNo(String tradeNo);
 
 }

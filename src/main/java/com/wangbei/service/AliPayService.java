@@ -38,17 +38,23 @@ public class AliPayService {
             AlipayConfigConstant.ALIPAY_PUBLIC_KEY, AlipayConfigConstant.SIGNTYPE);
     @Autowired
     private OrderService orderService;
+    
+    @Autowired
+    private TradeService tradeService;
 
     @Transactional
     public String pay(Integer user, TradeTypeEnum tradeTypeEnum, Double amount) {
-        //创建订单 且订单状态为未支付
-        Orders order = orderService.generateOrder(user, PaymentTypeEnum.AliPay, amount, OrderService.generateOrderNo());
+        //创建订单和交易 且订单状态为未支付
+    	String tradeNo = TradeService.generateTradeNo();
+    	orderService.generateOrder(user, PaymentTypeEnum.AliPay, amount, tradeNo, tradeNo);
+		tradeService.paymentTrade(tradeNo, user, tradeTypeEnum, (int) (amount * 10));
+		// 签名
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         String amountStr = String.valueOf(amount);
         String subject = TradeTypeEnum.getByTradeType(tradeTypeEnum);
         model.setSubject(subject);
-        model.setOutTradeNo(order.getOrderNo());
+        model.setOutTradeNo(tradeNo);
         model.setTimeoutExpress("30m");
         model.setTotalAmount(amountStr);
         model.setProductCode("QUICK_MSECURITY_PAY");
@@ -84,7 +90,9 @@ public class AliPayService {
             logger.info("商户订单号：{},支付宝交易号:{},交易状态为:{},支付时间:{}", outTradeNo, tradeNo, status, timestamp);
             //交易成功后，需要判断当前商户订单是否已经处理 并处理当前订单状态
             if (status.equals("TRADE_SUCCESS")) {
-                orderService.updateOrderStatus(outTradeNo, tradeNo, OrderStatusEnum.SUCCESS, new Date());
+                // orderService.updateOrderStatus(outTradeNo, tradeNo, OrderStatusEnum.SUCCESS, new Date());
+                orderService.completeOrders(tradeNo);
+				tradeService.completePaymentTrade(tradeNo);
             }
             return "success";
         }

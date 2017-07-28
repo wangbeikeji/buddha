@@ -1,9 +1,9 @@
 package com.wangbei.dao;
 
+import java.util.Date;
+
 import com.wangbei.entity.Orders;
 import com.wangbei.util.enums.OrderStatusEnum;
-
-import java.util.Date;
 
 /**
  * @author Created by yuyidi on 2017/7/28.
@@ -13,4 +13,7 @@ public interface OrderDao extends BaseDao<Orders, Integer> {
 
     Integer updateOrderStatusAndModifyTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum, Date
             modifyTime);
+    
+    Orders getOrderByTradeNo(String tradeNo);
+    
 }
