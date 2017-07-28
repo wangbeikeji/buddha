@@ -1,6 +1,7 @@
 package com.wangbei.util.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.wangbei.pojo.VirtualGoodsInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +17,19 @@ public enum TradeTypeEnum implements CommonalityEnum {
     FRUIT(2, "供果"),
     FLOWERS(3, "供花"),
     RUNE(4, "求符"),
-    DIVINATION(5,"求签"),
+    DIVINATION(5, "求签"),
     CHECKIN(6, "签到"),
     FREELIFE(7, "放生"),
-    MERIT(8,"功德");
+    MERIT(8, "功德");
 
+    private static Map<TradeTypeEnum, String> virtualGoodsInfoMap = new HashMap<>();
     private static Map<Integer, TradeTypeEnum> valueMap = new HashMap<>();
+
+    static {
+        virtualGoodsInfoMap.put(CHARGE, "功德充值");
+        virtualGoodsInfoMap.put(FREELIFE,"生灵放生");
+        virtualGoodsInfoMap.put(MERIT, "随喜功德");
+    }
 
     static {
         for (TradeTypeEnum _enum : TradeTypeEnum.values()) {
@@ -44,6 +52,10 @@ public enum TradeTypeEnum implements CommonalityEnum {
             throw new IllegalArgumentException("No element matches " + index);
         }
         return result;
+    }
+
+    public static String getByTradeType(TradeTypeEnum tradeTypeEnum) {
+        return virtualGoodsInfoMap.get(tradeTypeEnum);
     }
 
     @Override

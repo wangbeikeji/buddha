@@ -19,6 +19,7 @@ import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.service.wxpay.WxPayService;
 import com.wangbei.util.JacksonUtil;
+import com.wangbei.util.enums.TradeTypeEnum;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +33,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/payment")
 @Api(description = "支付接口列表")
-public class PaymentController {
+public class WxPayController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,12 +42,11 @@ public class PaymentController {
 	
 	@PostMapping("/wxUnifiedOrder")
 	@ApiOperation(value = "微信支付统一下单接口（type：0充值 7放生 8功德）")
-	public Response<Map<String, Object>> wxUnifiedOrder(int type, int meritValue, double totalFee, String goodsDesc) {
+	public Response<Map<String, Object>> wxUnifiedOrder(int type, int meritValue, double totalFee) {
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
-		logger.info(String.format("user(%s) unified order(type:%s, meritValue:%s, totalFee:%s, goodsDesc:%s)",
-				authUserDetails.getUserId(), type, meritValue, totalFee, goodsDesc));
-		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(), type, meritValue, totalFee,
-				goodsDesc);
+		logger.info(String.format("user(%s) unified order(type:%s, meritValue:%s, totalFee:%s)",
+				authUserDetails.getUserId(), type, meritValue, totalFee));
+		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(), TradeTypeEnum.getByIndex(type), meritValue, totalFee);
 		logger.info(String.format("unified order result:%s", JacksonUtil.encode(result)));
 		return new Response<>(result);
 	}

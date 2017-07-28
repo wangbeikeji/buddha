@@ -16,7 +16,7 @@ import com.wangbei.util.enums.TradeTypeEnum;
 /**
  * @author yuyidi 2017-07-14 11:33:00
  * @class com.wangbei.service.HerebyService
- * @description 恭请佛业务
+ * @description 请符文
  */
 @Service
 public class BegService {

@@ -1,15 +1,18 @@
 package com.wangbei.controller;
 
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.wangbei.pojo.Response;
+import com.wangbei.pojo.pay.AlipayPaymentInfo;
+import com.wangbei.security.AuthUserDetails;
+import com.wangbei.security.SecurityAuthService;
 import com.wangbei.service.AliPayService;
-import com.wangbei.util.constants.AlipayConfigConstant;
+import com.wangbei.util.enums.PaymentTypeEnum;
+import com.wangbei.util.enums.TradeTypeEnum;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -22,17 +25,36 @@ import java.util.Map;
  * @description 支付控制器
  */
 @RestController
-@RequestMapping("/pay")
+@RequestMapping("/alipay")
 public class AliPayController {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AliPayService paymentService;
-
+    /**
+    * @author yuyidi 2017-07-28 15:00:32
+    * @method payment
+    * @param type 交易的对象类型  0 充值,7 放生,8 功德箱随喜
+    * @param amount
+    * @return com.wangbei.pojo.Response<java.lang.String>
+    * @description
+    */
+    @ApiOperation(value = "支付")
     @PostMapping("/payment")
-    public Response<String> payment() {
-        return new Response<>(paymentService.pay());
+    public Response<String> payment(@RequestParam TradeTypeEnum type,Double amount) {
+        AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+        Integer user = authUserDetails.getUserId();
+        return new Response<>(paymentService.pay(user,type,amount));
     }
 
+    /**
+    * @author yuyidi 2017-07-27 14:28:27
+    * @method callback
+    * @param request
+    * @return java.lang.String
+    * @description 支付宝服务器异步通知支付结果
+    */
     @PostMapping("/callback")
     public String callback(HttpServletRequest request) throws AlipayApiException {
         Map<String, String> params = new HashMap<>();
@@ -57,11 +79,18 @@ public class AliPayController {
      * @method sync
      * @param
      * @return com.wangbei.pojo.Response<java.lang.String>
-     * @description 主动请求返回
+     * @description 客户端同步支付结果返回，服务器端验签并解析支付结果，并返回最终支付结果给客户端
      */
-    @GetMapping("/sync")
-    public Response<String> sync() {
-        return null;
+    @PostMapping("/sync")
+    public Response<AlipayPaymentInfo> sync(@RequestBody AlipayPaymentInfo paymentInfo) {
+
+        return new Response<>(paymentInfo);
+    }
+
+    @GetMapping
+    public String syncReturn(){
+        logger.info("支付完成后，自动执行跳转页面");
+        return "success";
     }
 
     @GetMapping("/auth")
