@@ -13,4 +13,6 @@ public interface OrderDao extends BaseDao<Orders, Integer> {
 
     Integer updateOrderStatusAndModifyTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum, Date
             modifyTime);
+
+    Orders fetchOrderByOrderNo(String orderNo);
 }

@@ -56,4 +56,9 @@ public class OrderDaoImpl implements OrderDao {
     public Integer updateOrderStatusAndModifyTime(String orderNo,String thridOrderNo, OrderStatusEnum orderStatusEnum, Date modifyTime) {
         return orderRepository.updateStatusAndTime(orderNo,thridOrderNo,orderStatusEnum,modifyTime);
     }
+
+    @Override
+    public Orders fetchOrderByOrderNo(String orderNo) {
+        return orderRepository.findByOrderNo(orderNo);
+    }
 }

@@ -54,4 +54,8 @@ public class OrderService {
         strBuilder.append(RandomUtil.generateRandomCode(6));
         return strBuilder.toString();
     }
+
+    public Orders getOrderByOrderNo(String orderNo) {
+        return orderDao.fetchOrderByOrderNo(orderNo);
+    }
 }

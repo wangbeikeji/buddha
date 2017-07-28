@@ -54,7 +54,7 @@ public enum AlipayResultStatus{
         }
     }
 
-    public static AlipayResultStatus getByIndex(Integer index){
+    public static AlipayResultStatus getByIndex(String index){
         AlipayResultStatus result = valueMap.get(index);
         if (result == null) {
             throw new IllegalArgumentException("No element matches " + index);

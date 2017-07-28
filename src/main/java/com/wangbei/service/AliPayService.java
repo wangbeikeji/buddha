@@ -6,9 +6,12 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.wangbei.entity.Orders;
 import com.wangbei.exception.ServiceException;
+import com.wangbei.util.JacksonUtil;
 import com.wangbei.util.constants.AlipayConfigConstant;
 import com.wangbei.util.enums.OrderStatusEnum;
 import com.wangbei.util.enums.PaymentTypeEnum;
@@ -22,6 +25,7 @@ import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -89,5 +93,26 @@ public class AliPayService {
             return "success";
         }
         return "fail";
+    }
+
+    public String orderQuery(String aliOrderNo) throws AlipayApiException {
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        Map<String, String> bizModel = new HashMap<>();
+        bizModel.put("trade_no",aliOrderNo);
+        request.setBizContent(JacksonUtil.encode(bizModel));
+        AlipayTradeQueryResponse response = alipayClient.sdkExecute(request);
+        try {
+            String result = URLDecoder.decode(response.getBody(), "UTF-8");
+            if (response.getTradeStatus().equals("TRADE_SUCCESS")) {
+                //若支付成功
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "fail";
+    }
+
+    public Orders fetchOrderByOrderNo(String orderNo) {
+        return orderService.getOrderByOrderNo(orderNo);
     }
 }
