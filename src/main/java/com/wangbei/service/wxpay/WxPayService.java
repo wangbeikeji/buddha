@@ -156,7 +156,7 @@ public class WxPayService {
 		if (trade == null) {
 			throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
 		}
-		String thirdTradeNo = trade.getThirdTradeNo();
+		String thirdTradeNo = null;
 		// -----------------配置类型的参数-------------------
 		WxPayData queryDataReq = new WxPayData();
 		// 公众账号ID

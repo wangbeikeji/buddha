@@ -1,9 +1,9 @@
 package com.wangbei.util.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * 交易状态 枚举
@@ -11,14 +11,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @author luomengan
  *
  */
-public enum TradeStatusEnum implements CommonalityEnum {
+public enum OrderStatusEnum implements CommonalityEnum {
 
-	PENDING(0, "未完成"), COMPLETED(1, "已完成");
+	UNPAY(0, "未付款"),PAYCLOSE(1,"交易关闭"),SUCCESS(2, "支付成功"),FINISHED(3,"支付结束");
 
-	private static Map<Integer, TradeStatusEnum> valueMap = new HashMap<>();
+	private static Map<Integer, OrderStatusEnum> valueMap = new HashMap<>();
 
 	static {
-		for (TradeStatusEnum _enum : TradeStatusEnum.values()) {
+		for (OrderStatusEnum _enum : OrderStatusEnum.values()) {
 			valueMap.put(_enum.getIndex(), _enum);
 		}
 	}
@@ -26,13 +26,13 @@ public enum TradeStatusEnum implements CommonalityEnum {
 	private Integer index;
 	private String status;
 
-	TradeStatusEnum(Integer index, String status) {
+	OrderStatusEnum(Integer index, String status) {
 		this.index = index;
 		this.status = status;
 	}
 
-	public static TradeStatusEnum getByIndex(Integer index) {
-		TradeStatusEnum result = valueMap.get(index);
+	public static OrderStatusEnum getByIndex(Integer index) {
+		OrderStatusEnum result = valueMap.get(index);
 		if (result == null) {
 			throw new IllegalArgumentException("No element matches " + index);
 		}

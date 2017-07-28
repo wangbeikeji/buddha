@@ -31,6 +31,9 @@ public class Trade implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
+	@Column(name = "trade_no")
+	private String tradeNo;
 	/**
 	 * 用户id
 	 */
@@ -42,35 +45,20 @@ public class Trade implements Serializable {
 	@Column(name = "type")
 	@Convert(converter = TradeTypeEnumConverter.class)
 	private TradeTypeEnum type;
-	/**
-	 * 交易流水号
-	 */
-	@Column(name = "trade_no", unique = true)
-	private String tradeNo;
-	/**
-	 * 第三方交易流水号
-	 */
-	@Column(name = "third_trade_no")
-	private String thirdTradeNo;
+
 	/**
 	 * 交易状态
 	 */
 	@Column(name = "status")
 	@Convert(converter = TradeStatusEnumConverter.class)
 	private TradeStatusEnum status;
+
 	/**
 	 * 功德数
 	 */
 	@Column(name = "merit_value")
 	private Integer meritValue;
-	/**
-	 * 总金额
-	 */
-	@Column(name = "total_fee")
-	private Double totalFee;
-	@Column(name = "payment_type")
-	@Convert(converter = PaymentTypeEnumConverter.class)
-	private PaymentTypeEnum paymentType;
+
 	/**
 	 * 创建时间
 	 */
@@ -83,6 +71,14 @@ public class Trade implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getTradeNo() {
+		return tradeNo;
+	}
+
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
 	}
 
 	public Integer getUserId() {
@@ -99,14 +95,6 @@ public class Trade implements Serializable {
 
 	public void setType(TradeTypeEnum type) {
 		this.type = type;
-	}
-
-	public String getTradeNo() {
-		return tradeNo;
-	}
-
-	public void setTradeNo(String tradeNo) {
-		this.tradeNo = tradeNo;
 	}
 
 	public TradeStatusEnum getStatus() {
@@ -133,28 +121,5 @@ public class Trade implements Serializable {
 		this.createTime = createTime;
 	}
 
-	public Double getTotalFee() {
-		return totalFee;
-	}
-
-	public void setTotalFee(Double totalFee) {
-		this.totalFee = totalFee;
-	}
-
-	public PaymentTypeEnum getPaymentType() {
-		return paymentType;
-	}
-
-	public void setPaymentType(PaymentTypeEnum paymentType) {
-		this.paymentType = paymentType;
-	}
-
-	public String getThirdTradeNo() {
-		return thirdTradeNo;
-	}
-
-	public void setThirdTradeNo(String thirdTradeNo) {
-		this.thirdTradeNo = thirdTradeNo;
-	}
 
 }

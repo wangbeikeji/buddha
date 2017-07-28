@@ -28,7 +28,7 @@ public interface CheckinRepository extends Repository<Checkin, Integer> {
 
 	Checkin findById(Integer id);
 	
-	@Query("from Checkin where userId=?1 and checkinTime>=?2 and checkinTime<?3")
+	@Query("select c from Checkin as c where c.userId=?1 and c.checkinTime>=?2 and c.checkinTime<?3")
     List<Checkin> getUserCheckin(Integer userId, Date today, Date tomorrow);
 	
 }
