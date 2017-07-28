@@ -40,12 +40,15 @@ import com.wangbei.service.JossService;
 import com.wangbei.service.MeritDetailService;
 import com.wangbei.service.OfferingsService;
 import com.wangbei.service.RuneService;
+import com.wangbei.service.TradeService;
 import com.wangbei.service.UserDivinationService;
 import com.wangbei.service.UserService;
 import com.wangbei.util.MessageResponse;
 import com.wangbei.util.SafeCollectionUtil;
 import com.wangbei.util.enums.CreatureEnum;
 import com.wangbei.util.enums.OfferingTypeEnum;
+import com.wangbei.util.enums.TradeStatusEnum;
+import com.wangbei.util.enums.TradeTypeEnum;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -81,6 +84,8 @@ public class UserController {
 	private UserDivinationService userDivinationService;
 	@Autowired
 	private CheckinService checkinService;
+	@Autowired
+	private TradeService tradeService;
 
 	@PostMapping("/register")
 	@ApiOperation(value = "用户注册")
@@ -284,7 +289,7 @@ public class UserController {
 	 */
 	@ApiOperation(value = "账户充值（type：0充值 7放生 8功德）")
 	@PostMapping("/{id}/charge/")
-	public Response<Trade> charge(@PathVariable Integer id, Integer meritValue, Integer type) {
+	public Response<Trade> charge(@PathVariable int id, int meritValue, int type) {
 		Response<Trade> response = new Response<>();
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
 		if (authUserDetails.getUserId() == id) {
@@ -303,7 +308,11 @@ public class UserController {
 		Response<TradeWithUserMeritValue> response = new Response<>();
 		TradeWithUserMeritValue result = userService.validateCharge(tradeNo);
 		response.setResult(result);
-		response.setMessage(MessageResponse.randomMerit());
+		if(result.getType() == TradeTypeEnum.FREELIFE) {
+			response.setMessage(MessageResponse.randomFreeLive());
+		} else if (result.getType() == TradeTypeEnum.MERIT) {
+			response.setMessage(MessageResponse.randomMerit());
+		}
 		return response;
 	}
 
@@ -335,4 +344,20 @@ public class UserController {
 		response.setMessage("当前用户信息不匹配");
 		return response;
 	}
+	
+	@ApiOperation(value = "获取放生和捐功德成功后的提示信息")
+	@GetMapping("/getWarmMessage")
+	public Response<String> getWarmMessage(String tradeNo) {
+		String message = "";
+		Trade trade = tradeService.getTrade(tradeNo);
+		if(trade != null && trade.getStatus() == TradeStatusEnum.COMPLETED) {
+			if(trade.getType() == TradeTypeEnum.FREELIFE) {
+				message = MessageResponse.randomFreeLive();
+			} else if (trade.getType() == TradeTypeEnum.MERIT) {
+				message = MessageResponse.randomMerit();
+			}
+		}
+		return new Response<>(message);
+	}
+	
 }

@@ -62,7 +62,9 @@ public class AppVersionService {
 		boolean result = false;
 		List<AppVersion> list = appVersionDao.listCurrentVersion();
 		if (list != null && list.size() > 0) {
-			result = list.get(0).getIsOnline();
+			if (list.get(0).getIsOnline() != null) {
+				result = list.get(0).getIsOnline();
+			}
 		}
 		return result;
 	}

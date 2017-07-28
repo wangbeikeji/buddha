@@ -9,9 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangbei.dao.AccountDao;
 import com.wangbei.dao.TradeDao;
+import com.wangbei.entity.Account;
 import com.wangbei.entity.Trade;
 import com.wangbei.exception.ServiceException;
+import com.wangbei.pojo.TradeWithUserMeritValue;
 import com.wangbei.service.TradeService;
 import com.wangbei.service.wxpay.api.WxPayApi;
 import com.wangbei.service.wxpay.api.WxPayConfig;
@@ -22,7 +25,7 @@ import com.wangbei.util.enums.TradeTypeEnum;
 
 @Service
 public class WxPayService {
-
+	
 	/**
 	 * 0微信公众号支付，微信APP支付
 	 */
@@ -33,10 +36,13 @@ public class WxPayService {
 
 	@Autowired
 	private TradeDao tradeDao;
+	
+	@Autowired
+	private AccountDao accountDao;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public Map<String, Object> unifiedOrder(Integer userId, Integer tradeType, int meritValue, int totalFee,
+	public Map<String, Object> unifiedOrder(Integer userId, Integer tradeType, int meritValue, double totalFee,
 			String goodsDesc, Object... otherParams) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		// step 1 : 组装请求参数
@@ -57,7 +63,7 @@ public class WxPayService {
 		String tradeNo = TradeService.generateTradeNo();
 		payDataReq.addValue("out_trade_no", tradeNo);
 		payDataReq.addValue("body", goodsDesc);
-		payDataReq.addValue("total_fee", totalFee);
+		payDataReq.addValue("total_fee", (int) (totalFee * 100));
 
 		String openid = null;
 		if (payMode == 0) {
@@ -77,12 +83,12 @@ public class WxPayService {
 			WxPayData payDataResp = WxPayApi.unifiedOrder(payDataReq, WxPayConfig.KEY);
 			String resultCode = null;
 			String resultMessage = null;
-			String thirdTradeNo = null;
+			String prepayId = null;
 			if ("SUCCESS".equals(payDataResp.getValue("return_code"))) {
 				if ("SUCCESS".equals(payDataResp.getValue("result_code"))) {
 					resultCode = "SUCCESS";
 					resultMessage = payDataResp.getValue("return_msg").toString();
-					thirdTradeNo = payDataResp.getValue("prepay_id").toString();
+					prepayId = payDataResp.getValue("prepay_id").toString();
 				} else {
 					resultCode = payDataResp.getValue("err_code").toString();
 					resultMessage = payDataResp.getValue("err_code_des").toString();
@@ -98,7 +104,7 @@ public class WxPayService {
 					payParamData.addValue("appId", WxPayConfig.APPID);
 					payParamData.addValue("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
 					payParamData.addValue("nonceStr", RandomUtil.generateNonceStr());
-					payParamData.addValue("package", "prepay_id=" + thirdTradeNo);
+					payParamData.addValue("package", "prepay_id=" + prepayId);
 					payParamData.addValue("signType", "MD5");
 					String sign = payParamData.makeSign(WxPayConfig.KEY);
 					payParamData.addValue("sign", sign);
@@ -109,7 +115,7 @@ public class WxPayService {
 					WxPayData payParamData = new WxPayData();
 					payParamData.addValue("appid", WxPayConfig.APPID);
 					payParamData.addValue("partnerid", WxPayConfig.MCHID);
-					payParamData.addValue("prepayid", thirdTradeNo);
+					payParamData.addValue("prepayid", prepayId);
 					payParamData.addValue("package", "Sign=WXPay");
 					payParamData.addValue("noncestr", RandomUtil.generateNonceStr());
 					payParamData.addValue("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
@@ -119,8 +125,8 @@ public class WxPayService {
 					result = payParamData.getDataValues();
 				}
 				// step 5 : 保存交易记录
-				tradeService.paymentTrade(tradeNo, thirdTradeNo, userId, TradeTypeEnum.getByIndex(tradeType),
-						PaymentTypeEnum.WxPay, meritValue, totalFee / 100D);
+				tradeService.paymentTrade(tradeNo, null, userId, TradeTypeEnum.getByIndex(tradeType),
+						PaymentTypeEnum.WxPay, meritValue, totalFee);
 				result.put("tradeNo", tradeNo);
 			} else {
 				if (payMode == 0) {
@@ -151,12 +157,12 @@ public class WxPayService {
 		return result;
 	}
 
-	public Trade orderQuery(String tradeNo) {
+	public TradeWithUserMeritValue orderQuery(String tradeNo) {
 		Trade trade = tradeDao.retrieveByTradeNo(tradeNo);
 		if (trade == null) {
 			throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
 		}
-		String thirdTradeNo = trade.getThirdTradeNo();
+		// String thirdTradeNo = trade.getThirdTradeNo();
 		// -----------------配置类型的参数-------------------
 		WxPayData queryDataReq = new WxPayData();
 		// 公众账号ID
@@ -166,28 +172,36 @@ public class WxPayService {
 		// 随机字符串
 		queryDataReq.addValue("nonce_str", RandomUtil.generateNonceStr());
 		// -----------------查询数据的参数-------------------
-		queryDataReq.addValue("transaction_id", thirdTradeNo);
+		// queryDataReq.addValue("transaction_id", thirdTradeNo);
+		queryDataReq.addValue("out_trade_no", tradeNo);
 		try {
 			// 调用第三方查询订单接口
 			WxPayData queryDataResp = WxPayApi.orderQuery(queryDataReq, WxPayConfig.KEY);
 			if ("SUCCESS".equals(queryDataResp.getValue("return_code"))) {
 				if ("SUCCESS".equals(queryDataResp.getValue("result_code"))) {
 					// 支付成功
-					return tradeService.completePaymentTrade(tradeNo);
+					trade = tradeService.completePaymentTrade(tradeNo);
 				}
 			}
 		} catch (IOException e) {
 			logger.error("Weixin pay orderQuery post http request failed!");
 			throw new RuntimeException("Weixin pay orderQuery post http request failed!");
 		}
-		return trade;
+		Account account = accountDao.findByUser(trade.getUserId());
+		TradeWithUserMeritValue result = new TradeWithUserMeritValue(trade);
+		result.setUserMeritValue(account.getMeritValue());
+		return result;
 	}
 
 	public String receiveNotify(String xml) {
 		WxPayData notifyResult = WxPayApi.getNotifyData(xml);
 		if ("SUCCESS".equals(notifyResult.getValue("return_code").toString())) {
 			String tradeNo = notifyResult.getValue("tradeNo").toString();
-			tradeService.completePaymentTrade(tradeNo);
+			try {
+				tradeService.completePaymentTrade(tradeNo);
+			} catch(ServiceException ex) {
+				logger.error("handle weixin pay notify exception!It could be a deal, not an extranet.", ex);
+			}
 			notifyResult.getDataValues().remove("tradeNo");
 		}
 		return notifyResult.toXml();

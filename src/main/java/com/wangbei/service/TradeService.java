@@ -170,9 +170,14 @@ public class TradeService {
 		return tradeDao.create(trade);
 	}
 
-	public Trade getTradeInfo(Integer tradeId) {
+	public Trade getTrade(Integer tradeId) {
 		return tradeDao.retrieveById(tradeId);
 	}
+	
+	public Trade getTrade(String tradeNo) {
+		return tradeDao.retrieveByTradeNo(tradeNo);
+	}
+
 
 	/**
 	 * 生成交易流水号

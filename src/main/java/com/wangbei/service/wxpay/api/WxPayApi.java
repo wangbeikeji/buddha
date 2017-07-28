@@ -121,7 +121,7 @@ public class WxPayApi {
 		try {
 			WxPayData data = new WxPayData();
 			data.fromXml(xml);
-			if (!data.checkSign(WxPayConfig.KEY)) {
+			if (data.checkSign(WxPayConfig.KEY)) {
 				String tradeNo = data.getValue("out_trade_no").toString();
 				result.addValue("tradeNo", tradeNo);
 				result.addValue("return_code", "SUCCESS");
