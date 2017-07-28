@@ -29,7 +29,9 @@ public class Trade implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
+	/**
+	 * 交易号
+	 */
 	@Column(name = "trade_no")
 	private String tradeNo;
 	/**
@@ -43,14 +45,12 @@ public class Trade implements Serializable {
 	@Column(name = "type")
 	@Convert(converter = TradeTypeEnumConverter.class)
 	private TradeTypeEnum type;
-
 	/**
 	 * 交易状态
 	 */
 	@Column(name = "status")
 	@Convert(converter = TradeStatusEnumConverter.class)
 	private TradeStatusEnum status;
-
 	/**
 	 * 功德数
 	 */

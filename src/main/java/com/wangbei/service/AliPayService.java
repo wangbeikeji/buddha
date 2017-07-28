@@ -13,7 +13,6 @@ import com.wangbei.entity.Orders;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.util.JacksonUtil;
 import com.wangbei.util.constants.AlipayConfigConstant;
-import com.wangbei.util.enums.OrderStatusEnum;
 import com.wangbei.util.enums.PaymentTypeEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
 import org.slf4j.Logger;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,16 +41,22 @@ public class AliPayService {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private TradeService tradeService;
+
     @Transactional
     public String pay(Integer user, TradeTypeEnum tradeTypeEnum, Double amount) {
-        //创建订单 且订单状态为未支付
-        Orders order = orderService.generateOrder(user, PaymentTypeEnum.AliPay, amount, OrderService.generateOrderNo());
+        //创建订单和交易 且订单状态为未支付
+        String tradeNo = TradeService.generateTradeNo();
+        orderService.generateOrder(user, PaymentTypeEnum.AliPay, amount, tradeNo, tradeNo);
+        tradeService.paymentTrade(tradeNo, user, tradeTypeEnum, (int) (amount * 10));
+        // 签名
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         String amountStr = String.valueOf(amount);
         String subject = TradeTypeEnum.getByTradeType(tradeTypeEnum);
         model.setSubject(subject);
-        model.setOutTradeNo(order.getOrderNo());
+        model.setOutTradeNo(tradeNo);
         model.setTimeoutExpress("30m");
         model.setTotalAmount(amountStr);
         model.setProductCode("QUICK_MSECURITY_PAY");
@@ -88,23 +92,28 @@ public class AliPayService {
             logger.info("商户订单号：{},支付宝交易号:{},交易状态为:{},支付时间:{}", outTradeNo, tradeNo, status, timestamp);
             //交易成功后，需要判断当前商户订单是否已经处理 并处理当前订单状态
             if (status.equals("TRADE_SUCCESS")) {
-                orderService.updateOrderStatus(outTradeNo, tradeNo, OrderStatusEnum.SUCCESS, new Date());
+                // orderService.updateOrderStatus(outTradeNo, tradeNo, OrderStatusEnum.SUCCESS, new Date());
+                orderService.completeOrders(tradeNo);
+                tradeService.completePaymentTrade(tradeNo);
             }
             return "success";
         }
         return "fail";
     }
 
-    public String orderQuery(String aliOrderNo) throws AlipayApiException {
+    public String orderQuery(String orderNo) throws AlipayApiException {
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         Map<String, String> bizModel = new HashMap<>();
-        bizModel.put("trade_no",aliOrderNo);
+        bizModel.put("out_trade_no", orderNo);
         request.setBizContent(JacksonUtil.encode(bizModel));
         AlipayTradeQueryResponse response = alipayClient.sdkExecute(request);
         try {
             String result = URLDecoder.decode(response.getBody(), "UTF-8");
+            logger.info("订单查询结果：{}", result);
             if (response.getTradeStatus().equals("TRADE_SUCCESS")) {
-                //若支付成功
+                orderService.completeOrders(orderNo);
+                tradeService.completePaymentTrade(orderNo);
+                return "success";
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -115,4 +124,6 @@ public class AliPayService {
     public Orders fetchOrderByOrderNo(String orderNo) {
         return orderService.getOrderByOrderNo(orderNo);
     }
+
+
 }

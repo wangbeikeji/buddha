@@ -26,10 +26,11 @@ public class OrderService {
     private OrderDao orderDao;
 
     @Transactional
-    public Orders generateOrder(Integer user, PaymentTypeEnum type, Double totalAmount, String orderNo) {
+    public Orders generateOrder(Integer user, PaymentTypeEnum type, Double totalAmount, String orderNo, String tradeNo) {
         Orders order = new Orders();
         order.setUserId(user);
         order.setOrderNo(orderNo);
+        order.setTradeNo(tradeNo);
         order.setStatus(OrderStatusEnum.UNPAY);
         order.setPaymentType(type);
         order.setCreateTime(new Date());
@@ -41,6 +42,14 @@ public class OrderService {
     public Integer updateOrderStatus(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum, Date
             paymentTime) {
         return orderDao.updateOrderStatusAndModifyTime(orderNo, thridOrderNo, orderStatusEnum, paymentTime);
+    }
+    
+    @Transactional
+    public Orders completeOrders(String tradeNo) {
+    	Orders orders = orderDao.getOrderByTradeNo(tradeNo);
+    	orders.setStatus(OrderStatusEnum.SUCCESS);
+    	orderDao.update(orders);
+    	return orders;
     }
     
     /**

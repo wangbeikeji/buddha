@@ -87,7 +87,7 @@ public class AliPayController {
      * @description 客户端同步支付结果返回，服务器端验签并解析支付结果，并返回最终支付结果给客户端
      */
     @PostMapping("/sync")
-    public Response<String> sync(@RequestBody AlipayPaymentInfo paymentInfo) {
+    public Response<String> sync(@RequestBody AlipayPaymentInfo paymentInfo) throws AlipayApiException {
         String result = "fail";
         //判断交易状态
         if (AlipayResultStatus.getByIndex(paymentInfo.getResultStatus()).equals(AlipayResultStatus
@@ -95,7 +95,7 @@ public class AliPayController {
             //若客户端交易成功 获取商户订单并验证订单状态
             TradePayResponse alipayTradeAppPayResponse = paymentInfo.getResult().getAlipayTradeAppPayResponse();
             String orderNo = alipayTradeAppPayResponse.getOutTradeNo();
-            String aliOrderNo = alipayTradeAppPayResponse.getTradeNo();
+//            String aliOrderNo = alipayTradeAppPayResponse.getTradeNo();
             Orders order = paymentService.fetchOrderByOrderNo(orderNo);
             if (order != null) {
                 if (order.getStatus().equals(OrderStatusEnum.SUCCESS)) {
@@ -103,7 +103,7 @@ public class AliPayController {
                     result = "success";
                 }
             }else{
-
+                paymentService.orderQuery(orderNo);
             }
         }
         return new Response<>(result);

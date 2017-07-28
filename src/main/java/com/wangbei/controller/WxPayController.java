@@ -42,11 +42,11 @@ public class WxPayController {
 	
 	@PostMapping("/wxUnifiedOrder")
 	@ApiOperation(value = "微信支付统一下单接口（type：0充值 7放生 8功德）")
-	public Response<Map<String, Object>> wxUnifiedOrder(int type, int meritValue, double totalFee) {
+	public Response<Map<String, Object>> wxUnifiedOrder(int type, double totalFee) {
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
-		logger.info(String.format("user(%s) unified order(type:%s, meritValue:%s, totalFee:%s)",
-				authUserDetails.getUserId(), type, meritValue, totalFee));
-		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(), TradeTypeEnum.getByIndex(type), meritValue, totalFee);
+		logger.info(String.format("user(%s) unified order(type:%s, totalFee:%s)",
+				authUserDetails.getUserId(), type, totalFee));
+		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(), TradeTypeEnum.getByIndex(type), totalFee);
 		logger.info(String.format("unified order result:%s", JacksonUtil.encode(result)));
 		return new Response<>(result);
 	}

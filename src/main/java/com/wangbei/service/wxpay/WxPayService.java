@@ -16,6 +16,7 @@ import com.wangbei.entity.Trade;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.pojo.TradeWithUserMeritValue;
 import com.wangbei.service.OrderService;
+import com.wangbei.service.TradeService;
 import com.wangbei.service.wxpay.api.WxPayApi;
 import com.wangbei.service.wxpay.api.WxPayConfig;
 import com.wangbei.service.wxpay.api.WxPayData;
@@ -30,7 +31,7 @@ public class WxPayService {
 	 * 0微信公众号支付，微信APP支付
 	 */
 	private int payMode = 1;
-	
+
 	@Autowired
 	private TradeDao tradeDao;
 
@@ -40,9 +41,12 @@ public class WxPayService {
 	@Autowired
 	private OrderService orderService;
 
+	@Autowired
+	private TradeService tradeService;
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public Map<String, Object> unifiedOrder(int userId, TradeTypeEnum tradeType, int meritValue, double totalFee,
+	public Map<String, Object> unifiedOrder(int userId, TradeTypeEnum tradeType, double totalFee,
 			Object... otherParams) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		// step 1 : 组装请求参数
@@ -60,8 +64,8 @@ public class WxPayService {
 		payDataReq.addValue("nonce_str", RandomUtil.generateNonceStr());
 
 		// -----------------支付数据的参数-------------------
-		String orderNo = OrderService.generateOrderNo();
-		payDataReq.addValue("out_trade_no", orderNo);
+		String tradeNo = TradeService.generateTradeNo();
+		payDataReq.addValue("out_trade_no", tradeNo);
 		payDataReq.addValue("body", TradeTypeEnum.getByTradeType(tradeType));
 		payDataReq.addValue("total_fee", (int) (totalFee * 100));
 
@@ -124,9 +128,10 @@ public class WxPayService {
 
 					result = payParamData.getDataValues();
 				}
-				// step 5 : 保存订单信息
-				orderService.generateOrder(userId, PaymentTypeEnum.WxPay, totalFee, orderNo);
-				result.put("orderNo", orderNo);
+				// step 5 : 保存订单信息和交易信息
+				orderService.generateOrder(userId, PaymentTypeEnum.WxPay, totalFee, tradeNo, tradeNo);
+				tradeService.paymentTrade(tradeNo, userId, tradeType, (int) (totalFee * 10));
+				result.put("tradeNo", tradeNo);
 			} else {
 				if (payMode == 0) {
 					result.put("appId", null);
@@ -156,9 +161,8 @@ public class WxPayService {
 		return result;
 	}
 
-	public TradeWithUserMeritValue orderQuery(String OrderNo) {
+	public TradeWithUserMeritValue orderQuery(String tradeNo) {
 		// 获取tradeNo
-		String tradeNo = null;
 		Trade trade = tradeDao.retrieveByTradeNo(tradeNo);
 		if (trade == null) {
 			throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
@@ -172,14 +176,15 @@ public class WxPayService {
 		// 随机字符串
 		queryDataReq.addValue("nonce_str", RandomUtil.generateNonceStr());
 		// -----------------查询数据的参数-------------------
-		queryDataReq.addValue("out_trade_no", OrderNo);
+		queryDataReq.addValue("out_trade_no", tradeNo);
 		try {
 			// 调用第三方查询订单接口
 			WxPayData queryDataResp = WxPayApi.orderQuery(queryDataReq, WxPayConfig.KEY);
 			if ("SUCCESS".equals(queryDataResp.getValue("return_code"))) {
 				if ("SUCCESS".equals(queryDataResp.getValue("result_code"))) {
-					// TODO 支付成功
-					// trade = tradeService.completePaymentTrade(tradeNo);
+					// 支付成功
+					orderService.completeOrders(tradeNo);
+					trade = tradeService.completePaymentTrade(tradeNo);
 				}
 			}
 		} catch (IOException e) {
@@ -195,10 +200,10 @@ public class WxPayService {
 	public String receiveNotify(String xml) {
 		WxPayData notifyResult = WxPayApi.getNotifyData(xml);
 		if ("SUCCESS".equals(notifyResult.getValue("return_code").toString())) {
-			// String tradeNo = notifyResult.getValue("tradeNo").toString();
+			String tradeNo = notifyResult.getValue("tradeNo").toString();
 			try {
-				// TODO 支付完成
-				// tradeService.completePaymentTrade(tradeNo);
+				orderService.completeOrders(tradeNo);
+				tradeService.completePaymentTrade(tradeNo);
 			} catch (ServiceException ex) {
 				logger.error("handle weixin pay notify exception!It could be a deal, not an extranet.", ex);
 			}

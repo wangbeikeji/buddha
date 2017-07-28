@@ -21,7 +21,6 @@ public class OrderDaoImpl implements OrderDao {
     @Autowired
     private OrderRepository orderRepository;
 
-
     @Override
     public Orders create(Orders order) {
         return orderRepository.save(order);
@@ -53,12 +52,19 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Integer updateOrderStatusAndModifyTime(String orderNo,String thridOrderNo, OrderStatusEnum orderStatusEnum, Date modifyTime) {
-        return orderRepository.updateStatusAndTime(orderNo,thridOrderNo,orderStatusEnum,modifyTime);
+    public Integer updateOrderStatusAndModifyTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum,
+                                                  Date modifyTime) {
+        return orderRepository.updateStatusAndTime(orderNo, thridOrderNo, orderStatusEnum, modifyTime);
     }
+
 
     @Override
     public Orders fetchOrderByOrderNo(String orderNo) {
         return orderRepository.findByOrderNo(orderNo);
+    }
+
+    @Override
+    public Orders getOrderByTradeNo(String tradeNo) {
+        return orderRepository.findByTradeNo(tradeNo);
     }
 }
