@@ -26,30 +26,30 @@ public class OrderDaoImpl implements OrderDao {
 		return ordersRepository.save(order);
 	}
 
-	@Override
-	public void deleteById(Integer id) {
+    @Override
+    public void deleteById(Integer id) {
 
-	}
+    }
 
-	@Override
-	public Orders update(Orders order) {
-		return null;
-	}
+    @Override
+    public Orders update(Orders order) {
+        return null;
+    }
 
-	@Override
-	public Orders retrieveById(Integer id) {
-		return null;
-	}
+    @Override
+    public Orders retrieveById(Integer id) {
+        return null;
+    }
 
-	@Override
-	public Page<Orders> page(int page, int limit) {
-		return null;
-	}
+    @Override
+    public Page<Orders> page(int page, int limit) {
+        return null;
+    }
 
-	@Override
-	public List<Orders> list() {
-		return null;
-	}
+    @Override
+    public List<Orders> list() {
+        return null;
+    }
 
 	@Override
 	public Integer updateOrderStatusAndModifyTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum,
@@ -61,4 +61,9 @@ public class OrderDaoImpl implements OrderDao {
 	public Orders getOrderByTradeNo(String tradeNo) {
 		return ordersRepository.findByTradeNo(tradeNo);
 	}
+	
+	@Override
+    public Orders fetchOrderByOrderNo(String orderNo) {
+        return ordersRepository.findByOrderNo(orderNo);
+    }
 }

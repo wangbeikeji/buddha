@@ -1,12 +1,16 @@
 package com.wangbei.controller;
 
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.wangbei.entity.Orders;
 import com.wangbei.pojo.Response;
 import com.wangbei.pojo.pay.AlipayPaymentInfo;
+import com.wangbei.pojo.pay.TradePayResponse;
 import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.service.AliPayService;
-import com.wangbei.util.enums.PaymentTypeEnum;
+import com.wangbei.util.enums.AlipayResultStatus;
+import com.wangbei.util.enums.OrderStatusEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -32,29 +36,30 @@ public class AliPayController {
 
     @Autowired
     private AliPayService paymentService;
+
     /**
-    * @author yuyidi 2017-07-28 15:00:32
-    * @method payment
-    * @param type 交易的对象类型  0 充值,7 放生,8 功德箱随喜
-    * @param amount
-    * @return com.wangbei.pojo.Response<java.lang.String>
-    * @description
-    */
+     * @param type   交易的对象类型  0 充值,7 放生,8 功德箱随喜
+     * @param amount
+     * @return com.wangbei.pojo.Response<java.lang.String>
+     * @author yuyidi 2017-07-28 15:00:32
+     * @method payment
+     * @description
+     */
     @ApiOperation(value = "支付")
     @PostMapping("/payment")
-    public Response<String> payment(@RequestParam TradeTypeEnum type,Double amount) {
+    public Response<String> payment(@RequestParam TradeTypeEnum type, Double amount) {
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         Integer user = authUserDetails.getUserId();
-        return new Response<>(paymentService.pay(user,type,amount));
+        return new Response<>(paymentService.pay(user, type, amount));
     }
 
     /**
-    * @author yuyidi 2017-07-27 14:28:27
-    * @method callback
-    * @param request
-    * @return java.lang.String
-    * @description 支付宝服务器异步通知支付结果
-    */
+     * @param request
+     * @return java.lang.String
+     * @author yuyidi 2017-07-27 14:28:27
+     * @method callback
+     * @description 支付宝服务器异步通知支付结果
+     */
     @PostMapping("/callback")
     public String callback(HttpServletRequest request) throws AlipayApiException {
         Map<String, String> params = new HashMap<>();
@@ -75,20 +80,37 @@ public class AliPayController {
     }
 
     /**
-     * @author yuyidi 2017-07-25 15:11:03
-     * @method sync
      * @param
      * @return com.wangbei.pojo.Response<java.lang.String>
+     * @author yuyidi 2017-07-25 15:11:03
+     * @method sync
      * @description 客户端同步支付结果返回，服务器端验签并解析支付结果，并返回最终支付结果给客户端
      */
     @PostMapping("/sync")
-    public Response<AlipayPaymentInfo> sync(@RequestBody AlipayPaymentInfo paymentInfo) {
-
-        return new Response<>(paymentInfo);
+    public Response<String> sync(@RequestBody AlipayPaymentInfo paymentInfo) throws AlipayApiException {
+        String result = "fail";
+        //判断交易状态
+        if (AlipayResultStatus.getByIndex(paymentInfo.getResultStatus()).equals(AlipayResultStatus
+                .SUCCESS)) {
+            //若客户端交易成功 获取商户订单并验证订单状态
+            TradePayResponse alipayTradeAppPayResponse = paymentInfo.getResult().getAlipayTradeAppPayResponse();
+            String orderNo = alipayTradeAppPayResponse.getOutTradeNo();
+//            String aliOrderNo = alipayTradeAppPayResponse.getTradeNo();
+            Orders order = paymentService.fetchOrderByOrderNo(orderNo);
+            if (order != null) {
+                if (order.getStatus().equals(OrderStatusEnum.SUCCESS)) {
+                    //当前订单支付成功
+                    result = "success";
+                }
+            }else{
+                paymentService.orderQuery(orderNo);
+            }
+        }
+        return new Response<>(result);
     }
 
     @GetMapping
-    public String syncReturn(){
+    public String syncReturn() {
         logger.info("支付完成后，自动执行跳转页面");
         return "success";
     }

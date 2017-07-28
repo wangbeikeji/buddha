@@ -6,11 +6,13 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.wangbei.entity.Orders;
 import com.wangbei.exception.ServiceException;
+import com.wangbei.util.JacksonUtil;
 import com.wangbei.util.constants.AlipayConfigConstant;
-import com.wangbei.util.enums.OrderStatusEnum;
 import com.wangbei.util.enums.PaymentTypeEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
 import org.slf4j.Logger;
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,17 +40,17 @@ public class AliPayService {
             AlipayConfigConstant.ALIPAY_PUBLIC_KEY, AlipayConfigConstant.SIGNTYPE);
     @Autowired
     private OrderService orderService;
-    
+
     @Autowired
     private TradeService tradeService;
 
     @Transactional
     public String pay(Integer user, TradeTypeEnum tradeTypeEnum, Double amount) {
         //创建订单和交易 且订单状态为未支付
-    	String tradeNo = TradeService.generateTradeNo();
-    	orderService.generateOrder(user, PaymentTypeEnum.AliPay, amount, tradeNo, tradeNo);
-		tradeService.paymentTrade(tradeNo, user, tradeTypeEnum, (int) (amount * 10));
-		// 签名
+        String tradeNo = TradeService.generateTradeNo();
+        orderService.generateOrder(user, PaymentTypeEnum.AliPay, amount, tradeNo, tradeNo);
+        tradeService.paymentTrade(tradeNo, user, tradeTypeEnum, (int) (amount * 10));
+        // 签名
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         String amountStr = String.valueOf(amount);
@@ -92,10 +94,36 @@ public class AliPayService {
             if (status.equals("TRADE_SUCCESS")) {
                 // orderService.updateOrderStatus(outTradeNo, tradeNo, OrderStatusEnum.SUCCESS, new Date());
                 orderService.completeOrders(tradeNo);
-				tradeService.completePaymentTrade(tradeNo);
+                tradeService.completePaymentTrade(tradeNo);
             }
             return "success";
         }
         return "fail";
     }
+
+    public String orderQuery(String orderNo) throws AlipayApiException {
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        Map<String, String> bizModel = new HashMap<>();
+        bizModel.put("out_trade_no", orderNo);
+        request.setBizContent(JacksonUtil.encode(bizModel));
+        AlipayTradeQueryResponse response = alipayClient.sdkExecute(request);
+        try {
+            String result = URLDecoder.decode(response.getBody(), "UTF-8");
+            logger.info("订单查询结果：{}", result);
+            if (response.getTradeStatus().equals("TRADE_SUCCESS")) {
+                orderService.completeOrders(orderNo);
+                tradeService.completePaymentTrade(orderNo);
+                return "success";
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "fail";
+    }
+
+    public Orders fetchOrderByOrderNo(String orderNo) {
+        return orderService.getOrderByOrderNo(orderNo);
+    }
+
+
 }

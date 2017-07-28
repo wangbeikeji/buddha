@@ -20,4 +20,5 @@ public interface OrdersRepository extends CurdJpaRepository<Orders, Integer>, Re
     
     Orders findByTradeNo(String tradeNo);
 
+    Orders findByOrderNo(String orderNo);
 }
