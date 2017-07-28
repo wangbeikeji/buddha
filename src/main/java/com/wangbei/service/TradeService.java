@@ -133,7 +133,7 @@ public class TradeService {
 		}
 		return trade;
 	}
-
+	
 	public Trade getTrade(Integer tradeId) {
 		return tradeDao.retrieveById(tradeId);
 	}

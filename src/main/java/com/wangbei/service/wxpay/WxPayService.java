@@ -22,6 +22,7 @@ import com.wangbei.service.wxpay.api.WxPayConfig;
 import com.wangbei.service.wxpay.api.WxPayData;
 import com.wangbei.util.RandomUtil;
 import com.wangbei.util.enums.PaymentTypeEnum;
+import com.wangbei.util.enums.TradeStatusEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
 
 @Service
@@ -167,29 +168,31 @@ public class WxPayService {
 		if (trade == null) {
 			throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
 		}
-		// -----------------配置类型的参数-------------------
-		WxPayData queryDataReq = new WxPayData();
-		// 公众账号ID
-		queryDataReq.addValue("appid", WxPayConfig.APPID);
-		// 商户号
-		queryDataReq.addValue("mch_id", WxPayConfig.MCHID);
-		// 随机字符串
-		queryDataReq.addValue("nonce_str", RandomUtil.generateNonceStr());
-		// -----------------查询数据的参数-------------------
-		queryDataReq.addValue("out_trade_no", tradeNo);
-		try {
-			// 调用第三方查询订单接口
-			WxPayData queryDataResp = WxPayApi.orderQuery(queryDataReq, WxPayConfig.KEY);
-			if ("SUCCESS".equals(queryDataResp.getValue("return_code"))) {
-				if ("SUCCESS".equals(queryDataResp.getValue("result_code"))) {
-					// 支付成功
-					orderService.completeOrders(tradeNo);
-					trade = tradeService.completePaymentTrade(tradeNo);
+		if (trade.getStatus() != TradeStatusEnum.COMPLETED) {
+			// -----------------配置类型的参数-------------------
+			WxPayData queryDataReq = new WxPayData();
+			// 公众账号ID
+			queryDataReq.addValue("appid", WxPayConfig.APPID);
+			// 商户号
+			queryDataReq.addValue("mch_id", WxPayConfig.MCHID);
+			// 随机字符串
+			queryDataReq.addValue("nonce_str", RandomUtil.generateNonceStr());
+			// -----------------查询数据的参数-------------------
+			queryDataReq.addValue("out_trade_no", tradeNo);
+			try {
+				// 调用第三方查询订单接口
+				WxPayData queryDataResp = WxPayApi.orderQuery(queryDataReq, WxPayConfig.KEY);
+				if ("SUCCESS".equals(queryDataResp.getValue("return_code"))) {
+					if ("SUCCESS".equals(queryDataResp.getValue("result_code"))) {
+						// 支付成功
+						orderService.completeOrders(tradeNo, null);
+						trade = tradeService.completePaymentTrade(tradeNo);
+					}
 				}
+			} catch (IOException e) {
+				logger.error("Weixin pay orderQuery post http request failed!");
+				throw new RuntimeException("Weixin pay orderQuery post http request failed!");
 			}
-		} catch (IOException e) {
-			logger.error("Weixin pay orderQuery post http request failed!");
-			throw new RuntimeException("Weixin pay orderQuery post http request failed!");
 		}
 		Account account = accountDao.findByUser(trade.getUserId());
 		TradeWithUserMeritValue result = new TradeWithUserMeritValue(trade);
@@ -201,8 +204,9 @@ public class WxPayService {
 		WxPayData notifyResult = WxPayApi.getNotifyData(xml);
 		if ("SUCCESS".equals(notifyResult.getValue("return_code").toString())) {
 			String tradeNo = notifyResult.getValue("tradeNo").toString();
+			String thirdTradeNo = notifyResult.getValue("thirdTradeNo").toString();
 			try {
-				orderService.completeOrders(tradeNo);
+				orderService.completeOrders(tradeNo, thirdTradeNo);
 				tradeService.completePaymentTrade(tradeNo);
 			} catch (ServiceException ex) {
 				logger.error("handle weixin pay notify exception!It could be a deal, not an extranet.", ex);

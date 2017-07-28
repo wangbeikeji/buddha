@@ -31,8 +31,8 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-@RequestMapping("/payment")
-@Api(description = "支付接口列表")
+@RequestMapping("/wxpay")
+@Api(description = "微信支付接口列表")
 public class WxPayController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -40,7 +40,7 @@ public class WxPayController {
 	@Autowired
 	private WxPayService wxPayService;
 	
-	@PostMapping("/wxUnifiedOrder")
+	@PostMapping("/unifiedOrder")
 	@ApiOperation(value = "微信支付统一下单接口（type：0充值 7放生 8功德）")
 	public Response<Map<String, Object>> wxUnifiedOrder(int type, double totalFee) {
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
@@ -51,13 +51,13 @@ public class WxPayController {
 		return new Response<>(result);
 	}
 
-	@PostMapping("/wxOrderQuery")
+	@PostMapping("/orderQuery")
 	@ApiOperation(value = "微信支付查询订单接口")
 	public Response<TradeWithUserMeritValue> wxOrderQuery(String tradeNo) {
 		return new Response<>(wxPayService.orderQuery(tradeNo));
 	}
 
-	@PostMapping("/wxNotify")
+	@PostMapping("/notify")
 	@ApiOperation(value = "微信支付回调通知")
 	public String wxNotify(HttpServletRequest request) {
 		try {

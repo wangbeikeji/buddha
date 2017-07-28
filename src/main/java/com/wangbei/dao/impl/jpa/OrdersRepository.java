@@ -12,10 +12,10 @@ import java.util.Date;
  * @author Created by yuyidi on 2017/7/28.
  * @desc
  */
-public interface OrderRepository extends CurdJpaRepository<Orders, Integer>, Repository<Orders, Integer> {
+public interface OrdersRepository extends CurdJpaRepository<Orders, Integer>, Repository<Orders, Integer> {
 
     @Modifying
-    @Query("update Orders o set o.status = ?3,o.modifyTime=?4,o.thiridOrderNo=?2 where o.orderNo=?1")
+    @Query("update Orders o set o.status = ?3,o.modifyTime=?4,o.thirdOrderNo=?2 where o.orderNo=?1")
     Integer updateStatusAndTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum, Date modifyTime);
     
     Orders findByTradeNo(String tradeNo);

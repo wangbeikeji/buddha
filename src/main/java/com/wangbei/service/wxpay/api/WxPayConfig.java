@@ -31,8 +31,8 @@ public class WxPayConfig {
 	/**
 	 * 支付结果通知回调url，用于商户接收支付结果
 	 */
-	// public static String NOTIFY_URL = "https://bud.waben.com.cn/buddha/payment/wxNotify";
-	public static String NOTIFY_URL = "http://33034446.nat123.net/buddha/payment/wxNotify";
+	// public static String NOTIFY_URL = "https://bud.waben.com.cn/buddha/wxpay/notify";
+	public static String NOTIFY_URL = "http://33034446.nat123.net/buddha/wxpay/notify";
 
 	// =======【商户系统后台机器IP】=====================================
 	/**

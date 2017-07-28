@@ -14,7 +14,7 @@ import com.wangbei.util.RandomUtil;
  *
  */
 public class WxPayApi {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(WxPayApi.class);
 
 	/**
@@ -115,7 +115,7 @@ public class WxPayApi {
 		result.fromXml(response, appSecret);
 		return result;
 	}
-	
+
 	public static WxPayData getNotifyData(String xml) {
 		WxPayData result = new WxPayData();
 		try {
@@ -124,6 +124,7 @@ public class WxPayApi {
 			if (data.checkSign(WxPayConfig.KEY)) {
 				String tradeNo = data.getValue("out_trade_no").toString();
 				result.addValue("tradeNo", tradeNo);
+				result.addValue("thirdTradeNo", data.getValue("transaction_id").toString());
 				result.addValue("return_code", "SUCCESS");
 				result.addValue("return_msg", "OK");
 			} else {

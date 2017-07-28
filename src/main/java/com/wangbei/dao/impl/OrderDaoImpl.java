@@ -1,7 +1,7 @@
 package com.wangbei.dao.impl;
 
 import com.wangbei.dao.OrderDao;
-import com.wangbei.dao.impl.jpa.OrderRepository;
+import com.wangbei.dao.impl.jpa.OrdersRepository;
 import com.wangbei.entity.Orders;
 import com.wangbei.util.enums.OrderStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ import java.util.List;
 public class OrderDaoImpl implements OrderDao {
 
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrdersRepository ordersRepository;
 
 	@Override
 	public Orders create(Orders order) {
-		return orderRepository.save(order);
+		return ordersRepository.save(order);
 	}
 
 	@Override
@@ -54,11 +54,11 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Integer updateOrderStatusAndModifyTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum,
 			Date modifyTime) {
-		return orderRepository.updateStatusAndTime(orderNo, thridOrderNo, orderStatusEnum, modifyTime);
+		return ordersRepository.updateStatusAndTime(orderNo, thridOrderNo, orderStatusEnum, modifyTime);
 	}
 
 	@Override
 	public Orders getOrderByTradeNo(String tradeNo) {
-		return orderRepository.findByTradeNo(tradeNo);
+		return ordersRepository.findByTradeNo(tradeNo);
 	}
 }
