@@ -82,14 +82,16 @@ public class UserService {
 
 	@Transactional
 	public Trade charge(Integer user, Integer meritValue, Integer type) {
-		String tradeNo = TradeService.generateTradeNo();
-		return tradeService.paymentTrade(tradeNo, null, user, TradeTypeEnum.getByIndex(type), PaymentTypeEnum.ApplePay,
-				meritValue, null);
+		// String tradeNo = TradeService.generateTradeNo();
+		// return tradeService.paymentTrade(tradeNo, null, user, TradeTypeEnum.getByIndex(type), PaymentTypeEnum.ApplePay,
+		//		meritValue, null);
+		return null;
 	}
 
 	@Transactional
 	public TradeWithUserMeritValue validateCharge(String tradeNo) {
-		Trade trade = tradeService.completePaymentTrade(tradeNo);
+		// Trade trade = tradeService.completePaymentTrade(tradeNo);
+		Trade trade = null;
 		Account account = accountDao.findByUser(trade.getUserId());
 		TradeWithUserMeritValue result = new TradeWithUserMeritValue(trade);
 		result.setUserMeritValue(account.getMeritValue());
