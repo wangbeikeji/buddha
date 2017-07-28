@@ -45,7 +45,7 @@ public class AliPayService {
     private TradeService tradeService;
 
     @Transactional
-    public String pay(Integer user, TradeTypeEnum tradeTypeEnum, Double amount) {
+    public String  pay(Integer user, TradeTypeEnum tradeTypeEnum, Double amount) {
         //创建订单和交易 且订单状态为未支付
         String tradeNo = TradeService.generateTradeNo();
         orderService.generateOrder(user, PaymentTypeEnum.AliPay, amount, tradeNo, tradeNo);
@@ -68,7 +68,7 @@ public class AliPayService {
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
             String result = URLDecoder.decode(response.getBody(), "UTF-8");
             logger.info("订单支付请求完成:{}", result);
-            return result;
+            return response.getBody();
         } catch (AlipayApiException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -93,8 +93,8 @@ public class AliPayService {
             //交易成功后，需要判断当前商户订单是否已经处理 并处理当前订单状态
             if (status.equals("TRADE_SUCCESS")) {
                 // orderService.updateOrderStatus(outTradeNo, tradeNo, OrderStatusEnum.SUCCESS, new Date());
-                orderService.completeOrders(tradeNo);
-                tradeService.completePaymentTrade(tradeNo);
+                orderService.completeOrders(outTradeNo);
+                tradeService.completePaymentTrade(outTradeNo);
             }
             return "success";
         }

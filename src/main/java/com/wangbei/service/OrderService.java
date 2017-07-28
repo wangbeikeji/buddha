@@ -46,7 +46,7 @@ public class OrderService {
     
     @Transactional
     public Orders completeOrders(String tradeNo) {
-    	Orders orders = orderDao.getOrderByTradeNo(tradeNo);
+            Orders orders = orderDao.getOrderByTradeNo(tradeNo);
     	orders.setStatus(OrderStatusEnum.SUCCESS);
     	orderDao.update(orders);
     	return orders;
