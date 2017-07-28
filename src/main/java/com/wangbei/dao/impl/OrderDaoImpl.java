@@ -1,7 +1,7 @@
 package com.wangbei.dao.impl;
 
 import com.wangbei.dao.OrderDao;
-import com.wangbei.dao.impl.jpa.OrderRepository;
+import com.wangbei.dao.impl.jpa.OrdersRepository;
 import com.wangbei.entity.Orders;
 import com.wangbei.util.enums.OrderStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,13 @@ import java.util.List;
 @Repository
 public class OrderDaoImpl implements OrderDao {
 
-    @Autowired
-    private OrderRepository orderRepository;
+	@Autowired
+	private OrdersRepository ordersRepository;
 
-    @Override
-    public Orders create(Orders order) {
-        return orderRepository.save(order);
-    }
+	@Override
+	public Orders create(Orders order) {
+		return ordersRepository.save(order);
+	}
 
     @Override
     public void deleteById(Integer id) {
@@ -51,20 +51,19 @@ public class OrderDaoImpl implements OrderDao {
         return null;
     }
 
-    @Override
-    public Integer updateOrderStatusAndModifyTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum,
-                                                  Date modifyTime) {
-        return orderRepository.updateStatusAndTime(orderNo, thridOrderNo, orderStatusEnum, modifyTime);
-    }
+	@Override
+	public Integer updateOrderStatusAndModifyTime(String orderNo, String thridOrderNo, OrderStatusEnum orderStatusEnum,
+			Date modifyTime) {
+		return ordersRepository.updateStatusAndTime(orderNo, thridOrderNo, orderStatusEnum, modifyTime);
+	}
 
-
-    @Override
+	@Override
+	public Orders getOrderByTradeNo(String tradeNo) {
+		return ordersRepository.findByTradeNo(tradeNo);
+	}
+	
+	@Override
     public Orders fetchOrderByOrderNo(String orderNo) {
-        return orderRepository.findByOrderNo(orderNo);
-    }
-
-    @Override
-    public Orders getOrderByTradeNo(String tradeNo) {
-        return orderRepository.findByTradeNo(tradeNo);
+        return ordersRepository.findByOrderNo(orderNo);
     }
 }

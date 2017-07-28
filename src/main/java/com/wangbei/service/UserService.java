@@ -28,7 +28,9 @@ public class UserService {
 	private AccountDao accountDao;
 	@Autowired
 	private TradeService tradeService;
-
+	@Autowired
+	private OrderService orderService;
+	
 	public User getUser(Integer id) {
 		return userDao.retrieveUserById(id);
 	}
@@ -82,16 +84,15 @@ public class UserService {
 
 	@Transactional
 	public Trade charge(Integer user, Integer meritValue, Integer type) {
-		// String tradeNo = TradeService.generateTradeNo();
-		// return tradeService.paymentTrade(tradeNo, null, user, TradeTypeEnum.getByIndex(type), PaymentTypeEnum.ApplePay,
-		//		meritValue, null);
-		return null;
+		String tradeNo = TradeService.generateTradeNo();
+		orderService.generateOrder(user, PaymentTypeEnum.ApplePay, (meritValue / 10d), tradeNo, tradeNo);
+		return tradeService.paymentTrade(tradeNo, user, TradeTypeEnum.getByIndex(type), meritValue);
 	}
 
 	@Transactional
 	public TradeWithUserMeritValue validateCharge(String tradeNo) {
-		// Trade trade = tradeService.completePaymentTrade(tradeNo);
-		Trade trade = null;
+		orderService.completeOrders(tradeNo, null);
+		Trade trade = tradeService.completePaymentTrade(tradeNo);
 		Account account = accountDao.findByUser(trade.getUserId());
 		TradeWithUserMeritValue result = new TradeWithUserMeritValue(trade);
 		result.setUserMeritValue(account.getMeritValue());

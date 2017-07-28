@@ -45,8 +45,8 @@ public class Orders implements Serializable {
 	/**
 	 * 第三方交易订单号
 	 */
-	@Column(name = "thrid_order_no")
-	private String thiridOrderNo;
+	@Column(name = "third_order_no")
+	private String thirdOrderNo;
 	/**
 	 * 订单状态
 	 */
@@ -99,12 +99,12 @@ public class Orders implements Serializable {
 		this.orderNo = orderNo;
 	}
 
-	public String getThiridOrderNo() {
-		return thiridOrderNo;
+	public String getThirdOrderNo() {
+		return thirdOrderNo;
 	}
 
-	public void setThiridOrderNo(String thiridOrderNo) {
-		this.thiridOrderNo = thiridOrderNo;
+	public void setThirdOrderNo(String thirdOrderNo) {
+		this.thirdOrderNo = thirdOrderNo;
 	}
 
 	public OrderStatusEnum getStatus() {

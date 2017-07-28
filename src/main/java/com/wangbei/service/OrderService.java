@@ -1,17 +1,18 @@
 package com.wangbei.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.wangbei.dao.OrderDao;
 import com.wangbei.entity.Orders;
 import com.wangbei.util.RandomUtil;
 import com.wangbei.util.enums.OrderStatusEnum;
 import com.wangbei.util.enums.PaymentTypeEnum;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author Created by yuyidi on 2017/7/28.
@@ -45,11 +46,21 @@ public class OrderService {
     }
     
     @Transactional
-    public Orders completeOrders(String tradeNo) {
-            Orders orders = orderDao.getOrderByTradeNo(tradeNo);
+
+    public Orders completeOrders(String tradeNo, String thiridOrderNo) {
+    	Orders orders = orderDao.getOrderByTradeNo(tradeNo);
     	orders.setStatus(OrderStatusEnum.SUCCESS);
+    	if(thiridOrderNo != null) {
+    		orders.setThirdOrderNo(thiridOrderNo);
+    	}
+    	orders.setModifyTime(new Date());
     	orderDao.update(orders);
     	return orders;
+    }
+    
+    @Transactional
+    public Orders completeOrders(String tradeNo) {
+    	return completeOrders(tradeNo, null);
     }
     
     /**
