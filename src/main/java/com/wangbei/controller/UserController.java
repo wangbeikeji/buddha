@@ -3,6 +3,7 @@ package com.wangbei.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.wangbei.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,19 +90,24 @@ public class UserController {
 
 	@PostMapping("/register")
 	@ApiOperation(value = "用户注册")
-	public Response<UserWithToken> addition(User user, Integer validateCode) {
+	public Response<UserWithToken> addition(String phone,String password, Integer validateCode) {
 		Response<UserWithToken> response = null;
-		if (user.getPhone() != null) {
-			ValidateCode validate = SafeCollectionUtil.getValidateCode(user.getPhone());
+		if (phone != null) {
+			ValidateCode validate = SafeCollectionUtil.getValidateCode(phone);
 			if (validate != null && validate.getCode().equals(validateCode)) {
+				User user = new User();
+				user.setPhone(phone);
+				user.setPassword(password);
 				User userInfo = userService.addUser(user);
 				UserWithToken result = new UserWithToken(userInfo);
 				result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
 				result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
 				response = new Response<>(result);
+				//验证码验证成功 删除保存的验证码信息
+				SafeCollectionUtil.removeValidateCode(phone);
 				return response;
 			}
-			return new Response<>("3000", "用户验证码发送失败");
+			throw new ServiceException(ServiceException.VALIDATECODE_CHECK_EXCEPTION);
 		}
 		return new Response<>("4001", "手机号不能为空");
 	}
@@ -137,7 +143,7 @@ public class UserController {
 				response = new Response<>(result);
 				return response;
 			}
-			return new Response<>("3000", "用户验证码发送失败");
+			throw new ServiceException(ServiceException.VALIDATECODE_CHECK_EXCEPTION);
 		}
 		return new Response<>("4001", "手机号不能为空");
 	}

@@ -46,7 +46,6 @@ public class OrderService {
     }
     
     @Transactional
-
     public Orders completeOrders(String tradeNo, String thiridOrderNo) {
     	Orders orders = orderDao.getOrderByTradeNo(tradeNo);
     	orders.setStatus(OrderStatusEnum.SUCCESS);

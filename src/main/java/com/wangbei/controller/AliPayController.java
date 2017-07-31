@@ -1,15 +1,11 @@
 package com.wangbei.controller;
 
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.wangbei.entity.Orders;
 import com.wangbei.pojo.Response;
-import com.wangbei.pojo.pay.AlipayPaymentInfo;
-import com.wangbei.pojo.pay.TradePayResponse;
 import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.service.AliPayService;
-import com.wangbei.util.enums.AlipayResultStatus;
 import com.wangbei.util.enums.OrderStatusEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
 import io.swagger.annotations.ApiOperation;
@@ -92,19 +88,19 @@ public class AliPayController {
         //判断交易状态
 //        if (AlipayResultStatus.getByIndex(paymentInfo.getResultStatus()).equals(AlipayResultStatus
 //                .SUCCESS)) {
-            //若客户端交易成功 获取商户订单并验证订单状态
+        //若客户端交易成功 获取商户订单并验证订单状态
 //            TradePayResponse alipayTradeAppPayResponse = paymentInfo.getResult().getAlipayTradeAppPayResponse();
 //            String orderNo = alipayTradeAppPayResponse.getOutTradeNo();
 //            String aliOrderNo = alipayTradeAppPayResponse.getTradeNo();
-            Orders order = paymentService.fetchOrderByOrderNo(orderNo);
-            if (order != null) {
-                if (order.getStatus().equals(OrderStatusEnum.SUCCESS)) {
-                    //当前订单支付成功
-                    result = "success";
-                }
-            }else{
-                paymentService.orderQuery(orderNo);
+        Orders order = paymentService.fetchOrderByOrderNo(orderNo);
+        if (order != null) {
+            if (order.getStatus().equals(OrderStatusEnum.SUCCESS)) {
+                //当前订单支付成功
+                result = "success";
             }
+        } else {
+            result = paymentService.orderQuery(orderNo);
+        }
         return new Response<>(result);
     }
 

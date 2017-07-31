@@ -10,8 +10,9 @@ public class ServiceException extends RuntimeException {
 
 	//系统相关
 	public static final String UNKNOW_EXCEPTION = "1001";
-	public static final String TOKEN_VALIDATE_EXCEPTION = "1003";
-
+	public static final String TOKEN_VALIDATE_EXCEPTION = "1002";
+	public static final String VALIDATECODE_REPEAD_EXCEPTION = "1003";
+	public static final String VALIDATECODE_CHECK_EXCEPTION="1004";
 	//交易
 	public static final String FREE_LIFE_EXCEPTION="2001";
 	public static final String TRADENO_NOTEXIST_EXCEPTION = "2002";

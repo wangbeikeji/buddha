@@ -10,6 +10,8 @@ public class ExceptionMap {
 	static {
 		exceptionMap.put(ServiceException.UNKNOW_EXCEPTION, "服务器未知异常");
 		exceptionMap.put(ServiceException.TOKEN_VALIDATE_EXCEPTION, "token验证失败");
+		exceptionMap.put(ServiceException.VALIDATECODE_REPEAD_EXCEPTION, "请勿重复发送验证码");
+		exceptionMap.put(ServiceException.VALIDATECODE_CHECK_EXCEPTION, "验证码校检失败");
 
 		exceptionMap.put(ServiceException.FREE_LIFE_EXCEPTION, "生灵跑了，放生失败");
 		exceptionMap.put(ServiceException.TRADENO_NOTEXIST_EXCEPTION, "交易流水号不存在");
