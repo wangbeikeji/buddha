@@ -29,7 +29,7 @@ public class ServiceException extends RuntimeException {
 	public static final String USER_ADDHEREBY_DUPLICATE_EXCEPTION = "4003";
 	public static final String USER_ALREADY_CHECKIN_EXCEPTION = "4004";
 	public static final String USER_ACCOUNT_NOT_FOUND_EXCEPTION="4005";
-
+	public static final String PHONEAUTHCODE_SENDFAILED_EXCEPTION="4006";
 
 	private String type;
 	private String message;

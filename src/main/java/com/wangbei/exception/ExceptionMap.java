@@ -26,5 +26,7 @@ public class ExceptionMap {
 		exceptionMap.put(ServiceException.USER_ADDHEREBY_DUPLICATE_EXCEPTION, "不能重复调用初始请佛接口");
 		exceptionMap.put(ServiceException.USER_ALREADY_CHECKIN_EXCEPTION, "今天已签到，不能重复签到");
 		exceptionMap.put(ServiceException.USER_ACCOUNT_NOT_FOUND_EXCEPTION, "用户账户异常");
+		exceptionMap.put(ServiceException.PHONEAUTHCODE_SENDFAILED_EXCEPTION, "短信验证码发送失败");
+		
 	}
 }

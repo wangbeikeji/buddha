@@ -39,15 +39,15 @@ public class WxPayController {
 
 	@Autowired
 	private WxPayService wxPayService;
-	
+
 	@PostMapping("/unifiedOrder")
 	@ApiOperation(value = "微信支付统一下单接口（type：0充值 7放生 8功德）")
 	public Response<Map<String, Object>> wxUnifiedOrder(int type, double totalFee) {
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
-		logger.info(String.format("user(%s) unified order(type:%s, totalFee:%s)",
-				authUserDetails.getUserId(), type, totalFee));
-		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(), TradeTypeEnum.getByIndex(type), totalFee);
-		logger.info(String.format("unified order result:%s", JacksonUtil.encode(result)));
+		logger.info("user({}) unified order(type:{}, totalFee:{})", authUserDetails.getUserId(), type, totalFee);
+		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(),
+				TradeTypeEnum.getByIndex(type), totalFee);
+		logger.info("unified order result:{}", JacksonUtil.encode(result));
 		return new Response<>(result);
 	}
 
@@ -68,5 +68,5 @@ public class WxPayController {
 			throw new RuntimeException("读取微信支付回调请求内容失败!", e);
 		}
 	}
-	
+
 }

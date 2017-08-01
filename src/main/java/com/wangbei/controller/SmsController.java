@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wangbei.pojo.Response;
-import com.wangbei.pojo.SendAuthCodeResult;
 import com.wangbei.service.SmsService;
 
 import io.swagger.annotations.Api;
@@ -28,7 +27,7 @@ public class SmsController {
 
 	@PostMapping(value = "/sendAuthCode")
 	@ApiOperation(value = "发送短信验证码")
-	public Response<SendAuthCodeResult> sendAuthCode(String phone) {
+	public Response<String> sendAuthCode(String phone) {
 		return new Response<>(smsService.sendAuthCode(phone));
 	}
 
