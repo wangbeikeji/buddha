@@ -66,7 +66,7 @@ public class UserDivinationService {
 	}
 
 	@Transactional
-	public UserShakeDivinationInfo shakeDivination(Integer userId) {
+	public UserShakeDivinationInfo shakeDivination() {
 		UserShakeDivinationInfo result = null;
 		// TODO 后面需将所有签进行缓存，不应每次都去查询数据库
 		List<Divination> list = divinationDao.listDivination();
@@ -78,14 +78,12 @@ public class UserDivinationService {
 			userDivination.setDivinationId(divination.getId());
 			userDivination.setMeritValue(divination.getMeritValue());
 			userDivination.setShakeTime(new Date());
-			userDivination.setUserId(userId);
 			userDivinationDao.createUserDivination(userDivination);
 			// step 3 : 返回用户摇签信息
 			result = new UserShakeDivinationInfo();
 			result.setType(divination.getType());
 			result.setPoem(divination.getPoem());
 			result.setId(userDivination.getId());
-			result.setUserId(userId);
 			result.setMeritValue(divination.getMeritValue());
 			return result;
 		}
@@ -146,6 +144,7 @@ public class UserDivinationService {
 		Trade trade = tradeService.trade(userId, TradeTypeEnum.DIVINATION, userDivination.getMeritValue());
 		if (trade != null) {
 			// 设置解签时间
+			userDivination.setUserId(userId);
 			userDivination.setExplainTime(new Date());
 			userDivinationDao.updateUserDivination(userDivination);
 			return divinationDao.retrieveDivinationById(userDivination.getDivinationId());

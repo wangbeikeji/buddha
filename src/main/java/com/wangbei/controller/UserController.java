@@ -269,9 +269,9 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "用户摇签")
-	@PostMapping("/{id}/shakeDivination")
-	public Response<UserShakeDivinationInfo> shakeDivination(@PathVariable Integer id) {
-		return new Response<>(userDivinationService.shakeDivination(id));
+	@PostMapping("/shakeDivination")
+	public Response<UserShakeDivinationInfo> shakeDivination() {
+		return new Response<>(userDivinationService.shakeDivination());
 	}
 
 	@ApiOperation(value = "用户解签")

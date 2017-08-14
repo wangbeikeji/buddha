@@ -74,6 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/appVersion/getCurrent").permitAll();
 		http.authorizeRequests().antMatchers("/appVersion/isOnline").permitAll();
 		http.authorizeRequests().antMatchers("/payment/wxNotify").permitAll();
+		http.authorizeRequests().antMatchers("/user/shakeDivination").permitAll();
 		// 后台管理相关接口和页面
 		http.authorizeRequests().antMatchers("/admin/**").permitAll();
 		http.authorizeRequests().antMatchers("/share/**").permitAll();
