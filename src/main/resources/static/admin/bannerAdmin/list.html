@@ -48,7 +48,7 @@ $(function() {
 				for(var i = 0; i < response.result.length; i++) {
 					var data = response.result[i];
 					var trHtml = "<tr>";
-					trHtml += "<td>" + data.id + "</td>";
+					trHtml += "<td>" + (i+1) + "</td>";
 					trHtml += "<td>" + data.title + "</td>";
 					trHtml += "<td>" + data.type + "</td>";
 					trHtml += "<td>" + (data.sortNum?data.sortNum:"") + "</td>";
