@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import com.wangbei.entity.Menu;
 import com.wangbei.service.MenuService;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author Created by yuyidi on 2017/6/28.
  * @desc
  */
 @RestController
 @RequestMapping("/menu")
+@Api(description = "菜单接口列表")
 public class MenuController {
     @Autowired
     public MenuService menuService;

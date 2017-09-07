@@ -10,14 +10,16 @@ import org.springframework.data.domain.Pageable;
  * @author Created by yuyidi on 2017/7/14.
  * @desc
  */
-public interface CurdJpaRepository<T,ID extends Serializable> {
-    T save(T t);
+public interface CurdJpaRepository<T, ID extends Serializable> {
 
-    void delete(ID id);
+	T save(T t);
 
-    Page<T> findAll(Pageable pageable);
+	void delete(ID id);
 
-    List<T> findAll();
+	Page<T> findAll(Pageable pageable);
 
-    T findById(ID id);
+	List<T> findAll();
+
+	T findById(ID id);
+
 }

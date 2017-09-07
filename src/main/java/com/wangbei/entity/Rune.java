@@ -13,19 +13,37 @@ import java.util.Date;
 @Table(name = "rune")
 public class Rune implements Serializable {
 
+	private static final long serialVersionUID = -7994807073300712620L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	/**
+	 * 符文名称
+	 */
 	@Column(name = "symbol")
 	private String symbol;
+	/**
+	 * 功效
+	 */
 	@Column(name = "effect")
 	private String effect;
+	/**
+	 * 适用
+	 */
 	@Column(name = "apply")
 	private String apply;
+	/**
+	 * 符图片链接
+	 */
 	@Column(name = "link")
 	private String link;
+	/**
+	 * 消耗功德数
+	 */
 	@Column(name = "merit_value")
 	private Integer meritValue;
+	
 	@Transient
 	private Date createTime;
 	@Transient

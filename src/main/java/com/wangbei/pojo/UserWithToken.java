@@ -25,6 +25,7 @@ public class UserWithToken extends User {
 			this.setName(u.getName());
 			this.setPhone(u.getPhone());
 			this.setAddress(u.getAddress());
+			this.setHeadPortraitLink(u.getHeadPortraitLink() == null ? "" : u.getHeadPortraitLink());
 		}
 	}
 

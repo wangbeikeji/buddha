@@ -1,9 +1,7 @@
 package com.wangbei.util;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class Md5Util {
 
@@ -35,7 +33,7 @@ public class Md5Util {
 				result = "0" + result;
 			}
 		}
-		return result;
+		return result.toUpperCase();
 	}
 
 	public static void main(String[] args) throws Exception {

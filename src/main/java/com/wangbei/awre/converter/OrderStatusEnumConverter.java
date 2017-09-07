@@ -1,9 +1,8 @@
 package com.wangbei.awre.converter;
 
-import com.wangbei.util.enums.OrderStatusEnum;
-import com.wangbei.util.enums.TradeStatusEnum;
-
 import javax.persistence.AttributeConverter;
+
+import com.wangbei.util.enums.OrderStatusEnum;
 
 /**
  * 交易状态转换器

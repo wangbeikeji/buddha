@@ -1,18 +1,9 @@
 package com.wangbei.awre;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.QueryLookupStrategy;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.persistence.EntityManagerFactory;
-import java.sql.SQLException;
-import java.util.Properties;
 
 /**
 * @author yuyidi 2017-07-03 16:42:03

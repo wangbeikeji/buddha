@@ -66,4 +66,9 @@ public class OrderDaoImpl implements OrderDao {
     public Orders fetchOrderByOrderNo(String orderNo) {
         return ordersRepository.findByOrderNo(orderNo);
     }
+
+	@Override
+	public Double staAmountByDateStage(Date startDate, Date endDate) {
+		return ordersRepository.staAmountByDateStage(startDate, endDate, OrderStatusEnum.SUCCESS);
+	}
 }

@@ -8,6 +8,7 @@ import com.wangbei.dao.FreeLifeDao;
 import com.wangbei.dao.TradeDao;
 import com.wangbei.entity.FreeLife;
 import com.wangbei.entity.Trade;
+import com.wangbei.exception.ExceptionEnum;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.util.enums.CreatureEnum;
 import com.wangbei.util.enums.TradeStatusEnum;
@@ -38,9 +39,9 @@ public class FreeLifeService {
 				return freeLifeDao.create(request);
 			} else {
 				if (trade == null) {
-					throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
+					throw new ServiceException(ExceptionEnum.TRADENO_NOTEXIST_EXCEPTION);
 				} else {
-					throw new ServiceException(ServiceException.TRADE_NOTCOMPLETED_EXCEPTION);
+					throw new ServiceException(ExceptionEnum.TRADE_NOTCOMPLETED_EXCEPTION);
 				}
 			}
 		}

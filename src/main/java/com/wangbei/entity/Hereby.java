@@ -17,58 +17,68 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "hereby")
-public class Hereby implements Serializable{
+public class Hereby implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "user_id")
-    private Integer userId;
-    @Column(name = "joss_id")
-    private Integer jossId;
-    @Column(name = "create_time")
-    private Date createTime = new Date();
+	private static final long serialVersionUID = 783974344140703786L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(name = "user_id")
+	private Integer userId;
+	@Column(name = "joss_id")
+	private Integer jossId;
+	@Column(name = "create_time")
+	private Date createTime = new Date();
+	@Column(name = "sort_num")
+	private Integer sortNum;
 
-    public Hereby() {
-    }
+	public Hereby() {
+	}
 
-    public Hereby(Integer userId, Integer jossId) {
-        this.userId = userId;
-        this.jossId = jossId;
-    }
+	public Hereby(Integer userId, Integer jossId) {
+		this.userId = userId;
+		this.jossId = jossId;
+	}
 
+	public Integer getId() {
+		return id;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getUserId() {
+		return userId;
+	}
 
-    public Integer getUserId() {
-        return userId;
-    }
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+	public Integer getJossId() {
+		return jossId;
+	}
 
-    public Integer getJossId() {
-        return jossId;
-    }
+	public void setJossId(Integer jossId) {
+		this.jossId = jossId;
+	}
 
-    public void setJossId(Integer jossId) {
-        this.jossId = jossId;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Integer getSortNum() {
+		return sortNum;
+	}
+
+	public void setSortNum(Integer sortNum) {
+		this.sortNum = sortNum;
+	}
 
 }

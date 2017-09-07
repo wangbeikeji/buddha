@@ -20,7 +20,7 @@ public class RandomUtil {
 	 */
 	public static String generateRandomCode(int length) {
 		double code = Math.random();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < length; i++) {
 			if (code > 0.1 && code < 1) {
 				break;
 			} else {

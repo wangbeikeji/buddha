@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.wangbei.dao.SmsDao;
+import com.wangbei.dao.impl.http.alisms.SendSmsClient;
+import com.wangbei.dao.impl.http.alisms.model.SendSmsResponse;
 import com.wangbei.pojo.SendAuthCodeResult;
-import com.wangbei.sdk.ali.SendSmsClient;
-import com.wangbei.sdk.ali.model.SendSmsResponse;
 import com.wangbei.util.RandomUtil;
 import com.wangbei.util.enums.SmsTypeEnum;
 

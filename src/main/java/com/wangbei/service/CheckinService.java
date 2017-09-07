@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wangbei.dao.CheckinDao;
 import com.wangbei.entity.Checkin;
-import com.wangbei.entity.Trade;
+import com.wangbei.exception.ExceptionEnum;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.util.enums.TradeTypeEnum;
 
@@ -75,7 +75,7 @@ public class CheckinService {
 
 		List<Checkin> list = checkinDao.getUserCheckin(userId, today, tomorrow);
 		if (list != null && list.size() > 0) {
-			throw new ServiceException(ServiceException.USER_ALREADY_CHECKIN_EXCEPTION);
+			throw new ServiceException(ExceptionEnum.USER_ALREADY_CHECKIN_EXCEPTION);
 		} else {
 			// 增加功德数
 			tradeService.trade(userId, TradeTypeEnum.CHECKIN, checkinMeritValue);

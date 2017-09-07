@@ -1,17 +1,15 @@
 package com.wangbei.controller;
 
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.wangbei.entity.Orders;
 import com.wangbei.pojo.Response;
-import com.wangbei.pojo.pay.AlipayPaymentInfo;
-import com.wangbei.pojo.pay.TradePayResponse;
 import com.wangbei.security.AuthUserDetails;
 import com.wangbei.security.SecurityAuthService;
 import com.wangbei.service.AliPayService;
-import com.wangbei.util.enums.AlipayResultStatus;
 import com.wangbei.util.enums.OrderStatusEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
+
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +28,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/alipay")
+@Api(description = "阿里支付接口列表")
 public class AliPayController {
 
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -45,12 +44,20 @@ public class AliPayController {
      * @method payment
      * @description
      */
-    @ApiOperation(value = "支付")
+    @ApiOperation(value = "支付宝APP支付（type：0充值 7放生 8功德）")
     @PostMapping("/payment")
-    public Response<String> payment(@RequestParam TradeTypeEnum type, Double amount) {
+    public Response<String> payment(int type, Double amount) {
         AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
         Integer user = authUserDetails.getUserId();
-        return new Response<>(paymentService.pay(user, type, amount));
+        return new Response<>(paymentService.pay(user, TradeTypeEnum.getByIndex(type), amount));
+    }
+    
+    @ApiOperation(value = "支付宝H5支付（type：0充值 7放生 8功德）")
+    @PostMapping("/h5Payment")
+    public Response<String> h5Payment(int type, Double amount) {
+        AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+        Integer user = authUserDetails.getUserId();
+        return new Response<>(paymentService.h5Pay(user, TradeTypeEnum.getByIndex(type), amount));
     }
 
     /**
@@ -60,7 +67,8 @@ public class AliPayController {
      * @method callback
      * @description 支付宝服务器异步通知支付结果
      */
-    @PostMapping("/callback")
+    @SuppressWarnings("rawtypes")
+	@PostMapping("/callback")
     public String callback(HttpServletRequest request) throws AlipayApiException {
         Map<String, String> params = new HashMap<>();
         Map requestParams = request.getParameterMap();
@@ -87,24 +95,23 @@ public class AliPayController {
      * @description 客户端同步支付结果返回，服务器端验签并解析支付结果，并返回最终支付结果给客户端
      */
     @PostMapping("/sync")
-    public Response<String> sync(@RequestBody AlipayPaymentInfo paymentInfo) throws AlipayApiException {
+    public Response<String> sync(String orderNo) throws AlipayApiException {
         String result = "fail";
         //判断交易状态
-        if (AlipayResultStatus.getByIndex(paymentInfo.getResultStatus()).equals(AlipayResultStatus
-                .SUCCESS)) {
-            //若客户端交易成功 获取商户订单并验证订单状态
-            TradePayResponse alipayTradeAppPayResponse = paymentInfo.getResult().getAlipayTradeAppPayResponse();
-            String orderNo = alipayTradeAppPayResponse.getOutTradeNo();
+//        if (AlipayResultStatus.getByIndex(paymentInfo.getResultStatus()).equals(AlipayResultStatus
+//                .SUCCESS)) {
+        //若客户端交易成功 获取商户订单并验证订单状态
+//            TradePayResponse alipayTradeAppPayResponse = paymentInfo.getResult().getAlipayTradeAppPayResponse();
+//            String orderNo = alipayTradeAppPayResponse.getOutTradeNo();
 //            String aliOrderNo = alipayTradeAppPayResponse.getTradeNo();
-            Orders order = paymentService.fetchOrderByOrderNo(orderNo);
-            if (order != null) {
-                if (order.getStatus().equals(OrderStatusEnum.SUCCESS)) {
-                    //当前订单支付成功
-                    result = "success";
-                }
-            }else{
-                paymentService.orderQuery(orderNo);
+        Orders order = paymentService.fetchOrderByOrderNo(orderNo);
+        if (order != null) {
+            if (order.getStatus().equals(OrderStatusEnum.SUCCESS)) {
+                //当前订单支付成功
+                result = "success";
             }
+        } else {
+            result = paymentService.orderQuery(orderNo);
         }
         return new Response<>(result);
     }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wangbei.dao.BegDao;
 import com.wangbei.entity.Beg;
 import com.wangbei.entity.Trade;
+import com.wangbei.exception.ExceptionEnum;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.util.enums.TradeTypeEnum;
 
@@ -40,7 +41,7 @@ public class BegService {
             request.expire();
             return begDao.create(request);
         }
-        throw new ServiceException(ServiceException.MERIT_POOL);
+        throw new ServiceException(ExceptionEnum.MERIT_POOL);
     }
 
     @Transactional
@@ -58,4 +59,9 @@ public class BegService {
     public List<Beg> getByUserAndExpireTimeGreaterThan(Integer user, Date date) {
         return begDao.begByUserAndExpireTimeGreaterThan(user, date);
     }
+    
+    public List<Beg> getByUserIdAndJossIdAndExpireTimeGreaterThan(Integer userId, Integer jossId, Date date) {
+        return begDao.begByUserIdAndJossIdAndExpireTimeGreaterThan(userId, jossId, date);
+    }
+    
 }

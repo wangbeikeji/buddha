@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -67,6 +68,11 @@ public class Knowledge implements Serializable {
 	 */
 	@Column(name = "sort_num")
 	private Integer sortNum;
+	/**
+	 * 是否收藏
+	 */
+	@Transient
+	private boolean isFavourite;
 
 	public Integer getId() {
 		return id;
@@ -130,6 +136,14 @@ public class Knowledge implements Serializable {
 
 	public void setSortNum(Integer sortNum) {
 		this.sortNum = sortNum;
+	}
+
+	public boolean isFavourite() {
+		return isFavourite;
+	}
+
+	public void setFavourite(boolean isFavourite) {
+		this.isFavourite = isFavourite;
 	}
 
 }

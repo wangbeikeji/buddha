@@ -1,8 +1,5 @@
 package com.wangbei.dao.impl.http;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 import org.springframework.stereotype.Component;
 
 import com.wangbei.dao.SmsDao;

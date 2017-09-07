@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wangbei.entity.Banner;
+import com.wangbei.pojo.DataResponse;
 import com.wangbei.pojo.Response;
 import com.wangbei.service.BannerService;
 import com.wangbei.util.enums.BannerTypeEnum;
@@ -62,6 +63,16 @@ public class BannerController {
 		bannerService.deleteBanner(id);
 		return new Response<Integer>(id);
 	}
+	
+	@PostMapping("/deletes")
+	@ApiOperation(value = "批量删除banner图（多个id以逗号分割）")
+	public Response<Boolean> deletes(String ids) {
+		String[] idsArr = ids.split(",");
+		for(String id : idsArr) {
+			bannerService.deleteBanner(Integer.parseInt(id));
+		}
+		return new Response<Boolean>(true);
+	}
 
 	@GetMapping("/page")
 	@ApiOperation(value = "获取banner图分页数据")
@@ -85,6 +96,14 @@ public class BannerController {
 	@ApiOperation(value = "根据类型获取banner图列表（1:资讯,2:故事,3:入门）")
 	public Response<List<Banner>> listByType(int type) {
 		return new Response<>(bannerService.listByType(BannerTypeEnum.getByIndex(type)));
+	}
+	
+	/*******************************************以下方法为后台管理专用**************************************************/
+	
+	@GetMapping("/adminList")
+	@ApiOperation(value = "获取banner图列表")
+	public DataResponse<List<Banner>> adminList() {
+		return new DataResponse<>(bannerService.list());
 	}
 
 }

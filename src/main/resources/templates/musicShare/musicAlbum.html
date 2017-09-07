@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<meta content="telephone=no,email=no" name="format-detection" />
+		<meta name="applicable-device" content="mobile" />
+		<title th:text="|佛音专辑-${category.name}|"></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+		<link rel="stylesheet" href="../../musicShare/css/fx.css" />
+		<style>
+			.f-thide2, .f-thide3, .f-thide4{
+				display: block !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="j-app" class="u-height">
+			<div class="m-playlist u-paddbm" data-reactroot="" data-reactid="1" data-react-checksum="1664594272">
+				<section class="u-plhead pylst_header" data-reactid="2">
+					<div class="plhead_bg" th:style="|background-image:url(${category.coverLink2});|" data-reactid="3"></div>
+					<div class="plhead_wrap" data-reactid="4">
+						<div class="plhead_fl lsthd_fl" data-reactid="5"><img class="u-img" th:src="${category.coverLink2}" data-reactid="6" /><span class="lsthd_icon" data-reactid="7"><!-- react-text: 8 -->精品<!-- /react-text --><!-- react-text: 9 -->歌单<!-- /react-text --></span></div>
+						<div class="plhead_fr" data-reactid="11">
+							<h2 class="f-thide2 f-brk lsthd_title" data-reactid="12" th:text="${category.name}"></h2>
+						</div>
+					</div>
+				</section>
+				<section class="pylst_intro" data-reactid="16">
+					<div class="u-intro" data-reactid="22">
+						<div class="f-brk f-thide3" data-reactid="23"><span data-reactid="24">
+							<i data-reactid="25" th:text="${category.txtDescription}"></i><br data-reactid="26" /></span>
+						</div>
+					</div>
+				</section>
+				<div class="pylst_list" data-reactid="41">
+					<h3 class="u-smtitle" data-reactid="42">歌曲列表</h3>
+					<ol class="u-songs" data-reactid="43" th:each="music,musicStat : ${musicList}">
+						<a th:href="|../music/${music.id}|">
+							<li class="u-song" data-reactid="44">
+								<div class="sgi_fl" data-reactid="45" th:text="${musicStat.index + 1}"></div>
+								<div class="sgi_fr f-bd f-bd-btm" data-reactid="46">
+									<div class="sgich_fl" data-reactid="47">
+										<div class="f-thide sgich_tl" data-reactid="48" th:text="${music.name}">
+										</div>
+										<div class="f-thide sgich_info" data-reactid="50" th:text="${music.author}">
+										</div>
+									</div>
+									<div class="sgich_fr" data-reactid="53"><span class="u-hmsprt sgich_ply" data-reactid="54"></span></div>
+								</div>
+							</li>
+						</a>
+					</ol>
+				</div>
+				</div>
+			</div>
+	</body>
+
+</html>

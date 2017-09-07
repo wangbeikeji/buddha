@@ -13,5 +13,10 @@ import java.util.List;
 public interface MeritDetailDao extends BaseDao<MeritDetail,Integer> {
 
     List<MeritDetail> meritDetailsByUserAndExpireTimeGreaterThan(Integer user,Date time);
+    
     MeritDetail meritDetailByUserAndType(Integer user, OfferingTypeEnum type);
+    
+	List<MeritDetail> meritDetailsByUserIdAndJossIdAndExpireTimeGreaterThan(Integer userId, Integer jossId, Date date);
+	
+	List<MeritDetail> meritDetailsByUserIdAndJossId(Integer userId, Integer oldJossId);
 }

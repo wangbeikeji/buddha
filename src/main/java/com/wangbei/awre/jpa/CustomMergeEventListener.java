@@ -1,5 +1,7 @@
 package com.wangbei.awre.jpa;
 
+import java.util.Map;
+
 import org.hibernate.bytecode.instrumentation.spi.LazyPropertyInitializer;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jpa.event.internal.core.JpaMergeEventListener;
@@ -10,8 +12,6 @@ import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * @author Created by yuyidi on 2017/7/4.

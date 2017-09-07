@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.wangbei.entity.Hereby;
-import com.wangbei.entity.MeritDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.wangbei.dao.JossDao;
+import com.wangbei.entity.Hereby;
 import com.wangbei.entity.Joss;
 
 /**

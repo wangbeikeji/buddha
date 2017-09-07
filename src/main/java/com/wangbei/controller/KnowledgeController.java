@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wangbei.entity.Knowledge;
+import com.wangbei.pojo.DataResponse;
 import com.wangbei.pojo.Response;
 import com.wangbei.service.KnowledgeService;
 import com.wangbei.util.enums.KnowledgeTypeEnum;
@@ -62,9 +63,19 @@ public class KnowledgeController {
 		knowledgeService.deleteKnowledge(id);
 		return new Response<Integer>(id);
 	}
+	
+	@PostMapping("/deletes")
+	@ApiOperation(value = "批量删除佛学知识（多个id以逗号分割）")
+	public Response<Boolean> deletes(String ids) {
+		String[] idsArr = ids.split(",");
+		for(String id : idsArr) {
+			knowledgeService.deleteKnowledge(Integer.parseInt(id));
+		}
+		return new Response<Boolean>(true);
+	}
 
 	@GetMapping("/pageByType")
-	@ApiOperation(value = "根据类型获取佛学知识分页数据（1:资讯,2:故事,3:入门）")
+	@ApiOperation(value = "根据类型获取佛学知识分页数据（1:资讯,2:故事,3:入门,4:养生）")
 	public Response<Page<Knowledge>> knowledgesByType(int type, int page, int limit) {
 		return new Response<>(
 				(Page<Knowledge>) knowledgeService.knowledgesByType(KnowledgeTypeEnum.getByIndex(type), page, limit));
@@ -78,7 +89,7 @@ public class KnowledgeController {
 	}
 	
 	@GetMapping("/listByType")
-	@ApiOperation(value = "根据类型获取佛学知识列表（1:资讯,2:故事,3:入门）")
+	@ApiOperation(value = "根据类型获取佛学知识列表（1:资讯,2:故事,3:入门,4:养生）")
 	public Response<List<Knowledge>> listByType(int type) {
 		return new Response<>(knowledgeService.listByType(KnowledgeTypeEnum.getByIndex(type)));
 	}
@@ -87,6 +98,14 @@ public class KnowledgeController {
 	@ApiOperation(value = "获取佛学知识列表")
 	public Response<List<Knowledge>> list() {
 		return new Response<>(knowledgeService.list());
+	}
+	
+	/*******************************************以下方法为后台管理专用**************************************************/
+	
+	@GetMapping("/adminListByType")
+	@ApiOperation(value = "根据类型获取佛学知识列表（后台管理使用）", notes="1:资讯,2:故事,3:入门,4:养生")
+	public DataResponse<List<Knowledge>> adminListByType(int type) {
+		return new DataResponse<>(knowledgeService.listByType(KnowledgeTypeEnum.getByIndex(type)));
 	}
 	
 }

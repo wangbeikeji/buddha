@@ -6,81 +6,83 @@ import java.util.Date;
 
 /**
  * @author Created by yuyidi on 2017/6/27.
- * @desc
+ * @desc 菜单
  */
 @Entity
 @Table(name = "menu")
 public class Menu implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "name", nullable = true)
-    private String name;
-    @Column(name = "level", nullable = true)
-    private String level;
-    @Column(name = "url")
-    private String url;
-    @Column(name = "icon")
-    private String icon;
-    @Column(name = "parent_id")
-    private Long parentId;
-    @Column(name = "create_time")
-    private Date createTime;
+	private static final long serialVersionUID = 2236900426229317395L;
 
-    public Integer getId() {
-        return id;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(name = "name", nullable = true)
+	private String name;
+	@Column(name = "level", nullable = true)
+	private String level;
+	@Column(name = "url")
+	private String url;
+	@Column(name = "icon")
+	private String icon;
+	@Column(name = "parent_id")
+	private Long parentId;
+	@Column(name = "create_time")
+	private Date createTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getLevel() {
-        return level;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
+	public String getLevel() {
+		return level;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public void setLevel(String level) {
+		this.level = level;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public String getIcon() {
-        return icon;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
+	public String getIcon() {
+		return icon;
+	}
 
-    public Long getParentId() {
-        return parentId;
-    }
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
+	public Long getParentId() {
+		return parentId;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 }

@@ -1,9 +1,8 @@
 package com.wangbei.awre.converter;
 
-import com.wangbei.util.enums.DivinationTypeEnum;
-import com.wangbei.util.enums.OfferingTypeEnum;
-
 import javax.persistence.AttributeConverter;
+
+import com.wangbei.util.enums.OfferingTypeEnum;
 
 /**
 * @author yuyidi 2017-07-06 17:24:07

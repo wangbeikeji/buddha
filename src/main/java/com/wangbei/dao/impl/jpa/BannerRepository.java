@@ -16,20 +16,10 @@ import com.wangbei.util.enums.BannerTypeEnum;
  * @author luomengan
  *
  */
-public interface BannerRepository extends Repository<Banner, Integer> {
-
-	public Banner save(Banner banner);
-
-	void delete(Integer id);
-
-	Page<Banner> findAll(Pageable pageable);
+public interface BannerRepository extends CurdJpaRepository<Banner, Integer>, Repository<Banner, Integer> {
 
 	Page<Banner> findByType(BannerTypeEnum type, Pageable pageable);
 
-	List<Banner> findAll();
-
 	List<Banner> findByType(BannerTypeEnum type, Sort sort);
-
-	Banner findById(Integer id);
 
 }

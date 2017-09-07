@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.wangbei.entity.Sutra;
+import com.wangbei.util.enums.SutraTypeEnum;
 
 /**
  * 经书 Dao
@@ -24,6 +25,16 @@ public interface SutraDao {
 
 	public Page<Sutra> pageSutra(int page, int limit);
 	
+	public Page<Sutra> pageSutraByIsEnableOrderById(boolean isEnable, int page, int limit);
+	
 	public List<Sutra> listSutra();
+	
+	public List<Sutra> listSutraByIsEnableOrderById(boolean isEnable);
+
+	public List<Sutra> listSutraOrderById();
+
+	public Page<Sutra> pageSutraByTypeAndIsEnableOrderById(boolean isEnable, SutraTypeEnum type, int page, int limit);
+
+	public List<Sutra> listSutraByTypeOrderById(SutraTypeEnum type);
 
 }

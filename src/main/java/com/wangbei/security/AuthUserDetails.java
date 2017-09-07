@@ -10,11 +10,14 @@ public class AuthUserDetails implements UserDetails {
 	private static final long serialVersionUID = -8766788348000173980L;
 
 	private String username;
+	private String name;
 	private String password;
 	private Integer userId;
+	private boolean isAdmin = false;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public AuthUserDetails(Integer userId, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+	public AuthUserDetails(Integer userId, String username, String password,
+			Collection<? extends GrantedAuthority> authorities) {
 		this.userId = userId;
 		this.username = username;
 		this.password = password;
@@ -62,6 +65,22 @@ public class AuthUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 }

@@ -18,7 +18,7 @@ import io.swagger.annotations.Api;
  */
 @RestController
 @RequestMapping("/httpError")
-@Api(description = "用户相关接口列表")
+@Api(description = "Http错误响应接口列表")
 public class HttpErrorController {
 
 	@RequestMapping("/403")

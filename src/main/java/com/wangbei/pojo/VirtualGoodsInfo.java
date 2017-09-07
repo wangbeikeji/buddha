@@ -7,6 +7,7 @@ import java.io.Serializable;
 * @class com.wangbei.pojo.VirtualGoodsInfo
 * @description 虚拟的支付商品信息
 */
+@SuppressWarnings("serial")
 public class VirtualGoodsInfo implements Serializable{
     //订单标题
     private String subject;

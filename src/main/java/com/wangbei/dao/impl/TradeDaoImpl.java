@@ -3,8 +3,15 @@ package com.wangbei.dao.impl;
 import com.wangbei.dao.TradeDao;
 import com.wangbei.dao.impl.jpa.TradeRepository;
 import com.wangbei.entity.Trade;
+import com.wangbei.util.enums.TradeStatusEnum;
+import com.wangbei.util.enums.TradeTypeEnum;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,5 +59,12 @@ public class TradeDaoImpl implements TradeDao {
 	@Override
 	public Trade retrieveByTradeNo(String tradeNo) {
 		return tradeRepository.findByTradeNo(tradeNo);
+	}
+
+	@Override
+	public Page<Trade> pageTradesByTypeAndStatus(TradeTypeEnum type, TradeStatusEnum status, int page,
+			int limit) {
+		Pageable pageable = new PageRequest(page, limit, new Sort(new Sort.Order(Direction.DESC, "createTime")));
+		return tradeRepository.findByTypeAndStatusAndMeritValueGreaterThan(type, status, 0, pageable);
 	}
 }

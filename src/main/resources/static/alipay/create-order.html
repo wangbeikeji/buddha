@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>创建订单</title>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#createOrderBtn").on("click", function(event){
+		event.preventDefault();
+		var data = $("#createOrderForm").serialize();
+		var newTab=window.open('about:blank', '_blank');
+		$.ajax({
+			type: "post",
+			url: "/buddha/alipay/h5Payment",
+			data: data,
+			dataType: "json",
+			headers: {
+				Authorization: "eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6IiIsInVzZXJJZCI6Mywic3ViIjoiMTM5Mjg5NTIyNTQiLCJleHAiOjQ0NzAwMDA2OTY1fQ._r485hISBsKmopDQ8JysYg3O9j85ae_ulpLDt1BnKqUq3XvpNjUWsS_YoL9KTH9Vnhy2_EPJeCj83ADBKyV4bg"
+			},
+			success: function(response){
+				var textHtml = response.result;
+				console.log(textHtml);
+				newTab.document.write(textHtml);
+				newTab.focus();
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+<div>
+	<form id="createOrderForm">
+		<select name="type">
+			<option value="0">充值</option>
+			<option value="7">放生</option>
+			<option value="8">捐功德</option>
+		</select>
+		<br />
+		<input type="text" name="amount" />
+		<br />
+		<button id="createOrderBtn">创建订单</button>
+	</form>
+</div>
+</body>
+</html>

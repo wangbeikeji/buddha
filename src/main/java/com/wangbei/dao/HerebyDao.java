@@ -1,5 +1,7 @@
 package com.wangbei.dao;
 
+import java.util.List;
+
 import com.wangbei.entity.Hereby;
 
 /**
@@ -9,4 +11,11 @@ import com.wangbei.entity.Hereby;
 public interface HerebyDao extends BaseDao<Hereby, Integer> {
 
     Hereby retrieveByUser(Integer user);
+    
+	Hereby retrieveByUserIdAndJossId(Integer userId, Integer newJossId);
+
+	void deleteByUserIdAndJossId(Integer userId, Integer jossId);
+	
+	List<Hereby> listByUserId(Integer userId);
+	
 }

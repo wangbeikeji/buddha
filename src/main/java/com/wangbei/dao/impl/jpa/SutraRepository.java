@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 
 import com.wangbei.entity.Sutra;
+import com.wangbei.util.enums.SutraTypeEnum;
 
 /**
  * 经书 Repository
@@ -14,16 +16,16 @@ import com.wangbei.entity.Sutra;
  * @author luomengan
  *
  */
-public interface SutraRepository extends Repository<Sutra, Integer> {
+public interface SutraRepository extends CurdJpaRepository<Sutra, Integer>, Repository<Sutra, Integer> {
 
-	public Sutra save(Sutra sutra);
+	List<Sutra> findAll(Sort sort);
 
-	void delete(Integer id);
+	List<Sutra> findByIsEnable(boolean isEnable, Sort sort);
 
-	Page<Sutra> findAll(Pageable pageable);
-	
-	List<Sutra> findAll();
+	Page<Sutra> findByIsEnable(boolean isEnable, Pageable pageable);
 
-	Sutra findById(Integer id);
-	
+	Page<Sutra> findByTypeAndIsEnable(SutraTypeEnum type, boolean isEnable, Pageable pageable);
+
+	List<Sutra> findByType(SutraTypeEnum type, Sort sort);
+
 }

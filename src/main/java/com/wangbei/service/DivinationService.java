@@ -1,8 +1,7 @@
 package com.wangbei.service;
 
-import java.util.*;
+import java.util.List;
 
-import com.wangbei.entity.Beg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

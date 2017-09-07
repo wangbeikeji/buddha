@@ -3,6 +3,10 @@ package com.wangbei.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.wangbei.exception.ExceptionEnum;
+import com.wangbei.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wangbei.entity.Beg;
 import com.wangbei.entity.Checkin;
@@ -87,23 +92,37 @@ public class UserController {
 	@Autowired
 	private TradeService tradeService;
 
+	public static ThreadLocal<MultipartFile> upfileLocal = new ThreadLocal<>();
+
+	@PostMapping("/generateAnonymousUser")
+	@ApiOperation(value = "生成匿名用户")
+	public Response<UserWithToken> generateAnonymousUser() {
+		User user = userService.generateAnonymousUser();
+		UserWithToken result = new UserWithToken(user);
+		if (result.getId() != null && result.getId() > 0) {
+			result.setMeritValue(userService.getUserMeritValue(result.getId()));
+			result.setPassword(user.getPassword());
+		}
+		return new Response<>(result);
+	}
+
 	@PostMapping("/register")
 	@ApiOperation(value = "用户注册")
-	public Response<UserWithToken> addition(User user, Integer validateCode) {
+	public Response<UserWithToken> addition(@RequestParam(required = true) String phone,
+			@RequestParam(required = true) String password, @RequestParam(required = true) Integer validateCode) {
 		Response<UserWithToken> response = null;
-		if (user.getPhone() != null) {
-			ValidateCode validate = SafeCollectionUtil.getValidateCode(user.getPhone());
-			if (validate != null && validate.getCode().equals(validateCode)) {
-				User userInfo = userService.addUser(user);
-				UserWithToken result = new UserWithToken(userInfo);
-				result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
-				result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
-				response = new Response<>(result);
-				return response;
-			}
-			return new Response<>("3000", "用户验证码发送失败");
+		ValidateCode validate = SafeCollectionUtil.getValidateCode(phone);
+		if (validate != null && validate.getCode().equals(validateCode)) {
+			User user = userService.register(phone, password);
+			UserWithToken result = new UserWithToken(user);
+			result.setMeritValue(userService.getUserMeritValue(user.getId()));
+			result.setToken(TokenAuthenticationService.generateToken(user.getId(), user.getPhone(), ""));
+			response = new Response<>(result);
+			// 验证码验证成功 删除保存的验证码信息
+			SafeCollectionUtil.removeValidateCode(phone);
+			return response;
 		}
-		return new Response<>("4001", "手机号不能为空");
+		throw new ServiceException(ExceptionEnum.VALIDATECODE_CHECK_EXCEPTION);
 	}
 
 	@PutMapping("/{id}")
@@ -125,24 +144,22 @@ public class UserController {
 
 	@PutMapping("/resetPassword")
 	@ApiOperation(value = "重置密码")
-	public Response<UserWithToken> resetPassword(String phone, Integer validateCode, String password) {
+	public Response<UserWithToken> resetPassword(@RequestParam(required = true) String phone,
+			@RequestParam(required = true) Integer validateCode, @RequestParam(required = true) String password) {
 		Response<UserWithToken> response = null;
-		if (phone != null) {
-			ValidateCode validate = SafeCollectionUtil.getValidateCode(phone);
-			if (validate != null && validate.getCode().equals(validateCode)) {
-				User userInfo = userService.resetPassword(phone, password);
-				UserWithToken result = new UserWithToken(userInfo);
-				result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
-				result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
-				response = new Response<>(result);
-				return response;
-			}
-			return new Response<>("3000", "用户验证码发送失败");
+		ValidateCode validate = SafeCollectionUtil.getValidateCode(phone);
+		if (validate != null && validate.getCode().equals(validateCode)) {
+			User userInfo = userService.resetPassword(phone, password);
+			UserWithToken result = new UserWithToken(userInfo);
+			result.setMeritValue(userService.getUserMeritValue(userInfo.getId()));
+			result.setToken(TokenAuthenticationService.generateToken(userInfo.getId(), userInfo.getPhone(), ""));
+			response = new Response<>(result);
+			return response;
 		}
-		return new Response<>("4001", "手机号不能为空");
+		throw new ServiceException(ExceptionEnum.VALIDATECODE_CHECK_EXCEPTION);
 	}
 
-	@ApiOperation(value = "请佛")
+	@ApiOperation(value = "请佛1.0")
 	@PostMapping("/{id}/hereby/")
 	public Response<Hereby> additionHereby(@PathVariable Integer id, Integer joss) {
 		Response<Hereby> response = new Response<>();
@@ -263,9 +280,9 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "用户摇签")
-	@PostMapping("/{id}/shakeDivination")
-	public Response<UserShakeDivinationInfo> shakeDivination(@PathVariable Integer id) {
-		return new Response<>(userDivinationService.shakeDivination(id));
+	@PostMapping("/shakeDivination")
+	public Response<UserShakeDivinationInfo> shakeDivination() {
+		return new Response<>(userDivinationService.shakeDivination());
 	}
 
 	@ApiOperation(value = "用户解签")
@@ -301,14 +318,14 @@ public class UserController {
 		response.setMessage("当前用户信息不匹配");
 		return response;
 	}
-	
+
 	@ApiOperation(value = "验证充值是否完成")
 	@PostMapping("/validateCharge/")
 	public Response<TradeWithUserMeritValue> validateCharge(String tradeNo) {
 		Response<TradeWithUserMeritValue> response = new Response<>();
 		TradeWithUserMeritValue result = userService.validateCharge(tradeNo);
 		response.setResult(result);
-		if(result.getType() == TradeTypeEnum.FREELIFE) {
+		if (result.getType() == TradeTypeEnum.FREELIFE) {
 			response.setMessage(MessageResponse.randomFreeLive());
 		} else if (result.getType() == TradeTypeEnum.MERIT) {
 			response.setMessage(MessageResponse.randomMerit());
@@ -328,7 +345,8 @@ public class UserController {
 	@ApiOperation(value = "放生（1千年龟，2百灵鸟，3锦鲤，4兔子，5狐狸）")
 	@ApiImplicitParam(name = "creature", allowableValues = "1,2,3,4,5", paramType = "query", dataType = "int")
 	@PostMapping("/{id}/freelife")
-	public Response<FreeLife> freeLife(@PathVariable Integer id, @RequestParam CreatureEnum creature, @RequestParam(required = false) String tradeNo) {
+	public Response<FreeLife> freeLife(@PathVariable Integer id, @RequestParam CreatureEnum creature,
+			@RequestParam(required = false) String tradeNo) {
 		Response<FreeLife> response = new Response<>();
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
 		if (authUserDetails.getUserId() == id) {
@@ -344,14 +362,14 @@ public class UserController {
 		response.setMessage("当前用户信息不匹配");
 		return response;
 	}
-	
+
 	@ApiOperation(value = "获取放生和捐功德成功后的提示信息")
 	@GetMapping("/getWarmMessage")
 	public Response<String> getWarmMessage(String tradeNo) {
 		String message = "";
 		Trade trade = tradeService.getTrade(tradeNo);
-		if(trade != null && trade.getStatus() == TradeStatusEnum.COMPLETED) {
-			if(trade.getType() == TradeTypeEnum.FREELIFE) {
+		if (trade != null && trade.getStatus() == TradeStatusEnum.COMPLETED) {
+			if (trade.getType() == TradeTypeEnum.FREELIFE) {
 				message = MessageResponse.randomFreeLive();
 			} else if (trade.getType() == TradeTypeEnum.MERIT) {
 				message = MessageResponse.randomMerit();
@@ -359,5 +377,13 @@ public class UserController {
 		}
 		return new Response<>(message);
 	}
-	
+
+	@ApiOperation(value = "上传用户头像")
+	@PostMapping("/uploadHeadPortrait")
+	public Response<String> uploadHeadPortrait(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+		FileUploadController.upfileLocal.set(file);
+		return new Response<>(userService.uploadHeadPortrait(authUserDetails.getUserId(), request));
+	}
+
 }

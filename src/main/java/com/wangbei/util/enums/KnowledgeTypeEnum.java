@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public enum KnowledgeTypeEnum implements CommonalityEnum {
 
-    INFORMATION(1, "资讯"), STORY(2, "故事"), BEGINNER(3, "入门");
+    INFORMATION(1, "资讯"), STORY(2, "故事"), BEGINNER(3, "入门"), HEALTH(4, "养生");
 
     private Integer index;
     private String type;

@@ -1,9 +1,5 @@
 package com.wangbei.dao.impl.jpa;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 
 import com.wangbei.entity.UserDivination;
@@ -14,16 +10,7 @@ import com.wangbei.entity.UserDivination;
  * @author luomengan
  *
  */
-public interface UserDivinationRepository extends Repository<UserDivination, Integer> {
+public interface UserDivinationRepository
+		extends CurdJpaRepository<UserDivination, Integer>, Repository<UserDivination, Integer> {
 
-	public UserDivination save(UserDivination userDivination);
-
-	void delete(Integer id);
-
-	Page<UserDivination> findAll(Pageable pageable);
-	
-	List<UserDivination> findAll();
-
-	UserDivination findById(Integer id);
-	
 }

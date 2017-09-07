@@ -3,8 +3,6 @@ package com.wangbei.dao.impl.jpa;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
@@ -16,19 +14,9 @@ import com.wangbei.entity.Checkin;
  * @author luomengan
  *
  */
-public interface CheckinRepository extends Repository<Checkin, Integer> {
+public interface CheckinRepository extends CurdJpaRepository<Checkin, Integer>, Repository<Checkin, Integer> {
 
-	Checkin save(Checkin checkin);
-
-	void delete(Integer id);
-
-	Page<Checkin> findAll(Pageable pageable);
-	
-	List<Checkin> findAll();
-
-	Checkin findById(Integer id);
-	
 	@Query("select c from Checkin as c where c.userId=?1 and c.checkinTime>=?2 and c.checkinTime<?3")
-    List<Checkin> getUserCheckin(Integer userId, Date today, Date tomorrow);
-	
+	List<Checkin> getUserCheckin(Integer userId, Date today, Date tomorrow);
+
 }

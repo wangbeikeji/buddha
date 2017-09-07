@@ -1,10 +1,9 @@
 package com.wangbei.util.enums;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.wangbei.pojo.VirtualGoodsInfo;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * @author yuyidi 2017-07-06 17:02:43

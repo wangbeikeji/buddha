@@ -11,6 +11,7 @@ import com.wangbei.dao.AccountDao;
 import com.wangbei.dao.TradeDao;
 import com.wangbei.entity.Account;
 import com.wangbei.entity.Trade;
+import com.wangbei.exception.ExceptionEnum;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.util.RandomUtil;
 import com.wangbei.util.enums.TradeStatusEnum;
@@ -46,7 +47,7 @@ public class TradeService {
 	public Trade trade(Integer user, TradeTypeEnum type, Integer meritValue) {
 		Account account = accountDao.findByUser(user);
 		if (account == null) {
-			throw new ServiceException(ServiceException.USER_ACCOUNT_NOT_FOUND_EXCEPTION);
+			throw new ServiceException(ExceptionEnum.USER_ACCOUNT_NOT_FOUND_EXCEPTION);
 		}
 		// 账户信息正常，则构造交易记录数据
 		Trade trade = new Trade();
@@ -67,7 +68,7 @@ public class TradeService {
 				: (account.getMeritValue() - meritValue);
 		if (finalMeritValue < 0) {
 			// 用户功德值不够，则抛出异常
-			throw new ServiceException(ServiceException.MERIT_POOL);
+			throw new ServiceException(ExceptionEnum.MERIT_POOL);
 		}
 		account.setMeritValue(finalMeritValue);
 		Account resultAccount = accountDao.update(account);
@@ -76,7 +77,7 @@ public class TradeService {
 			Trade result = tradeDao.create(trade);
 			return result;
 		}
-		throw new ServiceException(ServiceException.TRADE_ERROR_EXCEPTION);
+		throw new ServiceException(ExceptionEnum.TRADE_ERROR_EXCEPTION);
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class TradeService {
 	@Transactional
 	public Trade paymentTrade(String tradeNo, Integer userId, TradeTypeEnum type, Integer meritValue) {
 		if (!(type == TradeTypeEnum.CHARGE || type == TradeTypeEnum.FREELIFE || type == TradeTypeEnum.MERIT)) {
-			throw new ServiceException(ServiceException.CHARGETYPE_NOTMATCH_EXCEPTION);
+			throw new ServiceException(ExceptionEnum.CHARGETYPE_NOTMATCH_EXCEPTION);
 		}
 		// 保存交易记录
 		Trade trade = new Trade();
@@ -116,7 +117,7 @@ public class TradeService {
 	public Trade completePaymentTrade(String tradeNo) {
 		Trade trade = tradeDao.retrieveByTradeNo(tradeNo);
 		if (trade == null) {
-			throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
+			throw new ServiceException(ExceptionEnum.TRADENO_NOTEXIST_EXCEPTION);
 		}
 		if (!(trade.getStatus() == TradeStatusEnum.COMPLETED)) {
 			trade.setStatus(TradeStatusEnum.COMPLETED);
@@ -133,7 +134,7 @@ public class TradeService {
 		}
 		return trade;
 	}
-	
+
 	public Trade getTrade(Integer tradeId) {
 		return tradeDao.retrieveById(tradeId);
 	}

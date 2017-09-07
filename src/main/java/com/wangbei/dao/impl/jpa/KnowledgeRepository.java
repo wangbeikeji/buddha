@@ -15,20 +15,10 @@ import com.wangbei.util.enums.KnowledgeTypeEnum;
  * @author luomengan
  *
  */
-public interface KnowledgeRepository extends Repository<Knowledge, Integer> {
-
-	Knowledge save(Knowledge knowledge);
-
-	void delete(Integer id);
-
-	Page<Knowledge> findAll(Pageable pageable);
+public interface KnowledgeRepository extends CurdJpaRepository<Knowledge, Integer>, Repository<Knowledge, Integer> {
 
 	Page<Knowledge> findByType(KnowledgeTypeEnum type, Pageable pageable);
 	
-	List<Knowledge> findAll();
-	
 	List<Knowledge> findByType(KnowledgeTypeEnum type);
-
-	Knowledge findById(Integer id);
 	
 }

@@ -41,12 +41,23 @@ public class WxPayController {
 	private WxPayService wxPayService;
 
 	@PostMapping("/unifiedOrder")
-	@ApiOperation(value = "微信支付统一下单接口（type：0充值 7放生 8功德）")
-	public Response<Map<String, Object>> wxUnifiedOrder(int type, double totalFee) {
+	@ApiOperation(value = "微信APP支付统一下单接口（type：0充值 7放生 8功德）")
+	public Response<Map<String, Object>> wxAppUnifiedOrder(int type, double totalFee) {
 		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
 		logger.info("user({}) unified order(type:{}, totalFee:{})", authUserDetails.getUserId(), type, totalFee);
 		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(),
-				TradeTypeEnum.getByIndex(type), totalFee);
+				TradeTypeEnum.getByIndex(type), 1, totalFee);
+		logger.info("unified order result:{}", JacksonUtil.encode(result));
+		return new Response<>(result);
+	}
+
+	@PostMapping("/h5UnifiedOrder")
+	@ApiOperation(value = "微信H5支付统一下单接口（type：0充值 7放生 8功德）")
+	public Response<Map<String, Object>> wxH5UnifiedOrder(int type, double totalFee) {
+		AuthUserDetails authUserDetails = SecurityAuthService.getCurrentUser();
+		logger.info("user({}) unified order(type:{}, totalFee:{})", authUserDetails.getUserId(), type, totalFee);
+		Map<String, Object> result = wxPayService.unifiedOrder(authUserDetails.getUserId(),
+				TradeTypeEnum.getByIndex(type), 2, totalFee);
 		logger.info("unified order result:{}", JacksonUtil.encode(result));
 		return new Response<>(result);
 	}

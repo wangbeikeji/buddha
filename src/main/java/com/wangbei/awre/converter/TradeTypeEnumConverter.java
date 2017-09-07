@@ -1,9 +1,8 @@
 package com.wangbei.awre.converter;
 
-import com.wangbei.util.enums.GenderEnum;
-import com.wangbei.util.enums.TradeTypeEnum;
-
 import javax.persistence.AttributeConverter;
+
+import com.wangbei.util.enums.TradeTypeEnum;
 
 /**
 * @author yuyidi 2017-07-06 17:24:07

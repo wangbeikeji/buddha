@@ -3,6 +3,9 @@ package com.wangbei.dao.impl;
 import com.wangbei.dao.UserDao;
 import com.wangbei.dao.impl.jpa.UserRepository;
 import com.wangbei.entity.User;
+
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +43,10 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User retrieveUserById(Integer id) {
 		return userRepository.findById(id);
+	}
+
+	@Override
+	public Integer staCountOfUser(Date startDate, Date endDate) {
+		return userRepository.staCountOfUser(startDate, endDate);
 	}
 }

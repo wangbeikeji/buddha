@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.wangbei.exception.ExceptionEnum;
 import com.wangbei.pojo.Response;
 import com.wangbei.pojo.UserWithToken;
 import com.wangbei.security.AuthUserDetails;
@@ -37,9 +38,17 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
 			throws AuthenticationException, IOException, ServletException {
-		// 验证登陆信息
-		return getAuthenticationManager().authenticate(
-				new UsernamePasswordAuthenticationToken(req.getParameter("phone"), req.getParameter("password")));
+		String isAdmin = req.getParameter("isAdmin");
+		if ("true".equals(isAdmin)) {
+			// 后台管理登陆
+			return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(
+					"admin_" + req.getParameter("username"), req.getParameter("password")));
+		} else {
+			// APP用户登陆
+			return getAuthenticationManager()
+					.authenticate(new UsernamePasswordAuthenticationToken(req.getParameter("phone"),
+							req.getParameter("password") + "_extra_" + req.getParameter("newPhone")));
+		}
 	}
 
 	@Override
@@ -59,6 +68,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 				grantedAuthStr.toString());
 		// step 3 : 返回token到客户端
 		UserWithToken user = new UserWithToken(userService.getUserByPhone(auth.getName()));
+		user.setName(authUser.getName());
 		user.setMeritValue(userService.getUserMeritValue(user.getId()));
 		user.setToken(token);
 		Response<UserWithToken> result = new Response<UserWithToken>("200", user, "successful!");
@@ -72,7 +82,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 			AuthenticationException failed) throws IOException, ServletException {
 		response.setContentType("application/json;charset=utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
-		Response<String> result = new Response<>("601", "用户名或者密码错误!");
+		Response<String> result = new Response<>(ExceptionEnum.USERNAME_OR_PASSWORD_ERROR_EXCEPTION.getCode(),
+				ExceptionEnum.USERNAME_OR_PASSWORD_ERROR_EXCEPTION.getMessage());
 		response.getWriter().println(JacksonUtil.encode(result));
 	}
 }

@@ -13,6 +13,7 @@ import com.wangbei.dao.AccountDao;
 import com.wangbei.dao.TradeDao;
 import com.wangbei.entity.Account;
 import com.wangbei.entity.Trade;
+import com.wangbei.exception.ExceptionEnum;
 import com.wangbei.exception.ServiceException;
 import com.wangbei.pojo.TradeWithUserMeritValue;
 import com.wangbei.service.OrderService;
@@ -28,11 +29,6 @@ import com.wangbei.util.enums.TradeTypeEnum;
 @Service
 public class WxPayService {
 
-	/**
-	 * 0微信公众号支付，微信APP支付
-	 */
-	private int payMode = 1;
-
 	@Autowired
 	private TradeDao tradeDao;
 
@@ -47,7 +43,17 @@ public class WxPayService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public Map<String, Object> unifiedOrder(int userId, TradeTypeEnum tradeType, double totalFee,
+	/**
+	 * 统一下单
+	 * 
+	 * @param payMode
+	 *            <ul>
+	 *            <li>0微信公众号支付</li>
+	 *            <li>1微信APP支付</li>
+	 *            <li>2微信H5支付</li>
+	 *            </ul>
+	 */
+	public Map<String, Object> unifiedOrder(int userId, TradeTypeEnum tradeType, int payMode, double totalFee,
 			Object... otherParams) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		// step 1 : 组装请求参数
@@ -79,6 +85,8 @@ public class WxPayService {
 			}
 		} else if (payMode == 1) {
 			payDataReq.addValue("trade_type", "APP");
+		} else if (payMode == 2) {
+			payDataReq.addValue("trade_type", "MWEB");
 		} else {
 			throw new RuntimeException("不支持的微信支付方式!");
 		}
@@ -113,10 +121,8 @@ public class WxPayService {
 					payParamData.addValue("signType", "MD5");
 					String sign = payParamData.makeSign(WxPayConfig.KEY);
 					payParamData.addValue("sign", sign);
-
 					result = payParamData.getDataValues();
 				} else if (payMode == 1) {
-					// 生成sign
 					WxPayData payParamData = new WxPayData();
 					payParamData.addValue("appid", WxPayConfig.APPID);
 					payParamData.addValue("partnerid", WxPayConfig.MCHID);
@@ -126,7 +132,18 @@ public class WxPayService {
 					payParamData.addValue("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
 					String sign = payParamData.makeSign(WxPayConfig.KEY);
 					payParamData.addValue("sign", sign);
-
+					result = payParamData.getDataValues();
+				} else if (payMode == 2) {
+					WxPayData payParamData = new WxPayData();
+					payParamData.addValue("appid", WxPayConfig.APPID);
+					payParamData.addValue("partnerid", WxPayConfig.MCHID);
+					payParamData.addValue("prepayid", prepayId);
+					payParamData.addValue("package", "Sign=WXPay");
+					payParamData.addValue("mwebUrl", payDataResp.getValue("mweb_url").toString());
+					payParamData.addValue("noncestr", RandomUtil.generateNonceStr());
+					payParamData.addValue("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
+					String sign = payParamData.makeSign(WxPayConfig.KEY);
+					payParamData.addValue("sign", sign);
 					result = payParamData.getDataValues();
 				}
 				// step 5 : 保存订单信息和交易信息
@@ -166,7 +183,7 @@ public class WxPayService {
 		// 获取tradeNo
 		Trade trade = tradeDao.retrieveByTradeNo(tradeNo);
 		if (trade == null) {
-			throw new ServiceException(ServiceException.TRADENO_NOTEXIST_EXCEPTION);
+			throw new ServiceException(ExceptionEnum.TRADENO_NOTEXIST_EXCEPTION);
 		}
 		if (trade.getStatus() != TradeStatusEnum.COMPLETED) {
 			// -----------------配置类型的参数-------------------

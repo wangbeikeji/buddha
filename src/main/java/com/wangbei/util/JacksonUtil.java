@@ -4,47 +4,42 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.wangbei.awre.HttpClientConfigure.CustomSerializerProvider;
 
+@SuppressWarnings("unused")
 public class JacksonUtil {
-	private static final Logger logger = LoggerFactory
-			.getLogger(JacksonUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(JacksonUtil.class);
 	public static final ObjectMapper objectMapper = new ObjectMapper();
 	{
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		objectMapper.setDateFormat(dateFormat);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.setSerializerProvider(new CustomSerializerProvider());
 		// 是否使用parser是否允许使用java注释样式 / /**
 		objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES,
-				true);
+		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 		objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS,
-				true);
+		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
 		objectMapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 		SerializationConfig serConfig = objectMapper.getSerializationConfig();
-		DeserializationConfig deserializationConfig = objectMapper
-				.getDeserializationConfig();
+		DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
 	}
 
 	/**
 	 * 
-	 * @Title: decode
-	 * @Description: json字符串转对象
-	 * @author yuyidi0630@163.com
-	 * @param json
-	 * @param valueType
-	 * @param @return
-	 * @return T
-	 * @throws
+	 * @Title: decode @Description: json字符串转对象 @author yuyidi0630@163.com @param
+	 *         json @param valueType @param @return @return T @throws
 	 */
 	public static <T> T decode(String json, Class<T> valueType) {
 		try {
@@ -61,14 +56,9 @@ public class JacksonUtil {
 
 	/**
 	 * 
-	 * @Title: decode
-	 * @Description: json数组 转javaList
-	 * @author yuyidi0630@163.com
-	 * @param json
-	 * @param valueTypeRef
-	 * @param @return
-	 * @return T
-	 * @throws
+	 * @Title: decode @Description: json数组 转javaList @author
+	 *         yuyidi0630@163.com @param json @param
+	 *         valueTypeRef @param @return @return T @throws
 	 */
 	public static <T> T decode(String json, TypeReference<T> valueTypeRef) {
 		try {
@@ -85,12 +75,8 @@ public class JacksonUtil {
 
 	/**
 	 * 
-	 * @Title: encode
-	 * @Description: 对象转数组
-	 * @author yuyidi0630@163.com
-	 * @param object
-	 * @return String
-	 * @throws
+	 * @Title: encode @Description: 对象转数组 @author yuyidi0630@163.com @param
+	 *         object @return String @throws
 	 */
 	public static String encode(Object object) {
 		try {

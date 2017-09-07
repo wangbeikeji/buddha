@@ -62,4 +62,14 @@ public class BegDaoImpl implements BegDao{
     public List<Beg> begByUserAndExpireTimeGreaterThan(Integer user, Date time) {
         return begRepository.findAllByUserIdAndExpireTimeGreaterThan(user,time);
     }
+
+	@Override
+	public List<Beg> begByUserIdAndJossIdAndExpireTimeGreaterThan(Integer userId, Integer jossId, Date time) {
+		return begRepository.findAllByUserIdAndJossIdExpireTimeGreaterThan(userId, jossId, time);
+	}
+
+	@Override
+	public List<Beg> begByUserIdAndJossId(Integer userId, Integer jossId) {
+		return begRepository.findByUserIdAndJossId(userId, jossId);
+	}
 }

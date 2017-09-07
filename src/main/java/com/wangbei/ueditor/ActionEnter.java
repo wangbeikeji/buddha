@@ -34,6 +34,16 @@ public class ActionEnter {
 		
 	}
 	
+	public ActionEnter ( HttpServletRequest request, String rootPath, String actionType) {
+			
+		this.request = request;
+		this.rootPath = rootPath;
+		this.actionType = actionType;
+		this.contextPath = request.getContextPath();
+		this.configManager = ConfigManager.getInstance( this.rootPath, this.contextPath, request.getRequestURI() );
+		
+	}
+	
 	public String exec () {
 		
 		String callbackName = this.request.getParameter("callback");

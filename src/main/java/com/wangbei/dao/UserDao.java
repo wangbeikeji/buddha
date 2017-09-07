@@ -1,5 +1,7 @@
 package com.wangbei.dao;
 
+import java.util.Date;
+
 import com.wangbei.entity.User;
 
 /**
@@ -18,4 +20,6 @@ public interface UserDao {
 	public User fetchUserByPhone(String phone);
 
 	public User fetchUserByPhoneAndPassword(String phone, String password);
+
+	public Integer staCountOfUser(Date startDate, Date endDate);
 }

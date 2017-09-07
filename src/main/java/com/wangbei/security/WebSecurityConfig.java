@@ -42,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/httpError/**").permitAll();
 		// 登陆和注册
 		http.authorizeRequests().antMatchers("/login").permitAll();
+		http.authorizeRequests().antMatchers("/logout").permitAll();
 		http.authorizeRequests().antMatchers("/user/register").permitAll();
 		http.authorizeRequests().antMatchers("/sms/**").permitAll();
 		http.authorizeRequests().antMatchers("/user/login").permitAll();
@@ -58,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/attachment/**").permitAll();
 		http.authorizeRequests().antMatchers("/editorupload/**").permitAll();
 		// 部分开放接口
+		http.authorizeRequests().antMatchers("/user/generateAnonymousUser").permitAll();
 		http.authorizeRequests().antMatchers("/offerings/groupByType").permitAll();
 		http.authorizeRequests().antMatchers("/joss/list").permitAll();
 		http.authorizeRequests().antMatchers("/rune/list").permitAll();
@@ -74,14 +76,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/appVersion/getCurrent").permitAll();
 		http.authorizeRequests().antMatchers("/appVersion/isOnline").permitAll();
 		http.authorizeRequests().antMatchers("/payment/wxNotify").permitAll();
+		http.authorizeRequests().antMatchers("/userBuddhistNote/pagePublicByType").permitAll();
+		http.authorizeRequests().antMatchers("/buddhistMusicCategory/**").permitAll();
+		http.authorizeRequests().antMatchers("/buddhistMusic/**").permitAll();
 		// 后台管理相关接口和页面
 		http.authorizeRequests().antMatchers("/admin/**").permitAll();
+		http.authorizeRequests().antMatchers("/admin_test/**").permitAll();
 		http.authorizeRequests().antMatchers("/share/**").permitAll();
+		http.authorizeRequests().antMatchers("/musicShare/**").permitAll();
 		http.authorizeRequests().antMatchers("/system/ping").permitAll();
 		http.authorizeRequests().antMatchers("/alipay/**").permitAll();
 		http.authorizeRequests().antMatchers("/alipay/callback", "/alipay/auth").permitAll();
 		// 其余
-
 		http.authorizeRequests().antMatchers("/**").authenticated();
 
 		// 添加一个过滤器 所有访问 /login 的请求交给 JWTLoginFilter 来处理 这个类处理所有的JWT相关内容

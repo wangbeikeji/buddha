@@ -1,5 +1,7 @@
 package com.wangbei.awre;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.event.service.spi.EventListenerGroup;
 import org.hibernate.event.service.spi.EventListenerRegistry;
@@ -14,8 +16,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import com.wangbei.awre.jpa.CustomMergeEventListener;
-
-import javax.persistence.EntityManagerFactory;
 
 /**
  * @author yuyidi 2017-07-05 17:08:58
