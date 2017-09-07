@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/userBuddhistNote/pagePublicByType").permitAll();
 		http.authorizeRequests().antMatchers("/buddhistMusicCategory/**").permitAll();
 		http.authorizeRequests().antMatchers("/buddhistMusic/**").permitAll();
+		http.authorizeRequests().antMatchers("/user/shakeDivination").permitAll();
 		// 后台管理相关接口和页面
 		http.authorizeRequests().antMatchers("/admin/**").permitAll();
 		http.authorizeRequests().antMatchers("/admin_test/**").permitAll();
