@@ -43,7 +43,7 @@ public class User implements Serializable {
 	@ApiModelProperty(allowableValues = "1,2", dataType = "integer")
 	@Convert(converter = GenderEnumConverter.class)
 	@Column(name = "gender")
-	private GenderEnum gender = GenderEnum.MAN;
+	private GenderEnum gender;
 	/**
 	 * 生日
 	 */
@@ -69,7 +69,17 @@ public class User implements Serializable {
 	 */
 	@ApiModelProperty(hidden = true)
 	@Column(name = "create_time")
-	private Date creatTime = new Date();
+	private Date creatTime;
+	/**
+	 * 是否测试用户
+	 */
+	@Column(name = "is_test")
+	private Boolean isTest;
+	/**
+	 * 是否匿名用户
+	 */
+	@Column(name = "is_anonymous")
+	private Boolean isAnonymous;
 
 	public Integer getId() {
 		return id;
@@ -149,6 +159,22 @@ public class User implements Serializable {
 
 	public void setHeadPortraitLink(String headPortraitLink) {
 		this.headPortraitLink = headPortraitLink;
+	}
+
+	public Boolean getIsTest() {
+		return isTest;
+	}
+
+	public void setIsTest(Boolean isTest) {
+		this.isTest = isTest;
+	}
+
+	public Boolean getIsAnonymous() {
+		return isAnonymous;
+	}
+
+	public void setIsAnonymous(Boolean isAnonymous) {
+		this.isAnonymous = isAnonymous;
 	}
 
 }

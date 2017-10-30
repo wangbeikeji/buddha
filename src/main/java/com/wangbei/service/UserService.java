@@ -30,6 +30,7 @@ import com.wangbei.exception.ServiceException;
 import com.wangbei.pojo.TradeWithUserMeritValue;
 import com.wangbei.ueditor.ActionEnter;
 import com.wangbei.util.RandomUtil;
+import com.wangbei.util.enums.GenderEnum;
 import com.wangbei.util.enums.PaymentTypeEnum;
 import com.wangbei.util.enums.PushTypeEnum;
 import com.wangbei.util.enums.TradeTypeEnum;
@@ -73,6 +74,9 @@ public class UserService {
 			throw new ServiceException(ExceptionEnum.USER_REGISTER_EXIST_EXCEPTION);
 		}
 		User result = userDao.createUser(user);
+		if (user.getGender() == null) {
+			user.setGender(GenderEnum.MAN);
+		}
 		if (result != null) {
 			// 用户注册成功之后为当前用户初始化一个账户信息
 			accountDao.create(new Account(result.getId(), 0));
@@ -99,7 +103,7 @@ public class UserService {
 
 	@Transactional
 	public User modifyUser(User user) {
-		return userDao.createUser(user);
+		return userDao.updateUser(user);
 	}
 
 	@Transactional
@@ -136,6 +140,8 @@ public class UserService {
 		user.setCreatTime(new Date());
 		user.setPhone(RandomUtil.generateRandomCode(9) + RandomUtil.generateRandomCode(2));
 		user.setPassword(RandomUtil.generateRandomCode(6));
+		user.setGender(GenderEnum.MAN);
+		user.setIsAnonymous(true);
 		userDao.createUser(user);
 		accountDao.create(new Account(user.getId(), 0));
 
@@ -189,15 +195,17 @@ public class UserService {
 
 	public User register(String phone, String password) {
 		User check = userDao.fetchUserByPhone(phone);
-		if(check != null) {
+		if (check != null) {
 			throw new ServiceException(ExceptionEnum.USER_REGISTER_EXIST_EXCEPTION);
 		}
-		
+
 		User user = new User();
 		user.setPhone(phone);
 		user.setPassword(password);
 		user.setCreatTime(new Date());
+		user.setGender(GenderEnum.MAN);
 		userDao.createUser(user);
+		accountDao.create(new Account(user.getId(), 0));
 		return user;
 	}
 

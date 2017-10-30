@@ -13,7 +13,8 @@ import java.util.Map;
  */
 public enum FavouriteTypeEnum implements CommonalityEnum {
 
-	OTHER(1, "其他"), INFORMATION(2, "资讯"), STORY(3, "故事"), BEGINNER(4, "入门"), SUTRA(5, "经文"), BUDDHISTMUSIC(6, "佛音"), HEALTH(7, "养生"); 
+	OTHER(1, "其他"), INFORMATION(2, "资讯"), STORY(3, "故事"), BEGINNER(4, "入门"), SUTRA(5, "经文"), BUDDHISTMUSIC(6,
+			"佛音"), HEALTH(7, "养生"), TEMPLE(8, "名刹");
 
 	private Integer index;
 	private String type;

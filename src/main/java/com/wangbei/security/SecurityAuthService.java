@@ -18,4 +18,13 @@ public class SecurityAuthService {
 		}
 		return null;
 	}
+
+	public static Integer getUserId() {
+		AuthUserDetails authDetails = getCurrentUser();
+		if (authDetails != null) {
+			return authDetails.getUserId();
+		}
+		return null;
+	}
+
 }

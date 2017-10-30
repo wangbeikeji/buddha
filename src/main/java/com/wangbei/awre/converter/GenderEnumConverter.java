@@ -20,6 +20,9 @@ public class GenderEnumConverter implements AttributeConverter<GenderEnum,Intege
     */
     @Override
     public Integer convertToDatabaseColumn(GenderEnum attribute) {
+    	if(attribute == null) {
+    		return GenderEnum.MAN.getIndex();
+    	}
         return  attribute.getIndex();
     }
 

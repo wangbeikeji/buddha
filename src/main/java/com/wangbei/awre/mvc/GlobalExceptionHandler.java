@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(ServiceException.class)
 	@ResponseBody
-	public Response<? extends Object> exceptionHandler(ServiceException ex, HttpServletResponse response) {
+	public Response<? extends Object> exceptionHandler(ServiceException ex, HttpServletRequest request, HttpServletResponse response) {
 		Response<? extends Object> result = new Response<>(null);
 		result.setCode(ex.getCode());
 		result.setMessage(ex.getMessage());

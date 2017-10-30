@@ -19,7 +19,8 @@ public enum TradeTypeEnum implements CommonalityEnum {
     DIVINATION(5, "求签"),
     CHECKIN(6, "签到"),
     FREELIFE(7, "放生"),
-    MERIT(8, "功德");
+    MERIT(8, "功德"),
+	BLESSINGLAMP(9, "点灯");
 
     private static Map<TradeTypeEnum, String> virtualGoodsInfoMap = new HashMap<>();
     private static Map<Integer, TradeTypeEnum> valueMap = new HashMap<>();

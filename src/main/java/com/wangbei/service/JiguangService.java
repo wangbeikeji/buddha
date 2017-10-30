@@ -116,7 +116,7 @@ public class JiguangService {
 				.addPlatformNotification(
 						AndroidNotification.newBuilder().setTitle(title).setAlert(alert).addExtras(extras).build())
 				.build());
-
+		builder.setOptions(Options.newBuilder().setApnsProduction(true).build());
 		return builder.build();
 	}
 
@@ -136,7 +136,7 @@ public class JiguangService {
 		 * "华人佛教", extras));
 		 */
 		// ture为生产环境，false为开发环境
-		builder.setOptions(Options.newBuilder().setApnsProduction(false).build());
+		builder.setOptions(Options.newBuilder().setApnsProduction(true).build());
 		return builder.build();
 	}
 

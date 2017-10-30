@@ -3,6 +3,7 @@ package com.wangbei.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -180,7 +181,7 @@ public class SutraService {
 		}
 		return result;
 	}
-	
+
 	public List<Sutra> listByTypeOrderById(SutraTypeEnum type) {
 		List<Sutra> result = sutraDao.listSutraByTypeOrderById(type);
 		if (result != null && result.size() > 0) {
@@ -223,13 +224,93 @@ public class SutraService {
 		}
 	}
 
-	public void collectSutraData(int type, String resource) {
-		if (type == 1) {
+	public void collectSutraData(int collectType, String resource, SutraTypeEnum type) {
+		if (collectType == 1) {
 			collectLocalData(resource);
-		} else if (type == 2) {
+		} else if (collectType == 2) {
 			collectLiaotuoData();
-		} else if (type == 3) {
+		} else if (collectType == 3) {
+			try {
+				collectLocalData2(resource, type);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
+	private File[] filterFile(File parentFile, final String suffix) {
+		return parentFile.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				if (name.toLowerCase().endsWith(suffix)) {
+					return true;
+				}
+				return false;
+			}
+		});
+	}
+
+	private File filterFile(File parentFile, final String suffix, final String prefix) {
+		File[] fileArr = parentFile.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				if (name.toLowerCase().endsWith(suffix)) {
+					String originPrefix = name.substring(0, name.indexOf(suffix));
+					if (originPrefix.equals(prefix) || originPrefix.equals(prefix.replaceAll(" ", "-"))) {
+						return true;
+					}
+					return false;
+				}
+				return false;
+			}
+		});
+		if (fileArr != null && fileArr.length > 0) {
+			return fileArr[0];
+		}
+		return null;
+	}
+
+	private File renameFile(File oldFile, String pyName) throws IOException {
+		String name = oldFile.getName();
+		if (!name.equals(pyName)) {
+			File newDir = new File(oldFile.getParentFile(), pyName);
+			FileUtils.moveFile(oldFile, newDir);
+			return newDir;
+		} else {
+			return oldFile;
+		}
+	}
+
+	private void collectLocalData2(String dir, SutraTypeEnum type) throws Exception {
+		String sutraDirStr = outerResources + "document/sutra";
+		if (dir != null && !"".equals(dir.trim())) {
+			sutraDirStr = dir;
+		}
+		String httpBase = "http://10.0.0.4:8080/buddha/document/sutra/";
+		File sutraDir = new File(sutraDirStr);
+
+		File[] txtFile = filterFile(sutraDir, ".txt");
+		for (File txt : txtFile) {
+			Sutra sutra = new Sutra();
+			String name = txt.getName();
+			String pyName = PinyinUtil.getPingYin(name, true);
+			String jpgPyName = "";
+			String sutraName = name.substring(0, name.lastIndexOf("."));
+			File jpg = filterFile(sutraDir, ".jpg", sutraName);
+			if(jpg != null) {
+				jpgPyName = PinyinUtil.getPingYin(jpg.getName(), true);
+				jpg = renameFile(jpg, jpgPyName);
+			} else {
+				continue;
+			}
+			txt = renameFile(txt, pyName);
+			
+			sutra.setContentLink(httpBase + pyName);
+			sutra.setIsEnable(true);
+			sutra.setTitle(sutraName);
+			sutra.setType(type);
+			sutra.setLink(httpBase + jpgPyName);
+			sutraDao.createSutra(sutra);
 		}
 	}
 
@@ -252,13 +333,13 @@ public class SutraService {
 					if (!"txt".equals(innerEntry.getValue()) && splitFileName.indexOf(innerSplitFileName) == 0) {
 						String title = splitFileName;
 						String link = "/picture/sutra/"
-								+ PinyinUtil.getPingYin(innerEntry.getKey()).replaceAll(" ", "");
+								+ PinyinUtil.getPingYin(innerEntry.getKey(), true).replaceAll(" ", "");
 						String contentLink = "/document/sutra/"
-								+ PinyinUtil.getPingYin(entry.getKey()).replaceAll(" ", "");
+								+ PinyinUtil.getPingYin(entry.getKey(), true).replaceAll(" ", "");
 						String picFileName = outerResources + "picture/sutra/"
-								+ PinyinUtil.getPingYin(innerEntry.getKey()).replaceAll(" ", "");
+								+ PinyinUtil.getPingYin(innerEntry.getKey(), true).replaceAll(" ", "");
 						String txtFileName = outerResources + "document/sutra/"
-								+ PinyinUtil.getPingYin(entry.getKey()).replaceAll(" ", "");
+								+ PinyinUtil.getPingYin(entry.getKey(), true).replaceAll(" ", "");
 						InputStream is = null;
 						OutputStream out = null;
 						try {
@@ -296,9 +377,10 @@ public class SutraService {
 
 				if (!isMatchPic) {
 					String title = splitFileName;
-					String contentLink = "/document/sutra/" + PinyinUtil.getPingYin(entry.getKey()).replaceAll(" ", "");
+					String contentLink = "/document/sutra/"
+							+ PinyinUtil.getPingYin(entry.getKey(), true).replaceAll(" ", "");
 					String txtFileName = outerResources + "document/sutra/"
-							+ PinyinUtil.getPingYin(entry.getKey()).replaceAll(" ", "");
+							+ PinyinUtil.getPingYin(entry.getKey(), true).replaceAll(" ", "");
 					InputStream is = null;
 					OutputStream out = null;
 					try {

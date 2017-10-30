@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.wangbei.security.jwt.JWTAuthenticationFilter;
 import com.wangbei.security.jwt.JWTLoginFilter;
+import com.wangbei.service.RankingService;
 import com.wangbei.service.UserService;
 
 @Configuration
@@ -21,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private RankingService rankingService;
 
 	@Bean
 	AuthenticationProvider authenticationProvider() {
@@ -88,11 +92,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/system/ping").permitAll();
 		http.authorizeRequests().antMatchers("/alipay/**").permitAll();
 		http.authorizeRequests().antMatchers("/alipay/callback", "/alipay/auth").permitAll();
+		http.authorizeRequests().antMatchers("/wxpay/orderQuery", "/wxpay/notify").permitAll();
 		// 其余
 		http.authorizeRequests().antMatchers("/**").authenticated();
 
 		// 添加一个过滤器 所有访问 /login 的请求交给 JWTLoginFilter 来处理 这个类处理所有的JWT相关内容
-		http.addFilterBefore(new JWTLoginFilter("/login", authenticationManager(), userService),
+		http.addFilterBefore(new JWTLoginFilter("/login", authenticationManager(), userService, rankingService),
 				UsernamePasswordAuthenticationFilter.class);
 		// 添加一个过滤器验证其他请求的Token是否合法
 		http.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

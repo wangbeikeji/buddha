@@ -47,7 +47,7 @@ public class TradeService {
 	public Trade trade(Integer user, TradeTypeEnum type, Integer meritValue) {
 		Account account = accountDao.findByUser(user);
 		if (account == null) {
-			throw new ServiceException(ExceptionEnum.USER_ACCOUNT_NOT_FOUND_EXCEPTION);
+			account = accountDao.create(new Account(user, 0));
 		}
 		// 账户信息正常，则构造交易记录数据
 		Trade trade = new Trade();
@@ -119,7 +119,7 @@ public class TradeService {
 		if (trade == null) {
 			throw new ServiceException(ExceptionEnum.TRADENO_NOTEXIST_EXCEPTION);
 		}
-		if (!(trade.getStatus() == TradeStatusEnum.COMPLETED)) {
+		if (trade.getStatus() != TradeStatusEnum.COMPLETED) {
 			trade.setStatus(TradeStatusEnum.COMPLETED);
 			Account account = accountDao.findByUser(trade.getUserId());
 			if (account == null) {

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 
 import com.wangbei.dao.UserBindingDao;
@@ -48,7 +50,7 @@ public class UserBindingDaoImpl implements UserBindingDao {
 	public Page<UserBinding> pageUserBinding(int page, int limit) {
 		return userBindingRepository.findAll(new PageRequest(page, limit));
 	}
-	
+
 	@Override
 	public List<UserBinding> listUserBinding() {
 		return userBindingRepository.findAll();
@@ -56,7 +58,12 @@ public class UserBindingDaoImpl implements UserBindingDao {
 
 	@Override
 	public UserBinding retrieveUserBindingByUserIdAndType(Integer userId, BindingTypeEnum type) {
-		return userBindingRepository.findByUserIdAndType(userId, type);
+		Sort sort = new Sort(new Sort.Order(Direction.DESC, "bindingTime"));
+		List<UserBinding> list = userBindingRepository.findByUserIdAndType(userId, type, sort);
+		if (list != null && list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 	@Override

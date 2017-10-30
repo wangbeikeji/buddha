@@ -29,19 +29,19 @@ public interface UserSettingRepository extends Repository<UserSetting, Integer> 
 
 	UserSetting findByUserId(Integer userId);
 
-	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.buddhist_festival_remind=1 and t2.type=1 and t2.binding_account is not null and t1.user_id=t2.user_id;", nativeQuery = true)
+	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.buddhist_festival_remind=1 and t2.type=1 and t2.binding_account is not null and t2.binding_account != '' and t1.user_id=t2.user_id;", nativeQuery = true)
 	List<Object[]> getBuddhistFestivalRemindUser();
 
-	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.feast_day_remind=1 and t2.type=1 and t2.binding_account is not null and t1.user_id=t2.user_id;", nativeQuery = true)
+	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.feast_day_remind=1 and t2.type=1 and t2.binding_account is not null and t2.binding_account != '' and t1.user_id=t2.user_id;", nativeQuery = true)
 	List<Object[]> getFeastDayRemindUser();
 
-	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.sutra_remind=1 and t2.type=1 and t2.binding_account is not null and t1.user_id=t2.user_id;", nativeQuery = true)
+	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.sutra_remind=1 and t2.type=1 and t2.binding_account is not null and t2.binding_account != '' and t1.user_id=t2.user_id;", nativeQuery = true)
 	List<Object[]> getSutraRemindUser();
 
-	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.music_remind=1 and t2.type=1 and t2.binding_account is not null and t1.user_id=t2.user_id;", nativeQuery = true)
+	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.music_remind=1 and t2.type=1 and t2.binding_account is not null and t2.binding_account != '' and t1.user_id=t2.user_id;", nativeQuery = true)
 	List<Object[]> getMusicRemindUser();
 
-	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.information_remind=1 and t2.type=1 and t2.binding_account is not null and t1.user_id=t2.user_id;", nativeQuery = true)
+	@Query(value = "select t1.user_id, t2.binding_account from user_setting t1, user_binding t2 where t1.information_remind=1 and t2.type=1 and t2.binding_account is not null and t2.binding_account != '' and t1.user_id=t2.user_id;", nativeQuery = true)
 	List<Object[]> getInformationRemindUser();
 	
 }

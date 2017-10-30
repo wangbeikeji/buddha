@@ -17,9 +17,11 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.wangbei.exception.ExceptionEnum;
+import com.wangbei.pojo.ConsumeMeritRanking;
 import com.wangbei.pojo.Response;
 import com.wangbei.pojo.UserWithToken;
 import com.wangbei.security.AuthUserDetails;
+import com.wangbei.service.RankingService;
 import com.wangbei.service.UserService;
 import com.wangbei.util.JacksonUtil;
 
@@ -29,9 +31,13 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 	private UserService userService;
 
-	public JWTLoginFilter(String url, AuthenticationManager authManager, UserService userService) {
+	private RankingService rankingService;
+
+	public JWTLoginFilter(String url, AuthenticationManager authManager, UserService userService,
+			RankingService rankingService) {
 		super(new AntPathRequestMatcher(url, HttpMethod.POST.name()));
 		this.userService = userService;
+		this.rankingService = rankingService;
 		setAuthenticationManager(authManager);
 	}
 
@@ -68,6 +74,10 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 				grantedAuthStr.toString());
 		// step 3 : 返回token到客户端
 		UserWithToken user = new UserWithToken(userService.getUserByPhone(auth.getName()));
+		ConsumeMeritRanking ranking = rankingService.currentUserConsumeMeritRanking(user.getId());
+		if (ranking != null) {
+			user.setGrade(ranking.getGrade());
+		}
 		user.setName(authUser.getName());
 		user.setMeritValue(userService.getUserMeritValue(user.getId()));
 		user.setToken(token);

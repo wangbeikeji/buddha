@@ -12,6 +12,8 @@ public class StaChargeInfo {
 
 	private Integer gender;
 
+	private String birthday;
+
 	private Date registTime;
 
 	private String tradeNo;
@@ -24,7 +26,11 @@ public class StaChargeInfo {
 
 	private Integer meritValue;
 
+	private Integer status;
+
 	private Date chargeTime;
+
+	private Date orderTime;
 
 	public Integer getUserId() {
 		return userId;
@@ -99,6 +105,9 @@ public class StaChargeInfo {
 	}
 
 	public Date getChargeTime() {
+		if (chargeTime == null) {
+			return orderTime;
+		}
 		return chargeTime;
 	}
 
@@ -112,6 +121,30 @@ public class StaChargeInfo {
 
 	public void setPaymentType(Integer paymentType) {
 		this.paymentType = paymentType;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Date getOrderTime() {
+		return orderTime;
+	}
+
+	public void setOrderTime(Date orderTime) {
+		this.orderTime = orderTime;
 	}
 
 }

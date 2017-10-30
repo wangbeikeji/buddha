@@ -3,6 +3,8 @@ package com.wangbei.util;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,4 +93,11 @@ public class JacksonUtil {
 		}
 		return null;
 	}
+	
+	public static void main(String[] args) {
+		Map<String, String> map = new HashMap<>();
+		map.put("name", "张三");
+		
+		System.out.println(map.toString());
+ 	}
 }

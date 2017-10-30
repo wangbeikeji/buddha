@@ -1,6 +1,8 @@
 package com.wangbei.dao.impl;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,40 @@ public class DynamicQuerySqlDaoImpl implements DynamicQuerySqlDao {
 							Class<?>[] paramTypes = setMethodMap.get(new Integer(j)).getParamTypes();
 							Method m = clazz.getMethod(mName, paramTypes);
 							Object obj = queryList.get(i)[j];
+							if (obj instanceof BigInteger) {
+								BigInteger bigObj = (BigInteger) obj;
+								if (paramTypes[0] == Integer.class) {
+									m.invoke(inner, bigObj.intValue());
+									continue;
+								} else if (paramTypes[0] == Long.class) {
+									m.invoke(inner, bigObj.longValue());
+									continue;
+								} else if (paramTypes[0] == Double.class) {
+									m.invoke(inner, bigObj.doubleValue());
+									continue;
+								}
+							} else if (obj instanceof BigDecimal) {
+								BigDecimal bigObj = (BigDecimal) obj;
+								if (paramTypes[0] == Integer.class) {
+									m.invoke(inner, bigObj.intValue());
+									continue;
+								} else if (paramTypes[0] == Long.class) {
+									m.invoke(inner, bigObj.longValue());
+									continue;
+								} else if (paramTypes[0] == Double.class) {
+									m.invoke(inner, bigObj.doubleValue());
+									continue;
+								}
+							} else if (obj instanceof Double && paramTypes[0] != Double.class) {
+								Double dObj = (Double) obj;
+								if (paramTypes[0] == Integer.class) {
+									m.invoke(inner, dObj.intValue());
+									continue;
+								} else if (paramTypes[0] == Long.class) {
+									m.invoke(inner, dObj.longValue());
+									continue;
+								}
+							}
 							m.invoke(inner, obj);
 						}
 					}
@@ -58,7 +94,12 @@ public class DynamicQuerySqlDaoImpl implements DynamicQuerySqlDao {
 	public <T> T executeComputeSql(String sql) {
 		try {
 			Query query = entityManager.createNativeQuery(sql);
-			return (T) query.getSingleResult();
+			List<T> list = query.getResultList();
+			if (list.size() > 0) {
+				return list.get(0);
+			} else {
+				return null;
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException("DynamicQuerySql execute failed!", ex);
 		}

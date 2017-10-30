@@ -24,8 +24,11 @@ public class AuthUserDetails implements UserDetails {
 		this.authorities = authorities;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public int getUserId() {
+		if(userId != null) {
+			return userId.intValue();
+		}
+		return -1;
 	}
 
 	public void setUserId(Integer userId) {

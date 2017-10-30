@@ -1,76 +1,75 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+<html>
 
-    <title>华人佛教分享</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            text-decoration: none;
-            font-family: "微软雅黑";
-        }
-
-        img {
-            display: block;
-            border: 0;
-        }
-
-        body {
-            width: 10rem;
-            margin: 0 auto;
-        }
-
-        .header {
-            height: 1.5rem;
-            background: #B35434;
-            width: 10rem;
-            position: relative;
-        }
-
-        .header p {
-            text-align: center;
-            font-size: .5rem;
-            line-height: 1.5rem;
-        }
-
-        .Land {
-            width: .4rem;
-            position: absolute;
-            left: .5rem;
-            top: 0.45rem;
-        }
-
-        .qian-img {
-            position: absolute;
-            top: 1.5rem;
-            width:10rem;
-        }
-
-        .qian-title {
-            position: absolute;
-            width: 10rem;
-        }
-
-        .qian-title > img {
-            display: block;
-            margin: 0 auto;
-            width: 1rem;
-            margin-top: 1rem;
-        }
-
-        .qian-title > p {
-            width: 6.8rem;
-            margin: .75rem auto;
-            text-align: justify;
-            font-size: .375rem;
-            margin-left: 2.25rem;
-        }
-
-        .footer {
+	<head>
+		<meta charset="UTF-8" />
+		<title>华人佛教分享</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+		<style type="text/css">
+			* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    font-family: "微软雅黑";
+}
+.Land {
+    width: .4rem;
+    position: absolute;
+    left: .5rem;
+    top: 0.45rem;
+}
+body {
+    margin: 0 auto;
+    width: 10rem;
+    position: relative;
+}
+a {
+    color: #000;
+}
+.header {
+    height: 1.5rem;
+    background: #B35434;
+    width: 10rem;
+    position: relative;
+}
+.header p {
+    text-align: center;
+    font-size: .5rem;
+    color: #dec17C;
+    line-height: 1.5rem;
+}
+			.qian-img {
+				position: absolute;
+				top: 1.5rem;
+				width: 10rem;
+			}
+			
+			.qian-title {
+				position: absolute;
+				width: 10rem;
+			}
+			
+			.qian-title>img {
+				display: block;
+				margin: 0 auto;
+				width: 1rem;
+				margin-top: 1.5rem;
+			}
+			
+			.qian-title>p {
+				width: 6.8rem;
+				margin: .75rem auto;
+				text-align: justify;
+				font-size: .375rem;
+				margin-left: 2rem;
+			}
+			
+			.hide {
+				display: none;
+			}
+			
+			.footer {
             position: fixed;
             bottom: 0;
             width: 10rem;
@@ -114,49 +113,37 @@
             margin-top: .45rem;
             margin-right: .75rem;
         }
-    </style>
+		</style>
+	</head>
 
-</head>
+	<body>
+		<header class="header">
+			<p>解签</p>
+			<a href="JavaScript:history.go(-1)">
+				<img class="Land" th:src="@{/image/Path.png}" />
+			</a>
+		</header>
+		<img class="qian-img" th:src="@{/image/share/jq-qianneirong-bg.png}" width="100%" />
+		<section class="qian-title typing">
+			<img th:src="@{/image/share/jq-tishiicon.png}" />
+			<p> <span class="q-summarize hide" id="text1" style="display: inline;" th:text="|【概述】：${divination.summarize}|"></span></p>
+			<p class="hide" >【<span class="q-type hide" id="text2" style="display: inline;" th:text="${divination.type.type}"></span>】：<span class="q-reference hide" id="text3" style="display: inline;" th:text="${divination.reference}"></span></p>
+			<p class="hide">【诗曰】：<span id="text4" class="q-poem hide" style="display: inline;" th:text="${divination.poem}"></span></p>
+			<p class="hide">【解曰】：<span id="text5" class="q-solution hide" style="display: inline;" th:text="${divination.solution}"></span></p>
+			<p class="hide">【签语】<span id="text6" class="q-sketch hide" style="display: inline;" th:text="${divination.sketch}"></span></p>
+		</section>
+		<div class="footer">
+		    <img src="/image/AppIcon29x29.png" th:src="@{/image/AppIcon29x29.png}"/>
+		    <span>
+						华人佛教app
+					</span>
+		    <a href="https://itunes.apple.com/us/app/华人佛教-佛教佛经听佛音修行者必备/id1278715663?l=zh&amp;ls=1&amp;mt=8">
+		        下载
+		    </a>
+		</div>
+	</body>
+	<script type="text/javascript" th:src="@{/musicShare/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/musicShare/js/flexible.debug.js}"></script>
+	<script type="text/javascript" th:src="@{/js/share/divination.js}"></script>
 
-<body>
-
-<header class="header">
-    <p>分享</p>
-    <a href="javascript:history.back(1)">
-        <img class="Land" src="/image/Path.png" th:src="@{/image/Path.png}"/>
-    </a>
-</header>
-<img class="qian-img" src="/image/share/jq-qianneirong-bg.png" th:src="@{/image/share/jq-qianneirong-bg.png}"
-     width="100%"/>
-<section class="qian-title">
-    <img src="/image/share/jq-tishiicon.png" th:src="@{/image/share/jq-tishiicon.png}"/>
-    <p>
-        【概述】：
-        <!--/*@thymesVar id="divination.summarize" type="com.wangbei.entity.Divination"*/-->
-        <span th:text="${divination.summarize}">此卦盘古初开天地之象，诸事皆吉也。此签家宅祈福，自身求财，秋冬大利，交易婚姻成，六甲生男，行人至，田蚕六畜好，寻人见，讼事吉，失物东北，疾病愈，山坟吉。</span>
-    </p>
-    <p>
-        【<span th:text="${divination.type.type}">上上签</span>】：<span th:text="${divination.reference}">钟离成道。</span>
-    </p>
-    <p>
-        【诗曰】：<span th:text="${divination.poem}">开天辟地作良缘 吉日良时万物全，若得此签非小可，人行忠正帝王宣。</span>
-    </p>
-    <p>
-        【解曰】：<span th:text="${divination.solution}">急速兆速 年未值时 观音降笔 先报君知。</span>
-    </p>
-    <p>
-        【签语】<span th:text="${divination.sketch}">此卦盘古初开天地之象，诸事皆吉也。</span>
-    </p>
-</section>
-<div class="footer">
-    <img src="/image/AppIcon29x29.png" th:src="@{/image/AppIcon29x29.png}"/>
-    <span>
-				华人佛教app
-			</span>
-    <a href="https://itunes.apple.com/us/app/华人佛教-佛教佛经听佛音修行者必备/id1278715663?l=zh&ls=1&mt=8">
-        下载
-    </a>
-</div>
-</body>
-<script th:src="@{/js/share/divination.js}" src="/js/share/divination.js"/>
 </html>

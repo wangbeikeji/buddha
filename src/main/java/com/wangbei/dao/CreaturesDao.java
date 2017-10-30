@@ -25,5 +25,7 @@ public interface CreaturesDao {
 	public Page<Creatures> pageCreatures(int page, int limit);
 	
 	public List<Creatures> listCreatures();
+	
+	public List<Creatures> listAllCreatures();
 
 }

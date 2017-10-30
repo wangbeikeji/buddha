@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -22,7 +23,7 @@ public interface OrdersRepository extends CurdJpaRepository<Orders, Integer>, Re
 
 	Orders findByOrderNo(String orderNo);
 
-	@Query("select sum(totalAmount) from Orders where modifyTime>=?1 and modifyTime<?2 and status=?3")
-	Double staAmountByDateStage(Date startDate, Date endDate, OrderStatusEnum status);
+	@Query("select round(sum(totalAmount),2) from Orders where modifyTime>=?1 and modifyTime<?2 and status=?3")
+	BigDecimal staAmountByDateStage(Date startDate, Date endDate, OrderStatusEnum status);
 
 }

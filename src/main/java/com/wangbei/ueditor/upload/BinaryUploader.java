@@ -12,7 +12,7 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.wangbei.controller.FileUploadController;
+import com.wangbei.controller.system.FileUploadController;
 import com.wangbei.ueditor.PathFormat;
 import com.wangbei.ueditor.define.AppInfo;
 import com.wangbei.ueditor.define.BaseState;

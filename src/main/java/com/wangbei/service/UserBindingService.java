@@ -64,6 +64,9 @@ public class UserBindingService {
 	}
 
 	public UserBinding bindAccount(Integer userId, BindingTypeEnum type, String bindingAccount) {
+		if (bindingAccount == null || "".equals(bindingAccount.trim())) {
+			return null;
+		}
 		UserBinding userBinding = userBindingDao.retrieveUserBindingByUserIdAndType(userId, type);
 		if (userBinding == null) {
 			userBinding = new UserBinding();

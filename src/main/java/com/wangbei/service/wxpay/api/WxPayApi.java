@@ -15,6 +15,7 @@ import com.wangbei.util.RandomUtil;
  */
 public class WxPayApi {
 
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(WxPayApi.class);
 
 	/**
@@ -121,19 +122,22 @@ public class WxPayApi {
 		try {
 			WxPayData data = new WxPayData();
 			data.fromXml(xml);
-			if (data.checkSign(WxPayConfig.KEY)) {
+			if ("SUCCESS".equals(data.getValue("result_code").toString())) {
 				String tradeNo = data.getValue("out_trade_no").toString();
 				result.addValue("tradeNo", tradeNo);
 				result.addValue("thirdTradeNo", data.getValue("transaction_id").toString());
+				result.addValue("result_code", "SUCCESS");
 				result.addValue("return_code", "SUCCESS");
 				result.addValue("return_msg", "OK");
 			} else {
-				result.addValue("return_code", "FAIL");
-				result.addValue("return_msg", "签名失败!");
+				result.addValue("result_code", "FAIL");
+				result.addValue("return_code", "SUCCESS");
+				result.addValue("return_msg", "OK");
 			}
 		} catch (Exception e) {
 			logger.error("Weixin nofity handle return failed!", e);
 			result.addValue("return_code", "FAIL");
+			result.addValue("result_code", "FAIL");
 			result.addValue("return_msg", e.getMessage());
 		}
 		return result;

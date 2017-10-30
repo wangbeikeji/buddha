@@ -96,6 +96,7 @@ public class BuddhistMusic implements Serializable {
 	/**
 	 * 所属专辑名称
 	 */
+	@Transient
 	private String categoryName;
 	/**
 	 * 播放次数

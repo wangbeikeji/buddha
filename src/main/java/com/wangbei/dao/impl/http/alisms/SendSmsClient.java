@@ -21,10 +21,14 @@ public class SendSmsClient {
 	private static final String domain = "dysmsapi.aliyuncs.com";
 
 	// 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
+	// private static final String accessKeyId = "LTAIrqrtreYF8ghc";
+	// private static final String accessKeySecret = "bPymzDrGMswIfVNjiIW9s2ADCSqWpZ";
+	// private static final String smsSign = "网贝科技";
 	private static final String accessKeyId = "LTAIrqrtreYF8ghc";
 	private static final String accessKeySecret = "bPymzDrGMswIfVNjiIW9s2ADCSqWpZ";
 	private static final String smsSign = "网贝科技";
 	// 验证码模板，参数为:authCode
+	// private static final String templateCode = "SMS_77160048";
 	private static final String templateCode = "SMS_77160048";
 	
 	public static void main(String[] args) {

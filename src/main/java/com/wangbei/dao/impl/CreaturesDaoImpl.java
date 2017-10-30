@@ -49,11 +49,16 @@ public class CreaturesDaoImpl implements CreaturesDao {
 	public Page<Creatures> pageCreatures(int page, int limit) {
 		return creaturesRepository.findAll(new PageRequest(page, limit));
 	}
-	
+
 	@Override
 	public List<Creatures> listCreatures() {
 		Sort sort = new Sort(new Sort.Order(Direction.DESC, "sortNum"));
 		return creaturesRepository.findByIsEnable(true, sort);
+	}
+
+	@Override
+	public List<Creatures> listAllCreatures() {
+		return creaturesRepository.findAll();
 	}
 
 }

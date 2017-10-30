@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.wangbei.entity.UserBuddhistNote;
+import com.wangbei.pojo.UserBuddhistNoteInfo;
 import com.wangbei.util.enums.BuddhistNoteTypeEnum;
 
 /**
@@ -30,5 +31,11 @@ public interface UserBuddhistNoteDao {
 	public Page<UserBuddhistNote> pageUserBuddhistNoteByType(Integer userId, BuddhistNoteTypeEnum type, int page, int limit);
 
 	public Page<UserBuddhistNote> pagePublicUserBuddhistNoteByType(BuddhistNoteTypeEnum type, int page, int limit);
+
+	public Page<UserBuddhistNoteInfo> sqlPageUserBuddhistNoteByType(Integer userId, BuddhistNoteTypeEnum type, int page,
+			int limit);
+
+	public Page<UserBuddhistNoteInfo> sqlPagePublicUserBuddhistNoteByType(Integer userId, BuddhistNoteTypeEnum type, int page,
+			int limit);
 
 }

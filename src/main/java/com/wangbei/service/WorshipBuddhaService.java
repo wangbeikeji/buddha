@@ -246,6 +246,7 @@ public class WorshipBuddhaService {
 					request.setOtherGender(otherGender);
 					request.setOtherName(otherName);
 				}
+				request.setMeritValue(runeInfo.getMeritValue());
 				request.expire();
 				begDao.create(request);
 

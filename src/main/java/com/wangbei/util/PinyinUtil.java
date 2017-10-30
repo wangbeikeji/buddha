@@ -16,7 +16,7 @@ public class PinyinUtil {
 	 *            中文
 	 * @return 中文全拼
 	 */
-	public static String getPingYin(String src) {
+	public static String getPingYin(String src, boolean isFile) {
 		char[] t1 = src.toCharArray();
 		HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
 		format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
@@ -40,6 +40,20 @@ public class PinyinUtil {
 			throw new RuntimeException("拼音转英文发生异常!");
 		}
 		String finalStr = filterString(result.toString());
+		int fileDianIndex = -1;
+		if (isFile) {
+			fileDianIndex = finalStr.lastIndexOf(".");
+		}
+		// 再做一次处理，如果不是数字或者字母，直接去掉
+		StringBuilder finalStrBuilder = new StringBuilder();
+		for (int i = 0; i < finalStr.length(); i++) {
+			char c = finalStr.charAt(i);
+			if ((48 <= c && c <= 57) || (65 <= c && c <= 90) || (97 <= c && c <= 122) || c == '@'
+					|| i == fileDianIndex) {
+				finalStrBuilder.append(c);
+			}
+		}
+		finalStr = finalStrBuilder.toString();
 		if (finalStr.length() > 180) {
 			finalStr = finalStr.substring(finalStr.length() - 180, finalStr.length());
 		}
@@ -47,8 +61,8 @@ public class PinyinUtil {
 	}
 
 	public static String filterString(String source) {
-		String[] filterArr = new String[] { " ", " ", "（", "）", "《", "》", "\\(", "\\)", ",", "，", ";", "；", "“", "”",
-				"'", "\"", "·", "、"};
+		String[] filterArr = new String[] { " ", " ", " ", "（", "）", "《", "》", "\\(", "\\)", ",", "，", ";", "；", "“", "”",
+				"'", "\"", "·", "、" };
 		for (String filter : filterArr) {
 			source = source.replaceAll(filter, "");
 		}
@@ -56,7 +70,7 @@ public class PinyinUtil {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(getPingYin("sadfsf三国sdfs演sdfd义sdfdsaf"));
+		System.out.println(getPingYin("sadfsf三国sdfs演sdfd义sdfdsaf", false));
 	}
 
 }

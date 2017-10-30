@@ -17,7 +17,7 @@ public interface UserRepository extends CurdJpaRepository<User, Integer>, Reposi
 
 	public User findByPhoneAndPassword(String phone, String password);
 
-	@Query("select count(id) from User where creatTime>=?1 and creatTime<?2")
-	public Integer staCountOfUser(Date startDate, Date endDate);
+	@Query("select count(id) from User where (isTest is null or isTest=?3) and creatTime>=?1 and creatTime<?2")
+	public Integer staCountOfUser(Date startDate, Date endDate, Boolean isTest);
 
 }

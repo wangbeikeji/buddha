@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 
 import com.wangbei.entity.UserBinding;
@@ -27,7 +28,7 @@ public interface UserBindingRepository extends Repository<UserBinding, Integer> 
 
 	UserBinding findById(Integer id);
 
-	UserBinding findByUserIdAndType(Integer userId, BindingTypeEnum type);
+	List<UserBinding> findByUserIdAndType(Integer userId, BindingTypeEnum type, Sort sort);
 
 	List<UserBinding> findByType(BindingTypeEnum type);
 

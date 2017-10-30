@@ -14,11 +14,17 @@ import com.wangbei.dao.BuddhistNoteJossDao;
 import com.wangbei.dao.SensitiveWordDao;
 import com.wangbei.dao.UserBuddhistNoteDao;
 import com.wangbei.dao.UserDao;
+import com.wangbei.dao.UserLikeDao;
 import com.wangbei.entity.BuddhistNoteJoss;
 import com.wangbei.entity.SensitiveWord;
 import com.wangbei.entity.User;
 import com.wangbei.entity.UserBuddhistNote;
+import com.wangbei.entity.UserLike;
+import com.wangbei.exception.ExceptionEnum;
+import com.wangbei.exception.ServiceException;
+import com.wangbei.pojo.UserBuddhistNoteInfo;
 import com.wangbei.util.enums.BuddhistNoteTypeEnum;
+import com.wangbei.util.enums.UserLikeTypeEnum;
 
 /**
  * 用户佛录 Service
@@ -40,6 +46,9 @@ public class UserBuddhistNoteService {
 
 	@Autowired
 	private SensitiveWordDao sensitiveWordDao;
+
+	@Autowired
+	private UserLikeDao userLikeDao;
 
 	public UserBuddhistNote getUserBuddhistNoteInfo(Integer id) {
 		return userBuddhistNoteDao.retrieveUserBuddhistNoteById(id);
@@ -87,13 +96,15 @@ public class UserBuddhistNoteService {
 		return userBuddhistNoteDao.listUserBuddhistNote();
 	}
 
-	public Page<UserBuddhistNote> pageUserBuddhistNoteByType(Integer userId, BuddhistNoteTypeEnum type, int page,
+	public Page<UserBuddhistNoteInfo> pageUserBuddhistNoteByType(Integer userId, BuddhistNoteTypeEnum type, int page,
 			int limit) {
-		return userBuddhistNoteDao.pageUserBuddhistNoteByType(userId, type, page, limit);
+		return userBuddhistNoteDao.sqlPageUserBuddhistNoteByType(userId, type, page, limit);
 	}
 
-	public Page<UserBuddhistNote> pagePublicUserBuddhistNoteByType(BuddhistNoteTypeEnum type, int page, int limit) {
-		Page<UserBuddhistNote> result = userBuddhistNoteDao.pagePublicUserBuddhistNoteByType(type, page, limit);
+	public Page<UserBuddhistNoteInfo> pagePublicUserBuddhistNoteByType(Integer userId, BuddhistNoteTypeEnum type,
+			int page, int limit) {
+		Page<UserBuddhistNoteInfo> result = userBuddhistNoteDao.sqlPagePublicUserBuddhistNoteByType(userId, type, page,
+				limit);
 		if (result.getContent() != null && result.getContent().size() > 0) {
 			// 关键词过滤
 			List<SensitiveWord> wordList = sensitiveWordDao.listSensitiveWordByIsEnable(true);
@@ -130,6 +141,29 @@ public class UserBuddhistNoteService {
 				return between;
 			}
 		}
+	}
+
+	public Integer userLike(int userId, Integer resourceId) {
+		UserBuddhistNote note = userBuddhistNoteDao.retrieveUserBuddhistNoteById(resourceId);
+		if (note == null) {
+			throw new ServiceException(ExceptionEnum.UNKNOW_EXCEPTION, new Object[] { "佛录id无效!" });
+		}
+		List<UserLike> list = userLikeDao.listByUserIdAndTypeAndResourceId(userId, UserLikeTypeEnum.BuddhistNoteLike,
+				resourceId);
+		if (list != null && list.size() > 0) {
+			for (int i = list.size() - 1; i >= 1; i--) {
+				userLikeDao.deleteUserLikeById(list.get(i).getId());
+			}
+			throw new ServiceException(ExceptionEnum.ALREADY_LIKE_EXCEPTION);
+		} else {
+			UserLike userLike = new UserLike();
+			userLike.setLikeTime(new Date());
+			userLike.setResourceId(resourceId);
+			userLike.setType(UserLikeTypeEnum.BuddhistNoteLike);
+			userLike.setUserId(userId);
+			userLikeDao.createUserLike(userLike);
+		}
+		return userLikeDao.getCountByTypeAndResourceId(UserLikeTypeEnum.BuddhistNoteLike, resourceId);
 	}
 
 }

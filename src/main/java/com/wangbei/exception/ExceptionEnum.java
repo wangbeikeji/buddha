@@ -11,9 +11,10 @@ public enum ExceptionEnum {
 	// 交易
 	TRADENO_NOTEXIST_EXCEPTION("2001", "交易流水号不存在"),
 	TRADE_NOTCOMPLETED_EXCEPTION("2002", "交易尚未完成，不能执行该操作"),
-	CHARGETYPE_NOTMATCH_EXCEPTION("2003", "充值类型不匹配"),
+	USER_NOTMATCH_EXCEPTION("2003", "当前用户信息不匹配"),
 	MERIT_POOL("2004", "功德值不足"),
 	TRADE_ERROR_EXCEPTION("2005", "交易创建失败"),
+	CHARGETYPE_NOTMATCH_EXCEPTION("2006", "充值类型不匹配"),
 	
 	// 资源
 	MENU_ADDITION_EXCEPTION("3001", "菜单添加异常"),
@@ -29,13 +30,17 @@ public enum ExceptionEnum {
 	LOGIN_ACCOUNT_OCCUPY_EXCEPTION("4007", "登陆账号已被占用"),
 	USERNAME_OR_PASSWORD_ERROR_EXCEPTION("4008", "用户名或者密码错误"),
 	USER_PHONE_CANNOT_BENULL_EXCEPTION("4009", "注册手机号不能为空"),
+	USER_PHONE_INVALID_EXCEPTION("4010", "发送失败，请检查手机号码是否有效或者稍后再试"),
 	
-	// 请佛、请符、求签、供品、佛音
+	// 请佛、请符、求签、供品、佛音、点灯
 	JOSSID_INVALID_EXCEPTION("6001", "佛像ID无效"),
 	BUDDHISTMUSICCATEGORY_NOTEXIST_EXCEPTION("6002", "佛音类别不存在"),
+	BUDDHISTTOPIC_ISOVER_EXCEPTION("6003", "共修主题已结束"),
+	ALREADY_LIGHTLAMP_EXCEPTION("6004", "已经点灯且灯油尚未燃尽，不能进行点灯操作"),
+	ALREADY_LIKE_EXCEPTION("6005", "已点赞，不能重复点赞"),
 	
 	// 后台管理
-	DATE_FORMAT_ERROR_EXCEPTION("7001", "日期格式错误，格式应为yyyy-MM-dd"),
+	DATE_FORMAT_ERROR_EXCEPTION("7001", "日期格式错误"),
 	PARSE_STRING_TO_DATE_EXCEPTION("7002", "解析时间异常");
 
 	private ExceptionEnum(String code, String message) {

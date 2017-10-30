@@ -9,12 +9,75 @@ import org.joda.time.DateTime;
 
 public class DateTimeUtil {
 
-	public static SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-	public static SimpleDateFormat sdfSimpleDate = new SimpleDateFormat("yyyyMMdd");
-	public static SimpleDateFormat sdfMonthDate = new SimpleDateFormat("yyyy年MM月");
-	public static SimpleDateFormat sdfHourDate = new SimpleDateFormat("dd日HH时");
-	public static SimpleDateFormat sdfDayDate = new SimpleDateFormat("yyyy年MM月dd日");
-	public static SimpleDateFormat sdfTimestampDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public static ThreadLocal<SimpleDateFormat> sdfDate = new ThreadLocal<>();
+	public static ThreadLocal<SimpleDateFormat> sdfSimpleDate = new ThreadLocal<>();
+	public static ThreadLocal<SimpleDateFormat> sdfMonthDate = new ThreadLocal<>();
+	public static ThreadLocal<SimpleDateFormat> sdfHourDate = new ThreadLocal<>();
+	public static ThreadLocal<SimpleDateFormat> sdfDayDate = new ThreadLocal<>();
+	public static ThreadLocal<SimpleDateFormat> sdfTimestampDate = new ThreadLocal<>();
+
+	static {
+		sdfDate.set(new SimpleDateFormat("yyyy-MM-dd"));
+		sdfSimpleDate.set(new SimpleDateFormat("yyyyMMdd"));
+		sdfMonthDate.set(new SimpleDateFormat("yyyy年MM月"));
+		sdfHourDate.set(new SimpleDateFormat("dd日HH时"));
+		sdfDayDate.set(new SimpleDateFormat("yyyy年MM月dd日"));
+		sdfTimestampDate.set(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+	}
+
+	public static SimpleDateFormat getSdfDate() {
+		SimpleDateFormat result = sdfDate.get();
+		if (result == null) {
+			result = new SimpleDateFormat("yyyy-MM-dd");
+			sdfDate.set(result);
+		}
+		return result;
+	}
+
+	public static SimpleDateFormat getSdfSimpleDate() {
+		SimpleDateFormat result = sdfSimpleDate.get();
+		if (result == null) {
+			result = new SimpleDateFormat("yyyyMMdd");
+			sdfSimpleDate.set(result);
+		}
+		return result;
+	}
+
+	public static SimpleDateFormat getSdfMonthDate() {
+		SimpleDateFormat result = sdfMonthDate.get();
+		if (result == null) {
+			result = new SimpleDateFormat("yyyy年MM月");
+			sdfMonthDate.set(result);
+		}
+		return result;
+	}
+
+	public static SimpleDateFormat getSdfHourDate() {
+		SimpleDateFormat result = sdfHourDate.get();
+		if (result == null) {
+			result = new SimpleDateFormat("dd日HH时");
+			sdfHourDate.set(result);
+		}
+		return result;
+	}
+
+	public static SimpleDateFormat getSdfDayDate() {
+		SimpleDateFormat result = sdfDayDate.get();
+		if (result == null) {
+			result = new SimpleDateFormat("yyyy年MM月dd日");
+			sdfDayDate.set(result);
+		}
+		return result;
+	}
+
+	public static SimpleDateFormat getSdfTimestampDate() {
+		SimpleDateFormat result = sdfTimestampDate.get();
+		if (result == null) {
+			result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			sdfTimestampDate.set(result);
+		}
+		return result;
+	}
 
 	/**
 	 * 获取下个月的第一天
@@ -24,7 +87,7 @@ public class DateTimeUtil {
 		cal.setTime(dt);
 		cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 1);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
-		return sdfDate.parse(sdfDate.format(cal.getTime()));
+		return getSdfDate().parse(getSdfDate().format(cal.getTime()));
 	}
 
 	/**
@@ -34,14 +97,14 @@ public class DateTimeUtil {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dt);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
-		return sdfDate.parse(sdfDate.format(cal.getTime()));
+		return getSdfDate().parse(getSdfDate().format(cal.getTime()));
 	}
 
 	/**
 	 * 获取下一天
 	 */
 	public static Date getNextDate(Date dt) throws ParseException {
-		return new DateTime(sdfDate.parse(sdfDate.format(dt))).plusHours(24).toDate();
+		return new DateTime(getSdfDate().parse(getSdfDate().format(dt))).plusHours(24).toDate();
 	}
 
 	/**
@@ -50,10 +113,10 @@ public class DateTimeUtil {
 	public static Date getMonday(Date dt) throws ParseException {
 		Integer weekDay = getWeekOfDate(dt);
 		if (weekDay == 1) {
-			return sdfDate.parse(sdfDate.format(dt));
+			return getSdfDate().parse(getSdfDate().format(dt));
 		} else {
 			DateTime dtTime = new DateTime(dt);
-			return sdfDate.parse(sdfDate.format(dtTime.minusHours((weekDay - 1) * 24).toDate()));
+			return getSdfDate().parse(getSdfDate().format(dtTime.minusHours((weekDay - 1) * 24).toDate()));
 		}
 	}
 
@@ -74,14 +137,18 @@ public class DateTimeUtil {
 	 * 获取7天前的日期
 	 */
 	public static Date getDaysAgo(Date dt, int days) throws ParseException {
-		return new DateTime(sdfDate.parse(sdfDate.format(dt))).minusHours((days - 1) * 24).toDate();
+		return new DateTime(getSdfDate().parse(getSdfDate().format(dt))).minusHours((days - 1) * 24).toDate();
+	}
+
+	public static Date getThisDayDate(Date dt) throws ParseException {
+		return getSdfDate().parse(getSdfDate().format(dt));
 	}
 
 	/**
 	 * 获取一个月前的日期
 	 */
 	public static Date getMonthsAgo(Date dt, int months) throws ParseException {
-		Date today = sdfDate.parse(sdfDate.format(dt));
+		Date today = getSdfDate().parse(getSdfDate().format(dt));
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(today);
 		cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) - months);

@@ -36,6 +36,11 @@ public class Beg implements Serializable {
 	@Column(name = "rune_id")
 	private Integer runeId;
 	/**
+	 * 消耗的功德数
+	 */
+	@Column(name = "merit_value")
+	private Integer meritValue;
+	/**
 	 * 是否为自己请符
 	 * 
 	 * <ul>
@@ -162,6 +167,14 @@ public class Beg implements Serializable {
 
 	public void setOtherBirthday(String otherBirthday) {
 		this.otherBirthday = otherBirthday;
+	}
+
+	public Integer getMeritValue() {
+		return meritValue;
+	}
+
+	public void setMeritValue(Integer meritValue) {
+		this.meritValue = meritValue;
 	}
 
 	public void expire() {

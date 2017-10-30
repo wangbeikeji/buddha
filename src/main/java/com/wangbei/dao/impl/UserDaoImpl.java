@@ -47,6 +47,6 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public Integer staCountOfUser(Date startDate, Date endDate) {
-		return userRepository.staCountOfUser(startDate, endDate);
+		return userRepository.staCountOfUser(startDate, endDate, false);
 	}
 }

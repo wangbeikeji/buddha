@@ -75,6 +75,10 @@ public class UserFavouriteDaoImpl implements UserFavouriteDao {
 			List<Object[]> objArrList = userFavouriteRepository.findKnowledgeByUserId(userId, type.getIndex(),
 					KnowledgeTypeEnum.HEALTH.getIndex(), page * limit, limit);
 			toUserFavouriteList(result, objArrList);
+		} else if (type == FavouriteTypeEnum.TEMPLE) {
+			List<Object[]> objArrList = userFavouriteRepository.findKnowledgeByUserId(userId, type.getIndex(),
+					KnowledgeTypeEnum.TEMPLE.getIndex(), page * limit, limit);
+			toUserFavouriteList(result, objArrList);
 		} else if (type == FavouriteTypeEnum.SUTRA) {
 			List<Object[]> objArrList = userFavouriteRepository.findSutraByUserId(userId, page * limit, limit);
 			toUserFavouriteList(result, objArrList);

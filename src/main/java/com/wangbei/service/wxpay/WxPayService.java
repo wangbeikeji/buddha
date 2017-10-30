@@ -206,6 +206,8 @@ public class WxPayService {
 						trade = tradeService.completePaymentTrade(tradeNo);
 					}
 				}
+
+				logger.info("query wxpay trade " + tradeNo + "result:" + queryDataResp.toJson());
 			} catch (IOException e) {
 				logger.error("Weixin pay orderQuery post http request failed!");
 				throw new RuntimeException("Weixin pay orderQuery post http request failed!");
@@ -218,13 +220,16 @@ public class WxPayService {
 	}
 
 	public String receiveNotify(String xml) {
+		logger.info("receive wxpay notify result:" + xml);
+
 		WxPayData notifyResult = WxPayApi.getNotifyData(xml);
-		if ("SUCCESS".equals(notifyResult.getValue("return_code").toString())) {
+		if ("SUCCESS".equals(notifyResult.getValue("result_code").toString())) {
 			String tradeNo = notifyResult.getValue("tradeNo").toString();
 			String thirdTradeNo = notifyResult.getValue("thirdTradeNo").toString();
 			try {
 				orderService.completeOrders(tradeNo, thirdTradeNo);
 				tradeService.completePaymentTrade(tradeNo);
+				logger.info("receive wxpay notify and complete tradeNo:" + tradeNo);
 			} catch (ServiceException ex) {
 				logger.error("handle weixin pay notify exception!It could be a deal, not an extranet.", ex);
 			}

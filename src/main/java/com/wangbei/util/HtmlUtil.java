@@ -1,6 +1,8 @@
 package com.wangbei.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +26,17 @@ public class HtmlUtil {
 		}
 		return null;
 	}
-	
+
+	public static List<String> getLinkHref(String html, String selector) {
+		List<String> result = new ArrayList<>();
+		Document doc = Jsoup.parse(html);
+		Elements eles = doc.select(selector);
+		for (int i = 0; i < eles.size(); i++) {
+			result.add(eles.get(i).attr("href"));
+		}
+		return result;
+	}
+
 	public static String getElementInnerHtml(String html, String selector) {
 		Document doc = Jsoup.parse(html);
 		Elements titleEle = doc.select(selector);
@@ -33,7 +45,7 @@ public class HtmlUtil {
 		}
 		return null;
 	}
-	
+
 	public static String getElementInnerImageLink(String html, String selector) {
 		Document doc = Jsoup.parse(html);
 		Elements imgEle = doc.select(selector + " img");
@@ -47,7 +59,7 @@ public class HtmlUtil {
 		String html = HttpService.sendGetForHtml("http://www.liaotuo.org/fojing/wuliangshoujing/40729.html");
 		String title = getElementInnterText(html, "h1[class].B1_tit");
 		String content = getElementInnterText(html, "div[class].B1_text");
-		
+
 		System.out.println(title);
 		System.out.println(content);
 	}

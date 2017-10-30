@@ -2,6 +2,7 @@ package com.wangbei.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -143,11 +144,199 @@ public class BuddhistMusicService {
 		}
 	}
 
+	private File renameDirectory(File oldDir, String pyName) throws IOException {
+		String name = oldDir.getName();
+		if (!name.equals(pyName)) {
+			File newDir = new File(oldDir.getParentFile(), pyName);
+			if (newDir.exists()) {
+				FileUtils.moveDirectoryToDirectory(oldDir, newDir, false);
+			} else {
+				oldDir.renameTo(newDir);
+			}
+			return newDir;
+		} else {
+			return oldDir;
+		}
+	}
+
+	private File renameFile(File oldFile, String pyName) throws IOException {
+		String name = oldFile.getName();
+		if (!name.equals(pyName)) {
+			File newDir = new File(oldFile.getParentFile(), pyName);
+			FileUtils.moveFile(oldFile, newDir);
+			return newDir;
+		} else {
+			return oldFile;
+		}
+	}
+
+	private File[] filterFile(File parentFile, final String suffix) {
+		return parentFile.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				if (name.toLowerCase().endsWith(suffix)) {
+					return true;
+				}
+				return false;
+			}
+		});
+	}
+
+	private String getFileCharset(File file) throws Exception {
+		InputStream in = new java.io.FileInputStream(file);
+		byte[] b = new byte[3];
+		in.read(b);
+		in.close();
+		if (b[0] == -17 && b[1] == -69 && b[2] == -65) {
+			return "UTF-8";
+		} else {
+			// 可能是GBK，也可能是其他编码
+			return "GBK";
+		}
+	}
+
 	/**
-	 * 根据音乐文件夹生成专辑和音乐记录，后台使用，不涉及到业务逻辑
+	 * 根据音乐文件夹生成专辑和音乐记录，后台使用，不涉及到业务逻辑，版本2
 	 */
-	public void autoCreateByDir() throws Exception {
+	public void autoCreateByDir2(String dir) throws Exception {
 		String musicDirStr = outerResources + "attachment/music";
+		if (dir != null && !"".equals(dir.trim())) {
+			musicDirStr = dir;
+		}
+		String httpBase = "http://10.0.0.4:8080/buddha";
+		File musicDir = new File(musicDirStr);
+		for (File category : musicDir.listFiles()) {
+			if (!category.isDirectory()) {
+				continue;
+			}
+			// 处理大类别
+			String name = category.getName();
+			String pyName = PinyinUtil.getPingYin(name, false);
+			category = renameDirectory(category, pyName);
+			List<BuddhistMusicCategory> checkMusicCategory = categoryDao.listBuddhistMusicCategoryByNameAndLevel(name,
+					1);
+			BuddhistMusicCategory musicCategory = null;
+			if (checkMusicCategory != null && checkMusicCategory.size() > 0) {
+				musicCategory = checkMusicCategory.get(0);
+			} else {
+				musicCategory = new BuddhistMusicCategory();
+				musicCategory.setTxtDescription(name);
+				musicCategory.setLevel(1);
+				musicCategory.setName(name);
+				List<BuddhistMusicCategory> checkLevelSize = categoryDao.listBuddhistMusicCategoryByLevel(1);
+				if (checkLevelSize != null && checkLevelSize.size() > 0) {
+					musicCategory.setSortNum(checkLevelSize.size() + 1);
+				} else {
+					musicCategory.setSortNum(1);
+				}
+				categoryDao.createBuddhistMusicCategory(musicCategory);
+			}
+			// 处理专辑
+			for (File musicAlbumFile : category.listFiles()) {
+				if (!musicAlbumFile.isDirectory()) {
+					continue;
+				}
+				String author = "";
+				name = musicAlbumFile.getName();
+				int splitIndex = name.indexOf("-");
+				if (splitIndex > 0) {
+					author = name.substring(0, splitIndex);
+					name = name.substring(splitIndex + 1);
+				}
+				pyName = PinyinUtil.getPingYin(name, false);
+				musicAlbumFile = renameDirectory(musicAlbumFile, pyName);
+				List<BuddhistMusicCategory> checkMusicAlbum = categoryDao.listBuddhistMusicCategoryByNameAndLevel(name,
+						2);
+				BuddhistMusicCategory musicAlbum = null;
+				if (checkMusicAlbum != null && checkMusicAlbum.size() > 0) {
+					musicAlbum = checkMusicAlbum.get(0);
+				} else {
+					musicAlbum = new BuddhistMusicCategory();
+					musicAlbum.setLevel(2);
+					musicAlbum.setName(name);
+					musicAlbum.setAuthor(author);
+					musicAlbum.setPlayTimes(0);
+					musicAlbum.setParent(musicCategory);
+					// 设置简介
+					File[] txtFile = filterFile(musicAlbumFile, ".txt");
+					if (txtFile != null && txtFile.length > 0) {
+						musicAlbum.setTxtDescription(FileUtils.readFileToString(txtFile[0], getFileCharset(txtFile[0])));
+					}
+					// 设置专辑封面
+					File[] pngFile = filterFile(musicAlbumFile, ".png");
+					if (pngFile != null && pngFile.length > 0) {
+						for (File png : pngFile) {
+							name = png.getName();
+							pyName = PinyinUtil.getPingYin(name, true);
+							png = renameFile(png, pyName);
+							String coverLink = httpBase + "/attachment/music/" + category.getName() + "/"
+									+ musicAlbumFile.getName() + "/" + pyName;
+							if (pyName.endsWith("1@3x.png")) {
+								musicAlbum.setCoverLink1(coverLink);
+							} else if (pyName.endsWith("2@3x.png")) {
+								musicAlbum.setCoverLink2(coverLink);
+							} else if (pyName.endsWith("3@3x.png")) {
+								musicAlbum.setCoverLink3(coverLink);
+							} else if (pyName.endsWith("4@3x.png")) {
+								musicAlbum.setCoverLink4(coverLink);
+							} else if (pyName.endsWith("5@3x.png")) {
+								musicAlbum.setCoverLink5(coverLink);
+							}
+						}
+					}
+					musicAlbum.setSortNum(1);
+					categoryDao.createBuddhistMusicCategory(musicAlbum);
+				}
+				// 处理佛音
+				File[] musicFileArr = filterFile(musicAlbumFile, ".mp3");
+				if (musicFileArr != null && musicFileArr.length > 0) {
+					for (File musicFile : musicFileArr) {
+						author = "";
+						String originFileName = musicFile.getName();
+						name = musicFile.getName();
+						splitIndex = name.indexOf("-");
+						if (splitIndex > 0) {
+							author = name.substring(0, splitIndex);
+							name = name.substring(splitIndex + 1);
+						}
+						pyName = PinyinUtil.getPingYin(originFileName, true);
+						musicFile = renameFile(musicFile, pyName);
+						String musicLink = httpBase + "/attachment/music/" + category.getName() + "/"
+								+ musicAlbumFile.getName() + "/" + pyName;
+						BuddhistMusic music = buddhistMusicDao.retrieveBuddhistMusicByLink(musicLink);
+						if (music == null) {
+							music = new BuddhistMusic();
+							music.setAuthor(author);
+							music.setCategoryId(musicAlbum.getId());
+							music.setIsRecommend(false);
+							music.setLink(musicLink);
+							music.setPlayTimes(0);
+							music.setName(name.substring(0, name.lastIndexOf(".")).trim());
+							List<BuddhistMusic> innerCheck = buddhistMusicDao
+									.listBuddhistMusicByCategoryId(musicAlbum.getId());
+							if (innerCheck != null && innerCheck.size() > 0) {
+								music.setSortNum(innerCheck.size() + 1);
+							} else {
+								music.setSortNum(1);
+							}
+							buddhistMusicDao.createBuddhistMusic(music);
+						} else {
+							System.out.println("未保存：" + originFileName);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * 根据音乐文件夹生成专辑和音乐记录，后台使用，不涉及到业务逻辑，版本1
+	 */
+	public void autoCreateByDir1(String dir) throws Exception {
+		String musicDirStr = outerResources + "attachment/music";
+		if (dir != null && !"".equals(dir.trim())) {
+			musicDirStr = dir;
+		}
 		String httpBase = "http://10.0.0.4:8080/buddha";
 		File musicDir = new File(musicDirStr);
 		if (musicDir.exists()) {
@@ -158,7 +347,7 @@ public class BuddhistMusicService {
 					if (firstLevelFile.isDirectory()) {
 						// 处理一级目录
 						String name = firstLevelFile.getName();
-						String newName = PinyinUtil.getPingYin(name);
+						String newName = PinyinUtil.getPingYin(name, false);
 						if (!name.equals(newName)) {
 							File newFirstLevelFile = new File(firstLevelFile.getParentFile(), newName);
 							if (newFirstLevelFile.exists()) {
@@ -198,7 +387,7 @@ public class BuddhistMusicService {
 						if (firstLevelChildFileList != null && firstLevelChildFileList.length > 0) {
 							for (File firstLevelChildFile : firstLevelChildFileList) {
 								String name1 = firstLevelChildFile.getName();
-								String name2 = PinyinUtil.getPingYin(name1);
+								String name2 = PinyinUtil.getPingYin(name1, false);
 								if (!name1.equals(name2)) {
 									File newFirstLevelChildFile = new File(firstLevelChildFile.getParentFile(), name2);
 									if (newFirstLevelChildFile.exists()) {
@@ -214,7 +403,7 @@ public class BuddhistMusicService {
 									firstLevelChildFile = newFirstLevelChildFile;
 								}
 								if (firstLevelChildFile.isDirectory()) {
-									// 处理一级目录下的目录
+									// 处理专辑
 									List<BuddhistMusicCategory> secondLevelCategoryList = categoryDao
 											.listBuddhistMusicCategoryByNameAndLevel(name1, 2);
 									BuddhistMusicCategory secondLevelCategory = null;
@@ -242,13 +431,13 @@ public class BuddhistMusicService {
 											categoryDao.createBuddhistMusicCategory(secondLevelCategory);
 										}
 									}
-									// 处理二级目录下的文件
+									// 处理专辑下的音乐
 									File[] secondLevelFiles = firstLevelChildFile.listFiles();
 									if (secondLevelFiles != null && secondLevelFiles.length > 0) {
 										for (File secondLevelFile : secondLevelFiles) {
 											if (secondLevelFile.isFile()) {
 												String name3 = secondLevelFile.getName();
-												String name4 = PinyinUtil.getPingYin(name3);
+												String name4 = PinyinUtil.getPingYin(name3, true);
 												if (!name3.equals(name4)) {
 													File newSecondLevelFile = new File(secondLevelFile.getParentFile(),
 															name4);
@@ -291,36 +480,6 @@ public class BuddhistMusicService {
 												}
 											}
 										}
-									}
-								} else {
-									// 处理一级目录下的文件
-									String link = httpBase + "/attachment/music/" + newName + "/" + name2;
-									BuddhistMusic music = buddhistMusicDao.retrieveBuddhistMusicByLink(link);
-									if (music == null) {
-										music = new BuddhistMusic();
-										music.setAuthor("无");
-										music.setCategoryId(firstLevelCategory.getId());
-										music.setIsRecommend(false);
-										music.setLink(link);
-										music.setDuration(getMusicDuration(link));
-										if (name1.indexOf("-") > 0) {
-											int gangIndex = name1.indexOf("-");
-											music.setAuthor(name1.substring(0, gangIndex).trim());
-											music.setName(
-													name1.substring(gangIndex + 1, name1.lastIndexOf(".")).trim());
-										} else {
-											music.setName(name1.substring(0, name1.lastIndexOf(".")));
-										}
-										List<BuddhistMusic> innerCheck = buddhistMusicDao
-												.listBuddhistMusicByCategoryId(firstLevelCategory.getId());
-										if (innerCheck != null && innerCheck.size() > 0) {
-											music.setSortNum(innerCheck.size() + 1);
-										} else {
-											music.setSortNum(1);
-										}
-										buddhistMusicDao.createBuddhistMusic(music);
-									} else {
-										System.out.println("未保存：" + name1);
 									}
 								}
 							}

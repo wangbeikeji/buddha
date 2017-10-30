@@ -102,6 +102,8 @@ public class KnowledgeService {
 				favouriteType = FavouriteTypeEnum.STORY;
 			} else if (knowledge.getType() == KnowledgeTypeEnum.HEALTH) {
 				favouriteType = FavouriteTypeEnum.HEALTH;
+			} else if (knowledge.getType() == KnowledgeTypeEnum.TEMPLE) {
+				favouriteType = FavouriteTypeEnum.TEMPLE;
 			}
 			List<Integer> resourceIdList = userFavouriteDao.getUserFavouriteResourceIdsByType(userId, favouriteType);
 			if (resourceIdList != null && resourceIdList.size() > 0) {
@@ -125,6 +127,8 @@ public class KnowledgeService {
 				favouriteType = FavouriteTypeEnum.STORY;
 			} else if (type == KnowledgeTypeEnum.HEALTH) {
 				favouriteType = FavouriteTypeEnum.HEALTH;
+			} else if (type == KnowledgeTypeEnum.TEMPLE) {
+				favouriteType = FavouriteTypeEnum.TEMPLE;
 			}
 			List<Integer> resourceIdList = userFavouriteDao.getUserFavouriteResourceIdsByType(userId, favouriteType);
 			if (resourceIdList != null && resourceIdList.size() > 0) {

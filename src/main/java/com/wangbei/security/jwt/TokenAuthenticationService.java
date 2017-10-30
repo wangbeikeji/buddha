@@ -42,4 +42,9 @@ public class TokenAuthenticationService {
 		return result;
 	}
 
+	public static void main(String[] args) throws Exception {
+		System.out.println(getTokenInfo(
+				"eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6IiIsInVzZXJJZCI6MjgyLCJzdWIiOiIxODAxOTY3MTQ4NSIsImV4cCI6NDMyMDAwMTUwNTExNTM3Mn0.c_3Be8sOmVDw27fNW7neKRLqaVyxM8sdTakv34Esa3P2iIi-kuWSv7K4aXmkftwZDbVx8T79uE5MZ2wQtAX1JA"));
+	}
+
 }
